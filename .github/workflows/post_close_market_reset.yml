@@ -1,1 +1,44 @@
+name: Post-close market reset
 
+on:
+  workflow_dispatch:
+  schedule:
+    # 4:00 PM India time = 10:30 AM UTC. Weekdays only.
+    # NSE holidays still need manual skip/acceptance; the job may rerun old/partial Yahoo data on holidays.
+    - cron: "30 10 * * 1-5"
+
+permissions:
+  contents: write
+
+jobs:
+  build-market-reset:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Yahoo download + engine
+        run: python run_post_close_pipeline.py --universe data/universe_2026.csv --price-dir data/yahoo_prices --outputs outputs --period 24mo --chart-scope dashboard
+
+      - name: Commit refreshed data and outputs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/yahoo_prices outputs
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Refresh post-close market reset"
+            git push
+          fi
