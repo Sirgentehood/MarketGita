@@ -91,6 +91,7 @@ class VCPScoreCard:
     combined_score: float
     volume_dryup_ratio: float
     breakout_volume_ratio: float
+    weekly_volume_ratio: float
     volume_is_drying_up: bool
     weekly_volume_is_drying_up: bool
     notes: str
@@ -417,13 +418,35 @@ def volume_ratio(volume: pd.Series, short: int, long: int) -> float:
         return np.nan
     return float(short_avg / long_avg)
 
-def recent_breakout_volume_ratio(volume: pd.Series, window: int = 50) -> float:
-    if len(volume) < window:
+def recent_breakout_volume_ratio(volume: pd.Series, window: int = 30) -> float:
+    """Daily volume ratio: current day volume / previous N-day average volume.
+
+    The current day is excluded from the average.
+    """
+    if len(volume) <= window:
         return np.nan
-    baseline = volume.iloc[-window:-1].mean()
+    baseline = volume.iloc[-window-1:-1].mean()
     if baseline == 0:
         return np.nan
     return float(volume.iloc[-1] / baseline)
+
+
+def current_week_volume_ratio(daily_volume: pd.Series, weekly_volume: pd.Series, current_days: int = 5, weekly_window: int = 10) -> float:
+    """Weekly volume ratio for dashboard cards.
+
+    Numerator: latest up-to-5 trading days of volume.
+    Denominator: average weekly volume of the previous `weekly_window` completed weeks,
+    excluding the current/partial week.
+    """
+    dv = daily_volume.dropna().astype(float)
+    wv = weekly_volume.dropna().astype(float)
+    if len(dv) < 1 or len(wv) <= weekly_window:
+        return np.nan
+    current_week_like_volume = dv.iloc[-current_days:].sum()
+    baseline = wv.iloc[-weekly_window-1:-1].mean()
+    if baseline == 0:
+        return np.nan
+    return float(current_week_like_volume / baseline)
 
 
 def slope_pct(series: pd.Series, window: int = 20) -> float:
@@ -1341,7 +1364,10 @@ def analyze_symbol(ticker: str, df: pd.DataFrame, benchmark_df: pd.DataFrame, re
 
     volume_dryup_ratio = volume_ratio(volume, config["volume_short_window"], config["volume_long_window"])
     weekly_volume_dryup_ratio = volume_ratio(weekly_df["Volume"].astype(float), 4, 12) if len(weekly_df) >= 12 else np.nan
-    breakout_volume_ratio = recent_breakout_volume_ratio(volume, config["volume_long_window"])
+    # Daily card volume: current day / previous 30 trading-day average.
+    breakout_volume_ratio = recent_breakout_volume_ratio(volume, 30)
+    # Weekly card volume: latest 5 trading days / previous 10 completed weekly volumes.
+    weekly_volume_ratio = current_week_volume_ratio(volume, weekly_df["Volume"].astype(float), current_days=5, weekly_window=10)
     avg_turnover_inr = avg_turnover(close, volume, 20)
     liquidity_ok = pd.notna(avg_turnover_inr) and avg_turnover_inr >= config["min_avg_turnover_inr"]
 
@@ -1517,7 +1543,7 @@ def analyze_symbol(ticker: str, df: pd.DataFrame, benchmark_df: pd.DataFrame, re
     combined_score = round(0.55 * daily_score + 0.45 * weekly_score, 2)
 
     volume_is_drying_up = bool(pd.notna(volume_dryup_ratio) and volume_dryup_ratio <= 0.85)
-    weekly_volume_is_drying_up = bool(pd.notna(weekly_volume_dryup_ratio) and weekly_volume_dryup_ratio <= 0.90)
+    weekly_volume_is_drying_up = bool(pd.notna(weekly_volume_ratio) and weekly_volume_ratio <= 0.90)
 
     notes = [stage, stage_variant]
     if trend_template_ok:
@@ -1560,6 +1586,7 @@ def analyze_symbol(ticker: str, df: pd.DataFrame, benchmark_df: pd.DataFrame, re
         weekly_quality, combo_bucket, combined_score,
         round(float(volume_dryup_ratio), 2) if pd.notna(volume_dryup_ratio) else np.nan,
         round(float(breakout_volume_ratio), 2) if pd.notna(breakout_volume_ratio) else np.nan,
+        round(float(weekly_volume_ratio), 2) if pd.notna(weekly_volume_ratio) else np.nan,
         volume_is_drying_up,
         weekly_volume_is_drying_up,
         ", ".join(notes),
@@ -1807,9 +1834,9 @@ def export_chart(
 
     ax1.plot(x, close.values, label="Close", linewidth=2.2, color="#1d4ed8")
     if ma_fast is not None:
-        ax1.plot(x, ma_fast.values, label=("10W MA" if is_weekly else "50DMA"), linewidth=2.7, alpha=0.96, color="#0f766e")
+        ax1.plot(x, ma_fast.values, label=("10W MA" if is_weekly else "50DMA"), linewidth=1.7, alpha=0.96, color="#0f766e")
     if ma_slow is not None:
-        ax1.plot(x, ma_slow.values, label=("30W MA" if is_weekly else "200DMA"), linewidth=2.7, alpha=0.92, color="#b45309")
+        ax1.plot(x, ma_slow.values, label=("30W MA" if is_weekly else "200DMA"), linewidth=1.7, alpha=0.92, color="#b45309")
 
     if pd.notna(pivot_low) and pd.notna(pivot_high):
         ax1.axhspan(float(pivot_low), float(pivot_high), alpha=0.18, label="Pivot zone", color="#f59e0b")
@@ -1898,7 +1925,7 @@ def export_chart(
     ax2.bar(x, volume.values, width=bar_width, alpha=0.72, color="#374151")
     vol_ma = volume.rolling(vol_window).mean()
     if vol_ma.notna().sum() == len(volume):
-        ax2.plot(x, vol_ma.values, linewidth=2.2, label=("10W Vol MA" if is_weekly else "20D Vol MA"), color="#475569")
+        ax2.plot(x, vol_ma.values, linewidth=1.2, label=("10W Vol MA" if is_weekly else "20D Vol MA"), color="#475569")
 
     # No grid lines on volume panel.
     ax2.grid(False)
@@ -2298,7 +2325,7 @@ def build_interesting20_snapshot(combined_df: pd.DataFrame, limit: int = 20, top
         "snapshot_date", "ticker", "Company Name", "Industry", "stage", "current_rank",
         "interesting_priority", "daily_setup_bucket", "weekly_setup_bucket", "combined_bucket",
         "final_combined_score", "daily_breakout_distance_pct", "weekly_breakout_distance_pct",
-        "rs_3m_pct", "rs_6m_pct", "volume_dryup_ratio", "breakout_volume_ratio",
+        "rs_3m_pct", "rs_6m_pct", "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio",
         "volume_is_drying_up", "weekly_volume_is_drying_up", "notes",
     ] if c in pool.columns]
     return pool[keep].reset_index(drop=True)
@@ -2377,8 +2404,8 @@ def build_outputs(
     final_report = apply_industry_boost(final_report, industry_df, cfg)
 
     metadata_cols = ["sector", "industry_group", "is_fo_stock", "fo_category", "Include"]
-    common_cols = ["ticker", "Company Name", "Industry"] + metadata_cols + ["stage", "stage_variant", "stage_confidence", "stage_reason", "rs_3m_pct", "rs_6m_pct", "avg_turnover_inr", "volume_dryup_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up", "notes"]
-    daily_cols = common_cols + ["daily_setup_bucket", "daily_score", "final_daily_score", "daily_pivot", "daily_breakout_distance_pct", "daily_contraction_depths_pct", "daily_contraction_durations", "daily_contraction_score", "daily_base_duration_days", "breakout_volume_ratio"]
+    common_cols = ["ticker", "Company Name", "Industry"] + metadata_cols + ["stage", "stage_variant", "stage_confidence", "stage_reason", "rs_3m_pct", "rs_6m_pct", "avg_turnover_inr", "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up", "notes"]
+    daily_cols = common_cols + ["daily_setup_bucket", "daily_score", "final_daily_score", "daily_pivot", "daily_breakout_distance_pct", "daily_contraction_depths_pct", "daily_contraction_durations", "daily_contraction_score", "daily_base_duration_days"]
     weekly_cols = common_cols + ["weekly_setup_bucket", "weekly_score", "final_weekly_score", "weekly_pivot", "weekly_breakout_distance_pct", "weekly_contraction_depths_pct", "weekly_contraction_durations", "weekly_contraction_score", "weekly_base_duration_weeks", "weekly_vcp_quality"]
     combined_cols = common_cols + ["daily_setup_bucket", "weekly_setup_bucket", "combined_bucket", "daily_score", "weekly_score", "combined_score", "industry_boost", "final_combined_score"]
 
@@ -2537,7 +2564,7 @@ def build_stage_action_history_snapshot(snapshot_df: pd.DataFrame, snapshot_date
     out["super_action"] = out.apply(lambda r: derive_super_action(str(r.get("stage", "")), str(r.get("combined_bucket", "")), float(pd.to_numeric(r.get(score_col), errors="coerce") if pd.notna(pd.to_numeric(r.get(score_col), errors="coerce")) else 0.0)), axis=1)
     keep_cols = [c for c in [
         "snapshot_date", "ticker", "Company Name", "Industry", "sector", "is_fo_stock", "fo_category", "stage", "stage_variant", "stage_confidence", "stage_reason", "combined_bucket", score_col,
-        "volume_dryup_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up",
+        "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up",
         "public_action", "super_action"
     ] if c in out.columns]
     history = out[keep_cols].copy()
@@ -2580,7 +2607,7 @@ def build_six_month_history(price_data: Dict[str, pd.DataFrame], benchmark_df: p
                 row["super_action"] = derive_super_action(row.get("stage", ""), row.get("combined_bucket", ""), float(row.get("combined_score", 0) or 0))
                 history_rows.append({k: row.get(k) for k in [
                     "snapshot_date", "ticker", "Company Name", "Industry", "stage", "combined_bucket", "combined_score",
-                    "volume_dryup_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up", "public_action", "super_action"
+                    "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up", "public_action", "super_action"
                 ]})
             except Exception:
                 continue
