@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.env
+.DS_Store
+.streamlit/secrets.toml
+# Keep generated outputs if you want Streamlit Cloud to serve latest static dashboard results.
+# outputs/
+# data/yahoo_prices/
