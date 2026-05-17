@@ -921,7 +921,7 @@ def build_today_summary_html(mode_text: str, stage2_count: int, leaders: list[st
   <div class="market-story-box">{story_lines}</div>
   <div class="today-summary-title today-summary-title-small">Scan Snapshot</div>
   <div class="today-summary-grid">{body}</div>
-</div>
+
 """
 
 
@@ -1568,7 +1568,7 @@ def render_metric(title: str, value: str, subtitle: str = ""):
   <div class="kicker">{h(title)}</div>
   <div class="metric-value">{h(value)}</div>
   <div class="metric-sub">{h(subtitle)}</div>
-</div>
+
 """,
         unsafe_allow_html=True,
     )
@@ -1645,12 +1645,12 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
       {variant_line}
       <div class="stock-meta">Industry: {h(industry)}</div>
       {extra_meta_line}
-    </div>
-  </div>
+
+
   <div class="badge-strip">{badge_line}</div>
   <div class="signal-line">{h(volume_text(row))}</div>
   <div class="signal-line">{h(rs_text(row.get('rs_3m_pct'), '3m'))}</div>
-</div>
+
 """,
             unsafe_allow_html=True,
         )
@@ -1700,7 +1700,7 @@ def render_connect_feedback_section():
 <div class="feedback-card">
   <div class="feedback-title">Connect & Feedback</div>
   <div class="feedback-sub">Share your view on this market-structure page, what felt useful, what was confusing, and your email ID if you want a reply.</div>
-</div>
+
 """,
         unsafe_allow_html=True,
     )
@@ -1770,7 +1770,7 @@ st.markdown(
   <div class="subtitle">A Holy-Grail for serious market participants who believe in long term structures over short term volatility. Not Investment Advice</div>
 
   <div class="unlock-line">{h(generated_line)}</div>
-</div>
+
 """,
     unsafe_allow_html=True,
 )
@@ -1848,7 +1848,7 @@ st.markdown(
     f"""
 <div class="disclaimer-card">
 <b>Public-data disclaimer:</b> This page shows rule-based structure, stage, sector and chart data only. It is not investment advice, research advice, portfolio advice, a recommendation, or a solicitation to buy/sell securities. Any mention of “interesting”, “leader”, “stage”, “outperformed”, or “underperformed” is a descriptive label from the dataset only. Liked stocks in this session: {liked_count}. Liked-watchlist memory is intentionally kept for the next update.
-</div>
+
 """,
     unsafe_allow_html=True,
 )
