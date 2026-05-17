@@ -1,20 +1,20 @@
 name: Post Close Market Reset
 
 on:
-  workflow_dispatch:
   schedule:
     # 4:00 PM IST = 10:30 AM UTC, Monday-Friday
     - cron: "30 10 * * 1-5"
+  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  post-close-market-reset:
+  run-post-close:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -29,15 +29,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Download Yahoo data
-        run: |
-          python yahoo_data_downloader.py
-
-      - name: Run VCP engine
+      - name: Run post-close pipeline
         run: |
           python run_post_close_pipeline.py
 
-      - name: Commit and push outputs
+      - name: Commit generated outputs
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
@@ -50,6 +46,4 @@ jobs:
           fi
 
           git commit -m "Update post-close market outputs"
-
-          git pull --rebase origin main
-          git push origin main
+          git push origin HEAD:main
