@@ -402,6 +402,57 @@ st.markdown(
   box-shadow: 0 10px 24px rgba(29,95,209,0.20);
 }
 
+
+
+/* Compact stock-card action buttons: keep Like / Daily / Weekly on one row on mobile. */
+.stock-actions-marker + div [data-testid="stHorizontalBlock"] {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 0.32rem !important;
+}
+.stock-actions-marker + div [data-testid="column"] {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  width: 33.33% !important;
+}
+.stock-actions-marker + div .stButton > button {
+  min-height: 2.22rem !important;
+  padding: 0.32rem 0.22rem !important;
+  font-size: 0.82rem !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.stock-actions-marker + div .stButton > button p,
+.stock-actions-marker + div .stButton > button span {
+  white-space: nowrap !important;
+  font-size: 0.82rem !important;
+}
+@media (max-width: 768px) {
+  .stock-actions-marker + div [data-testid="stHorizontalBlock"] {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 0.24rem !important;
+  }
+  .stock-actions-marker + div [data-testid="column"] {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: 33.33% !important;
+  }
+  .stock-actions-marker + div .stButton > button {
+    min-height: 2.05rem !important;
+    padding: 0.26rem 0.12rem !important;
+    font-size: 0.76rem !important;
+    letter-spacing: 0 !important;
+  }
+  .stock-actions-marker + div .stButton > button p,
+  .stock-actions-marker + div .stButton > button span {
+    font-size: 0.76rem !important;
+  }
+}
+
 @media (max-width: 768px) {
   .today-summary-row { grid-template-columns: 1fr; gap: 0.15rem; }
 }
@@ -1434,25 +1485,23 @@ def stock_display_name(row: pd.Series) -> str:
 
 def volume_text(row: pd.Series) -> str:
     ratio = pd.to_numeric(row.get("breakout_volume_ratio"), errors="coerce")
-    source = "last session"
     if pd.isna(ratio):
         ratio = pd.to_numeric(row.get("volume_dryup_ratio"), errors="coerce")
-        source = "recent average"
     if pd.isna(ratio):
         return "Volume: not available"
-    direction = "More" if float(ratio) >= 1 else "Less"
-    return f"Volume: {direction} than average daily ({float(ratio):.2f}x, {source})"
+    direction = "More Than" if float(ratio) >= 1 else "Less Than"
+    return f"Volume: {float(ratio):.1f}x {direction} Daily Average"
 
 
 def rs_text(value, months: str) -> str:
     val = pd.to_numeric(value, errors="coerce")
-    label_map = {"3m": "3 months", "6m": "6 months", "1m": "1 month", "12m": "12 months"}
+    label_map = {"3m": "3 Months", "6m": "6 Months", "1m": "1 Month", "12m": "12 Months"}
     label = label_map.get(str(months).strip().lower(), str(months))
     if pd.isna(val):
-        return f"Nifty relative {label}: not available"
+        return f"Nifty Relative: not available for {label}"
     arrow = "↑" if float(val) >= 0 else "↓"
     verb = "Outperformed" if float(val) >= 0 else "Underperformed"
-    return f"{arrow} {verb} Nifty by {abs(float(val)):.1f}% in {label}"
+    return f"{verb} {arrow} Nifty : {abs(float(val)):.1f}% in {label}"
 
 
 def safe_key(text: str) -> str:
@@ -1534,8 +1583,6 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
     badge_line = "".join([badge_html(label, css_class) for label, css_class in badges])
 
     extra_meta = []
-    if sector_raw and sector_raw.lower() not in {"nan", "none", "unknown", "-"}:
-        extra_meta.append(f"Sector: {h(sector_raw)}")
 
     extra_meta_line = ""
     if extra_meta:
@@ -1553,7 +1600,6 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
       <div class="stock-meta">Industry: {h(industry)}</div>
       {extra_meta_line}
     </div>
-    <div class="stage-pill">{h(chart_mode)}</div>
   </div>
   <div class="badge-strip">{badge_line}</div>
   <div class="signal-line">{h(volume_text(row))}</div>
@@ -1570,6 +1616,7 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
         else:
             st.markdown('<div class="chart-missing">Chart not available for this stock yet.</div>', unsafe_allow_html=True)
 
+        st.markdown('<div class="stock-actions-marker"></div>', unsafe_allow_html=True)
         c1, c2, c3 = st.columns(3)
         with c1:
             like_label = "♥ Liked" if is_liked else "♡ Like"
@@ -1579,12 +1626,12 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
                     liked.append(ticker)
                 rerun()
         with c2:
-            daily_label = "Daily ✓" if chart_mode == "Daily" else "Daily"
+            daily_label = "Daily"
             if st.button(daily_label, key=f"daily_{key}_{idx}", use_container_width=True, type=("primary" if chart_mode == "Daily" else "secondary")):
                 st.session_state[mode_key] = "Daily"
                 rerun()
         with c3:
-            weekly_label = "Weekly ✓" if chart_mode == "Weekly" else "Weekly"
+            weekly_label = "Weekly"
             if st.button(weekly_label, key=f"weekly_{key}_{idx}", use_container_width=True, type=("primary" if chart_mode == "Weekly" else "secondary")):
                 st.session_state[mode_key] = "Weekly"
                 rerun()

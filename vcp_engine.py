@@ -1807,9 +1807,9 @@ def export_chart(
 
     ax1.plot(x, close.values, label="Close", linewidth=2.2, color="#1d4ed8")
     if ma_fast is not None:
-        ax1.plot(x, ma_fast.values, label=("10W MA" if is_weekly else "50DMA"), linewidth=1.7, alpha=0.96, color="#0f766e")
+        ax1.plot(x, ma_fast.values, label=("10W MA" if is_weekly else "50DMA"), linewidth=2.7, alpha=0.96, color="#0f766e")
     if ma_slow is not None:
-        ax1.plot(x, ma_slow.values, label=("30W MA" if is_weekly else "200DMA"), linewidth=1.7, alpha=0.92, color="#b45309")
+        ax1.plot(x, ma_slow.values, label=("30W MA" if is_weekly else "200DMA"), linewidth=2.7, alpha=0.92, color="#b45309")
 
     if pd.notna(pivot_low) and pd.notna(pivot_high):
         ax1.axhspan(float(pivot_low), float(pivot_high), alpha=0.18, label="Pivot zone", color="#f59e0b")
@@ -1898,7 +1898,7 @@ def export_chart(
     ax2.bar(x, volume.values, width=bar_width, alpha=0.72, color="#374151")
     vol_ma = volume.rolling(vol_window).mean()
     if vol_ma.notna().sum() == len(volume):
-        ax2.plot(x, vol_ma.values, linewidth=1.2, label=("10W Vol MA" if is_weekly else "20D Vol MA"), color="#475569")
+        ax2.plot(x, vol_ma.values, linewidth=2.2, label=("10W Vol MA" if is_weekly else "20D Vol MA"), color="#475569")
 
     # No grid lines on volume panel.
     ax2.grid(False)
