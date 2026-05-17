@@ -489,6 +489,52 @@ st.markdown(
     border-radius: 22px !important;
   }
 }
+
+/* v31 prevent F&O/rank badges from occupying removed Daily/Weekly top-right slot */
+.stock-head {
+  display: block !important;
+}
+.stock-head > div {
+  width: 100% !important;
+}
+.stock-head > div:nth-child(2):empty {
+  display: none !important;
+}
+.badge-strip {
+  margin-top: 0.42rem !important;
+}
+
+
+/* v31 mobile stock action buttons: force Like / Daily / Weekly into one row */
+@media (max-width: 768px) {
+  div[data-testid="stHorizontalBlock"]:has(.stButton) {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.28rem !important;
+    align-items: stretch !important;
+  }
+  div[data-testid="stHorizontalBlock"]:has(.stButton) > div[data-testid="column"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 0 !important;
+  }
+  .stButton > button {
+    min-height: 2.05rem !important;
+    height: 2.05rem !important;
+    padding: 0.18rem 0.18rem !important;
+    font-size: 0.70rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    width: 100% !important;
+  }
+  .stButton > button p,
+  .stButton > button span {
+    font-size: 0.70rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+}
+
 </style>
 """,
     unsafe_allow_html=True,
