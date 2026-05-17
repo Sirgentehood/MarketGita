@@ -1,0 +1,1000 @@
+Company Name,Industry,Symbol,Series,ISIN Code,Ticker,sector,industry_group,is_fo_stock,fo_category,Include
+Reliance Industries Limited,Oil & Gas Refining & Marketing,RELIANCE,EQ,,RELIANCE.NS,Energy,Energy,True,F&O,1
+HDFC Bank Limited,Banks - Regional,HDFCBANK,EQ,,HDFCBANK.NS,Financial Services,Financial Services,True,F&O,1
+Bharti Airtel Limited,Telecom Services,BHARTIARTL,EQ,,BHARTIARTL.NS,Communication Services,Communication Services,True,F&O,1
+State Bank of India,Banks - Regional,SBIN,EQ,,SBIN.NS,Financial Services,Financial Services,True,F&O,1
+ICICI Bank Limited,Banks - Regional,ICICIBANK,EQ,,ICICIBANK.NS,Financial Services,Financial Services,True,F&O,1
+Tata Consultancy Services Limited,Information Technology Services,TCS,EQ,,TCS.NS,Technology,Technology,True,F&O,1
+Bajaj Finance Limited,Credit Services,BAJFINANCE,EQ,,BAJFINANCE.NS,Financial Services,Financial Services,True,F&O,1
+Larsen & Toubro Limited,Engineering & Construction,LT,EQ,,LT.NS,Industrials,Industrials,True,F&O,1
+Hindustan Unilever Limited,Household & Personal Products,HINDUNILVR,EQ,,HINDUNILVR.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+Life Insurance Corporation Of India,Insurance - Life,LICI,EQ,,LICI.NS,Financial Services,Financial Services,True,F&O,1
+Infosys Limited,Information Technology Services,INFY,EQ,,INFY.NS,Technology,Technology,True,F&O,1
+Sun Pharmaceutical Industries Limited,Drug Manufacturers - Specialty & Generic,SUNPHARMA,EQ,,SUNPHARMA.NS,Healthcare,Healthcare,True,F&O,1
+Adani Power Limited,Utilities,ADANIPOWER,EQ,,ADANIPOWER.NS,Utilities,Utilities,True,F&O,1
+Maruti Suzuki India Limited,Auto Manufacturers,MARUTI,EQ,,MARUTI.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Adani Ports and Special Economic Zone Limited,Marine Shipping,ADANIPORTS,EQ,,ADANIPORTS.NS,Industrials,Industrials,True,F&O,1
+Titan Company Limited,Luxury Goods,TITAN,EQ,,TITAN.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Mahindra & Mahindra Limited,Auto Manufacturers,M&M,EQ,,M&M.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Axis Bank Limited,Banks - Regional,AXISBANK,EQ,,AXISBANK.NS,Financial Services,Financial Services,True,F&O,1
+NTPC Limited,Utilities,NTPC,EQ,,NTPC.NS,Utilities,Utilities,True,F&O,1
+ITC Limited,Consumer Defensive,ITC,EQ,,ITC.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+Kotak Mahindra Bank Limited,Banks - Regional,KOTAKBANK,EQ,,KOTAKBANK.NS,Financial Services,Financial Services,True,F&O,1
+UltraTech Cement Limited,Building Materials,ULTRACEMCO,EQ,,ULTRACEMCO.NS,Basic Materials,Basic Materials,True,F&O,1
+Oil & Natural Gas Corporation Limited,Energy,ONGC,EQ,,ONGC.NS,Energy,Energy,True,F&O,1
+Adani Enterprises Limited,Energy,ADANIENT,EQ,,ADANIENT.NS,Energy,Energy,True,F&O,1
+HCL Technologies Limited,Information Technology Services,HCLTECH,EQ,,HCLTECH.NS,Technology,Technology,True,F&O,1
+Bharat Electronics Limited,Aerospace & Defense,BEL,EQ,,BEL.NS,Industrials,Industrials,True,F&O,1
+Hindustan Aeronautics Limited,Aerospace & Defense,HAL,EQ,,HAL.NS,Industrials,Industrials,True,F&O,1
+JSW Steel Limited,Steel,JSWSTEEL,EQ,,JSWSTEEL.NS,Basic Materials,Basic Materials,True,F&O,1
+Bajaj Auto Limited,Auto Manufacturers,BAJAJ-AUTO,EQ,,BAJAJ-AUTO.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Power Grid Corporation of India Limited,Utilities,POWERGRID,EQ,,POWERGRID.NS,Utilities,Utilities,True,F&O,1
+Bajaj Finserv Limited,Financial Services,BAJAJFINSV,EQ,,BAJAJFINSV.NS,Financial Services,Financial Services,True,F&O,1
+Avenue Supermarts Limited,Consumer Defensive,DMART,EQ,,DMART.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+Nestle India Limited,Packaged Foods,NESTLEIND,EQ,,NESTLEIND.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+Coal India Limited,Energy,COALINDIA,EQ,,COALINDIA.NS,Energy,Energy,True,F&O,1
+Hindustan Zinc Limited,Basic Materials,HINDZINC,EQ,,HINDZINC.NS,Basic Materials,Basic Materials,True,F&O,1
+Tata Steel Limited,Steel,TATASTEEL,EQ,,TATASTEEL.NS,Basic Materials,Basic Materials,True,F&O,1
+Asian Paints Limited,Specialty Chemicals,ASIANPAINT,EQ,,ASIANPAINT.NS,Basic Materials,Basic Materials,True,F&O,1
+Shriram Finance Limited,Credit Services,SHRIRAMFIN,EQ,,SHRIRAMFIN.NS,Financial Services,Financial Services,True,F&O,1
+ETERNAL LIMITED,Consumer Cyclical,ETERNAL,EQ,,ETERNAL.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Hindalco Industries Limited,Basic Materials,HINDALCO,EQ,,HINDALCO.NS,Basic Materials,Basic Materials,True,F&O,1
+Adani Green Energy Limited,Utilities - Renewable,ADANIGREEN,EQ,,ADANIGREEN.NS,Utilities,Utilities,True,F&O,1
+Wipro Limited,Information Technology Services,WIPRO,EQ,,WIPRO.NS,Technology,Technology,True,F&O,1
+Indian Oil Corporation Limited,Oil & Gas Refining & Marketing,IOC,EQ,,IOC.NS,Energy,Energy,True,F&O,1
+Grasim Industries Limited,Building Materials,GRASIM,EQ,,GRASIM.NS,Basic Materials,Basic Materials,True,F&O,1
+Eicher Motors Limited,Auto Manufacturers,EICHERMOT,EQ,,EICHERMOT.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+SBI Life Insurance Company Limited,Insurance - Life,SBILIFE,EQ,,SBILIFE.NS,Financial Services,Financial Services,True,F&O,1
+Divi's Laboratories Limited,Drug Manufacturers - Specialty & Generic,DIVISLAB,EQ,,DIVISLAB.NS,Healthcare,Healthcare,True,F&O,1
+TVS Motor Company Limited,Auto Manufacturers,TVSMOTOR,EQ,,TVSMOTOR.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+InterGlobe Aviation Limited,Industrials,INDIGO,EQ,,INDIGO.NS,Industrials,Industrials,True,F&O,1
+Varun Beverages Limited,Consumer Defensive,VBL,EQ,,VBL.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+Jio Financial Services Limited,Asset Management,JIOFIN,EQ,,JIOFIN.NS,Financial Services,Financial Services,True,F&O,1
+Adani Energy Solutions Limited,Utilities,ADANIENSOL,EQ,,ADANIENSOL.NS,Utilities,Utilities,True,F&O,1
+ICICI Prudential Asset Management Company Limited,Asset Management,ICICIAMC,EQ,,ICICIAMC.NS,Financial Services,Financial Services,False,Cash,1
+Tata Motors Limited,Auto Manufacturers,TMCV,EQ,,TMCV.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+BSE Limited,Financial Services,BSE,EQ,,BSE.NS,Financial Services,Financial Services,True,F&O,1
+Power Finance Corporation Limited,Credit Services,PFC,EQ,,PFC.NS,Financial Services,Financial Services,True,F&O,1
+Hitachi Energy India Limited,Electrical Equipment & Parts,POWERINDIA,EQ,,POWERINDIA.NS,Industrials,Industrials,True,F&O,1
+Trent Limited,Consumer Cyclical,TRENT,EQ,,TRENT.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+DLF Limited,Real Estate,DLF,EQ,,DLF.NS,Real Estate,Real Estate,True,F&O,1
+Hyundai Motor India Limited,Auto Manufacturers,HYUNDAI,EQ,,HYUNDAI.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Pidilite Industries Limited,Specialty Chemicals,PIDILITIND,EQ,,PIDILITIND.NS,Basic Materials,Basic Materials,True,F&O,1
+Cummins India Limited,Specialty Industrial Machinery,CUMMINSIND,EQ,,CUMMINSIND.NS,Industrials,Industrials,True,F&O,1
+ABB India Limited,Specialty Industrial Machinery,ABB,EQ,,ABB.NS,Industrials,Industrials,True,F&O,1
+Torrent Pharmaceuticals Limited,Drug Manufacturers - Specialty & Generic,TORNTPHARM,EQ,,TORNTPHARM.NS,Healthcare,Healthcare,True,F&O,1
+Solar Industries India Limited,Specialty Chemicals,SOLARINDS,EQ,,SOLARINDS.NS,Basic Materials,Basic Materials,True,F&O,1
+Cholamandalam Investment and Finance Company Limited,Credit Services,CHOLAFIN,EQ,,CHOLAFIN.NS,Financial Services,Financial Services,True,F&O,1
+Muthoot Finance Limited,Credit Services,MUTHOOTFIN,EQ,,MUTHOOTFIN.NS,Financial Services,Financial Services,True,F&O,1
+Bharat Heavy Electricals Limited,Specialty Industrial Machinery,BHEL,EQ,,BHEL.NS,Industrials,Industrials,True,F&O,1
+Tata Power Company Limited,Utilities,TATAPOWER,EQ,,TATAPOWER.NS,Utilities,Utilities,True,F&O,1
+Samvardhana Motherson International Limited,Auto Parts,MOTHERSON,EQ,,MOTHERSON.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Indian Railway Finance Corporation Limited,Credit Services,IRFC,EQ,,IRFC.NS,Financial Services,Financial Services,True,F&O,1
+CG Power and Industrial Solutions Limited,Electrical Equipment & Parts,CGPOWER,EQ,,CGPOWER.NS,Industrials,Industrials,True,F&O,1
+Polycab India Limited,Electrical Equipment & Parts,POLYCAB,EQ,,POLYCAB.NS,Industrials,Industrials,True,F&O,1
+Bank of Baroda,Banks - Regional,BANKBARODA,EQ,,BANKBARODA.NS,Financial Services,Financial Services,True,F&O,1
+Siemens Limited,Specialty Industrial Machinery,SIEMENS,EQ,,SIEMENS.NS,Industrials,Industrials,True,F&O,1
+Tata Capital Limited,Asset Management,TATACAP,EQ,,TATACAP.NS,Financial Services,Financial Services,False,Cash,1
+HDFC Life Insurance Company Limited,Insurance - Life,HDFCLIFE,EQ,,HDFCLIFE.NS,Financial Services,Financial Services,True,F&O,1
+Britannia Industries Limited,Packaged Foods,BRITANNIA,EQ,,BRITANNIA.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+Tata Motors Passenger Vehicles Limited,Auto Manufacturers,TMPV,EQ,,TMPV.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Tech Mahindra Limited,Information Technology Services,TECHM,EQ,,TECHM.NS,Technology,Technology,True,F&O,1
+Bharat Petroleum Corporation Limited,Oil & Gas Refining & Marketing,BPCL,EQ,,BPCL.NS,Energy,Energy,True,F&O,1
+LTM Limited,Information Technology Services,LTM,EQ,,LTM.NS,Technology,Technology,True,F&O,1
+JINDAL STEEL LIMITED,Steel,JINDALSTEL,EQ,,JINDALSTEL.NS,Basic Materials,Basic Materials,True,F&O,1
+Union Bank of India,Banks - Regional,UNIONBANK,EQ,,UNIONBANK.NS,Financial Services,Financial Services,True,F&O,1
+Billionbrains Garage Ventures Limited,Capital Markets,GROWW,EQ,,GROWW.NS,Financial Services,Financial Services,False,Cash,1
+Punjab National Bank,Banks - Regional,PNB,EQ,,PNB.NS,Financial Services,Financial Services,True,F&O,1
+HDFC Asset Management Company Limited,Asset Management,HDFCAMC,EQ,,HDFCAMC.NS,Financial Services,Financial Services,True,F&O,1
+Canara Bank,Banks - Regional,CANBK,EQ,,CANBK.NS,Financial Services,Financial Services,True,F&O,1
+GE Vernova T&D India Limited,Specialty Industrial Machinery,GVT&D,EQ,,GVT&D.NS,Industrials,Industrials,False,Cash,1
+Bajaj Holdings & Investment Limited,Asset Management,BAJAJHLDNG,EQ,,BAJAJHLDNG.NS,Financial Services,Financial Services,True,F&O,1
+Indian Bank,Banks - Regional,INDIANB,EQ,,INDIANB.NS,Financial Services,Financial Services,True,F&O,1
+Apollo Hospitals Enterprise Limited,Medical Care Facilities,APOLLOHOSP,EQ,,APOLLOHOSP.NS,Healthcare,Healthcare,True,F&O,1
+TATA CONSUMER PRODUCTS LIMITED,Packaged Foods,TATACONSUM,EQ,,TATACONSUM.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+Vedanta Limited,Basic Materials,VEDL,EQ,,VEDL.NS,Basic Materials,Basic Materials,True,F&O,1
+Siemens Energy India Limited,Utilities - Renewable,ENRIN,EQ,,ENRIN.NS,Utilities,Utilities,False,Cash,1
+Bosch Limited,Auto Parts,BOSCHLTD,EQ,,BOSCHLTD.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Ambuja Cements Limited,Building Materials,AMBUJACEM,EQ,,AMBUJACEM.NS,Basic Materials,Basic Materials,True,F&O,1
+GAIL (India) Limited,Utilities,GAIL,EQ,,GAIL.NS,Utilities,Utilities,True,F&O,1
+Cipla Limited,Drug Manufacturers - Specialty & Generic,CIPLA,EQ,,CIPLA.NS,Healthcare,Healthcare,True,F&O,1
+Lupin Limited,Drug Manufacturers - Specialty & Generic,LUPIN,EQ,,LUPIN.NS,Healthcare,Healthcare,True,F&O,1
+Dr. Reddy's Laboratories Limited,Drug Manufacturers - Specialty & Generic,DRREDDY,EQ,,DRREDDY.NS,Healthcare,Healthcare,True,F&O,1
+Marico Limited,Household & Personal Products,MARICO,EQ,,MARICO.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+Mazagon Dock Shipbuilders Limited,Aerospace & Defense,MAZDOCK,EQ,,MAZDOCK.NS,Industrials,Industrials,True,F&O,1
+GMR AIRPORTS LIMITED,Industrials,GMRAIRPORT,EQ,,GMRAIRPORT.NS,Industrials,Industrials,True,F&O,1
+Godrej Consumer Products Limited,Household & Personal Products,GODREJCP,EQ,,GODREJCP.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+Indus Towers Limited,Telecom Services,INDUSTOWER,EQ,,INDUSTOWER.NS,Communication Services,Communication Services,True,F&O,1
+Hero MotoCorp Limited,Auto Manufacturers,HEROMOTOCO,EQ,,HEROMOTOCO.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+LG Electronics India Limited,Technology,LGEINDIA,EQ,,LGEINDIA.NS,Technology,Technology,False,Cash,1
+Mankind Pharma Limited,Drug Manufacturers - Specialty & Generic,MANKIND,EQ,,MANKIND.NS,Healthcare,Healthcare,True,F&O,1
+JSW Energy Limited,Utilities,JSWENERGY,EQ,,JSWENERGY.NS,Utilities,Utilities,True,F&O,1
+Ashok Leyland Limited,Farm & Heavy Construction Machinery,ASHOKLEY,EQ,,ASHOKLEY.NS,Industrials,Industrials,True,F&O,1
+Max Healthcare Institute Limited,Medical Care Facilities,MAXHEALTH,EQ,,MAXHEALTH.NS,Healthcare,Healthcare,True,F&O,1
+Lloyds Metals And Energy Limited,Steel,LLOYDSME,EQ,,LLOYDSME.NS,Basic Materials,Basic Materials,False,Cash,1
+Lodha Developers Limited,Real Estate,LODHA,EQ,,LODHA.NS,Real Estate,Real Estate,True,F&O,1
+The Indian Hotels Company Limited,Lodging,INDHOTEL,EQ,,INDHOTEL.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Bharat Forge Limited,Auto Parts,BHARATFORG,EQ,,BHARATFORG.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Aditya Birla Capital Limited,Financial Services,ABCAPITAL,EQ,,ABCAPITAL.NS,Financial Services,Financial Services,True,F&O,1
+REC Limited,Credit Services,RECLTD,EQ,,RECLTD.NS,Financial Services,Financial Services,True,F&O,1
+Zydus Lifesciences Limited,Drug Manufacturers - Specialty & Generic,ZYDUSLIFE,EQ,,ZYDUSLIFE.NS,Healthcare,Healthcare,True,F&O,1
+United Spirits Limited,Consumer Defensive,UNITDSPR,EQ,,UNITDSPR.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+Waaree Energies Limited,Solar,WAAREEENER,EQ,,WAAREEENER.NS,Technology,Technology,True,F&O,1
+SHREE CEMENT LIMITED,Building Materials,SHREECEM,EQ,,SHREECEM.NS,Basic Materials,Basic Materials,True,F&O,1
+Meesho Limited,Consumer Cyclical,MEESHO,EQ,,MEESHO.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+ICICI Lombard General Insurance Company Limited,Financial Services,ICICIGI,EQ,,ICICIGI.NS,Financial Services,Financial Services,True,F&O,1
+NTPC Green Energy Limited,Utilities - Renewable,NTPCGREEN,EQ,,NTPCGREEN.NS,Utilities,Utilities,False,Cash,1
+Torrent Power Limited,Utilities,TORNTPOWER,EQ,,TORNTPOWER.NS,Utilities,Utilities,False,Cash,1
+Dabur India Limited,Household & Personal Products,DABUR,EQ,,DABUR.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+Aurobindo Pharma Limited,Drug Manufacturers - Specialty & Generic,AUROPHARMA,EQ,,AUROPHARMA.NS,Healthcare,Healthcare,True,F&O,1
+Lenskart Solutions Limited,Healthcare,LENSKART,EQ,,LENSKART.NS,Healthcare,Healthcare,False,Cash,1
+SRF Limited,Conglomerates,SRF,EQ,,SRF.NS,Industrials,Industrials,True,F&O,1
+Hindustan Petroleum Corporation Limited,Oil & Gas Refining & Marketing,HINDPETRO,EQ,,HINDPETRO.NS,Energy,Energy,True,F&O,1
+ICICI Prudential Life Insurance Company Limited,Insurance - Life,ICICIPRULI,EQ,,ICICIPRULI.NS,Financial Services,Financial Services,True,F&O,1
+Oracle Financial Services Software Limited,Software - Infrastructure,OFSS,EQ,,OFSS.NS,Technology,Technology,True,F&O,1
+NHPC Limited,Utilities - Renewable,NHPC,EQ,,NHPC.NS,Utilities,Utilities,True,F&O,1
+IDBI Bank Limited,Banks - Regional,IDBI,EQ,,IDBI.NS,Financial Services,Financial Services,False,Cash,1
+Persistent Systems Limited,Information Technology Services,PERSISTENT,EQ,,PERSISTENT.NS,Technology,Technology,True,F&O,1
+Multi Commodity Exchange of India Limited,Financial Services,MCX,EQ,,MCX.NS,Financial Services,Financial Services,True,F&O,1
+Havells India Limited,Electrical Equipment & Parts,HAVELLS,EQ,,HAVELLS.NS,Industrials,Industrials,True,F&O,1
+AU Small Finance Bank Limited,Banks - Regional,AUBANK,EQ,,AUBANK.NS,Financial Services,Financial Services,True,F&O,1
+FSN E-Commerce Ventures Limited,Consumer Cyclical,NYKAA,EQ,,NYKAA.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+NMDC Limited,Steel,NMDC,EQ,,NMDC.NS,Basic Materials,Basic Materials,True,F&O,1
+Steel Authority of India Limited,Steel,SAIL,EQ,,SAIL.NS,Basic Materials,Basic Materials,True,F&O,1
+PB Fintech Limited,Financial Services,POLICYBZR,EQ,,POLICYBZR.NS,Financial Services,Financial Services,True,F&O,1
+L&T Finance Limited,Credit Services,LTF,EQ,,LTF.NS,Financial Services,Financial Services,True,F&O,1
+One 97 Communications Limited,Software - Infrastructure,PAYTM,EQ,,PAYTM.NS,Technology,Technology,True,F&O,1
+Suzlon Energy Limited,Specialty Industrial Machinery,SUZLON,EQ,,SUZLON.NS,Industrials,Industrials,True,F&O,1
+Bharti Hexacom Limited,Telecom Services,BHARTIHEXA,EQ,,BHARTIHEXA.NS,Communication Services,Communication Services,False,Cash,1
+IndusInd Bank Limited,Banks - Regional,INDUSINDBK,EQ,,INDUSINDBK.NS,Financial Services,Financial Services,True,F&O,1
+Oil India Limited,Energy,OIL,EQ,,OIL.NS,Energy,Energy,True,F&O,1
+National Aluminium Company Limited,Basic Materials,NATIONALUM,EQ,,NATIONALUM.NS,Basic Materials,Basic Materials,True,F&O,1
+The Federal Bank  Limited,Banks - Regional,FEDERALBNK,EQ,,FEDERALBNK.NS,Financial Services,Financial Services,True,F&O,1
+Bajaj Housing Finance Limited,Mortgage Finance,BAJAJHFL,EQ,,BAJAJHFL.NS,Financial Services,Financial Services,False,Cash,1
+Swiggy Limited,Consumer Cyclical,SWIGGY,EQ,,SWIGGY.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Fortis Healthcare Limited,Medical Care Facilities,FORTIS,EQ,,FORTIS.NS,Healthcare,Healthcare,True,F&O,1
+Nippon Life India Asset Management Limited,Asset Management,NAM-INDIA,EQ,,NAM-INDIA.NS,Financial Services,Financial Services,True,F&O,1
+Adani Total Gas Limited,Utilities,ATGL,EQ,,ATGL.NS,Utilities,Utilities,False,Cash,1
+General Insurance Corporation of India,Financial Services,GICRE,EQ,,GICRE.NS,Financial Services,Financial Services,False,Cash,1
+UNO Minda Limited,Auto Parts,UNOMINDA,EQ,,UNOMINDA.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Alkem Laboratories Limited,Drug Manufacturers - Specialty & Generic,ALKEM,EQ,,ALKEM.NS,Healthcare,Healthcare,True,F&O,1
+Glenmark Pharmaceuticals Limited,Drug Manufacturers - Specialty & Generic,GLENMARK,EQ,,GLENMARK.NS,Healthcare,Healthcare,True,F&O,1
+Linde India Limited,Specialty Chemicals,LINDEINDIA,EQ,,LINDEINDIA.NS,Basic Materials,Basic Materials,False,Cash,1
+Schaeffler India Limited,Auto Parts,SCHAEFFLER,EQ,,SCHAEFFLER.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Laurus Labs Limited,Drug Manufacturers - Specialty & Generic,LAURUSLABS,EQ,,LAURUSLABS.NS,Healthcare,Healthcare,True,F&O,1
+Dixon Technologies (India) Limited,Technology,DIXON,EQ,,DIXON.NS,Technology,Technology,True,F&O,1
+The Phoenix Mills Limited,Real Estate,PHOENIXLTD,EQ,,PHOENIXLTD.NS,Real Estate,Real Estate,True,F&O,1
+Prestige Estates Projects Limited,Real Estate,PRESTIGE,EQ,,PRESTIGE.NS,Real Estate,Real Estate,True,F&O,1
+Bank of Maharashtra,Banks - Regional,MAHABANK,EQ,,MAHABANK.NS,Financial Services,Financial Services,False,Cash,1
+Bank of India,Banks - Regional,BANKINDIA,EQ,,BANKINDIA.NS,Financial Services,Financial Services,True,F&O,1
+Rail Vikas Nigam Limited,Engineering & Construction,RVNL,EQ,,RVNL.NS,Industrials,Industrials,True,F&O,1
+Info Edge (India) Limited,Communication Services,NAUKRI,EQ,,NAUKRI.NS,Communication Services,Communication Services,True,F&O,1
+Jindal Stainless Limited,Steel,JSL,EQ,,JSL.NS,Basic Materials,Basic Materials,False,Cash,1
+Oberoi Realty Limited,Real Estate,OBEROIRLTY,EQ,,OBEROIRLTY.NS,Real Estate,Real Estate,True,F&O,1
+Biocon Limited,Biotechnology,BIOCON,EQ,,BIOCON.NS,Healthcare,Healthcare,True,F&O,1
+SBI Cards and Payment Services Limited,Credit Services,SBICARD,EQ,,SBICARD.NS,Financial Services,Financial Services,True,F&O,1
+IDFC First Bank Limited,Banks - Regional,IDFCFIRSTB,EQ,,IDFCFIRSTB.NS,Financial Services,Financial Services,True,F&O,1
+Berger Paints (I) Limited,Specialty Chemicals,BERGEPAINT,EQ,,BERGEPAINT.NS,Basic Materials,Basic Materials,False,Cash,1
+Colgate Palmolive (India) Limited,Household & Personal Products,COLPAL,EQ,,COLPAL.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+JSW Infrastructure Limited,Marine Shipping,JSWINFRA,EQ,,JSWINFRA.NS,Industrials,Industrials,False,Cash,1
+Tube Investments of India Limited,Conglomerates,TIINDIA,EQ,,TIINDIA.NS,Industrials,Industrials,True,F&O,1
+Coforge Limited,Information Technology Services,COFORGE,EQ,,COFORGE.NS,Technology,Technology,True,F&O,1
+Max Financial Services Limited,Insurance - Life,MFSL,EQ,,MFSL.NS,Financial Services,Financial Services,True,F&O,1
+Fertilizers and Chemicals Travancore Limited,Agricultural Inputs,FACT,EQ,,FACT.NS,Basic Materials,Basic Materials,False,Cash,1
+HDB Financial Services Limited,Credit Services,HDBFS,EQ,,HDBFS.NS,Financial Services,Financial Services,False,Cash,1
+Vishal Mega Mart Limited,Consumer Cyclical,VMM,EQ,,VMM.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Coromandel International Limited,Agricultural Inputs,COROMANDEL,EQ,,COROMANDEL.NS,Basic Materials,Basic Materials,False,Cash,1
+Abbott India Limited,Drug Manufacturers - Specialty & Generic,ABBOTINDIA,EQ,,ABBOTINDIA.NS,Healthcare,Healthcare,False,Cash,1
+Godrej Properties Limited,Real Estate,GODREJPROP,EQ,,GODREJPROP.NS,Real Estate,Real Estate,True,F&O,1
+MRF Limited,Auto Parts,MRF,EQ,,MRF.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Hindustan Copper Limited,Basic Materials,HINDCOPPER,EQ,,HINDCOPPER.NS,Basic Materials,Basic Materials,False,Cash,1
+UPL Limited,Agricultural Inputs,UPL,EQ,,UPL.NS,Basic Materials,Basic Materials,True,F&O,1
+APL Apollo Tubes Limited,Steel,APLAPOLLO,EQ,,APLAPOLLO.NS,Basic Materials,Basic Materials,True,F&O,1
+Motilal Oswal Financial Services Limited,Capital Markets,MOTILALOFS,EQ,,MOTILALOFS.NS,Financial Services,Financial Services,True,F&O,1
+Bharat Dynamics Limited,Aerospace & Defense,BDL,EQ,,BDL.NS,Industrials,Industrials,True,F&O,1
+Thermax Limited,Conglomerates,THERMAX,EQ,,THERMAX.NS,Industrials,Industrials,False,Cash,1
+Sundaram Finance Limited,Credit Services,SUNDARMFIN,EQ,,SUNDARMFIN.NS,Financial Services,Financial Services,False,Cash,1
+Apar Industries Limited,Electrical Equipment & Parts,APARINDS,EQ,,APARINDS.NS,Industrials,Industrials,False,Cash,1
+Patanjali Foods Limited,Packaged Foods,PATANJALI,EQ,,PATANJALI.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+KEI Industries Limited,Electrical Equipment & Parts,KEI,EQ,,KEI.NS,Industrials,Industrials,True,F&O,1
+PI Industries Limited,Agricultural Inputs,PIIND,EQ,,PIIND.NS,Basic Materials,Basic Materials,True,F&O,1
+Mahindra & Mahindra Financial Services Limited,Credit Services,M&MFIN,EQ,,M&MFIN.NS,Financial Services,Financial Services,False,Cash,1
+Cochin Shipyard Limited,Aerospace & Defense,COCHINSHIP,EQ,,COCHINSHIP.NS,Industrials,Industrials,True,F&O,1
+Radico Khaitan Limited,Consumer Defensive,RADICO,EQ,,RADICO.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Supreme Industries Limited,Building Products & Equipment,SUPREMEIND,EQ,,SUPREMEIND.NS,Industrials,Industrials,True,F&O,1
+Housing & Urban Development Corporation Limited,Credit Services,HUDCO,EQ,,HUDCO.NS,Financial Services,Financial Services,False,Cash,1
+Premier Energies Limited,Solar,PREMIERENE,EQ,,PREMIERENE.NS,Technology,Technology,True,F&O,1
+Piramal Finance Limited,Credit Services,PIRAMALFIN,EQ,,PIRAMALFIN.NS,Financial Services,Financial Services,False,Cash,1
+NLC India Limited,Utilities,NLCINDIA,EQ,,NLCINDIA.NS,Utilities,Utilities,False,Cash,1
+360 ONE WAM LIMITED,Asset Management,360ONE,EQ,,360ONE.NS,Financial Services,Financial Services,True,F&O,1
+Tata Communications Limited,Telecom Services,TATACOMM,EQ,,TATACOMM.NS,Communication Services,Communication Services,False,Cash,1
+Indian Railway Catering And Tourism Corporation Limited,Consumer Cyclical,IRCTC,EQ,,IRCTC.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Anthem Biosciences Limited,Biotechnology,ANTHEM,EQ,,ANTHEM.NS,Healthcare,Healthcare,False,Cash,1
+Kalyan Jewellers India Limited,Luxury Goods,KALYANKJIL,EQ,,KALYANKJIL.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Voltas Limited,"Furnishings, Fixtures & Appliances",VOLTAS,EQ,,VOLTAS.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Balkrishna Industries Limited,Auto Parts,BALKRISIND,EQ,,BALKRISIND.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+JK Cement Limited,Building Materials,JKCEMENT,EQ,,JKCEMENT.NS,Basic Materials,Basic Materials,False,Cash,1
+Petronet LNG Limited,Oil & Gas Refining & Marketing,PETRONET,EQ,,PETRONET.NS,Energy,Energy,True,F&O,1
+MphasiS Limited,Information Technology Services,MPHASIS,EQ,,MPHASIS.NS,Technology,Technology,True,F&O,1
+Astral Limited,Building Products & Equipment,ASTRAL,EQ,,ASTRAL.NS,Industrials,Industrials,True,F&O,1
+Authum Investment & Infrastructure Limited,Capital Markets,AIIL,EQ,,AIIL.NS,Financial Services,Financial Services,False,Cash,1
+GlaxoSmithKline Pharmaceuticals Limited,Drug Manufacturers - General,GLAXO,EQ,,GLAXO.NS,Healthcare,Healthcare,False,Cash,1
+Page Industries Limited,Apparel Manufacturing,PAGEIND,EQ,,PAGEIND.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Gujarat Fluorochemicals Limited,Specialty Chemicals,FLUOROCHEM,EQ,,FLUOROCHEM.NS,Basic Materials,Basic Materials,False,Cash,1
+Godrej Industries Limited,Conglomerates,GODREJIND,EQ,,GODREJIND.NS,Industrials,Industrials,False,Cash,1
+Container Corporation of India Limited,Industrials,CONCOR,EQ,,CONCOR.NS,Industrials,Industrials,True,F&O,1
+Poonawalla Fincorp Limited,Credit Services,POONAWALLA,EQ,,POONAWALLA.NS,Financial Services,Financial Services,False,Cash,1
+L&T Technology Services Limited,Information Technology Services,LTTS,EQ,,LTTS.NS,Technology,Technology,False,Cash,1
+IPCA Laboratories Limited,Drug Manufacturers - Specialty & Generic,IPCALAB,EQ,,IPCALAB.NS,Healthcare,Healthcare,False,Cash,1
+Aster DM Healthcare Limited,Medical Care Facilities,ASTERDM,EQ,,ASTERDM.NS,Healthcare,Healthcare,False,Cash,1
+Ajanta Pharma Limited,Drug Manufacturers - Specialty & Generic,AJANTPHARM,EQ,,AJANTPHARM.NS,Healthcare,Healthcare,False,Cash,1
+Godfrey Phillips India Limited,Consumer Defensive,GODFRYPHLP,EQ,,GODFRYPHLP.NS,Consumer Defensive,Consumer Defensive,True,F&O,1
+Indian Renewable Energy Development Agency Limited,Credit Services,IREDA,EQ,,IREDA.NS,Financial Services,Financial Services,True,F&O,1
+United Breweries Limited,Consumer Defensive,UBL,EQ,,UBL.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+AIA Engineering Limited,Specialty Industrial Machinery,AIAENG,EQ,,AIAENG.NS,Industrials,Industrials,False,Cash,1
+Narayana Hrudayalaya Ltd.,Medical Care Facilities,NH,EQ,,NH.NS,Healthcare,Healthcare,False,Cash,1
+Tata Investment Corporation Limited,Asset Management,TATAINVEST,EQ,,TATAINVEST.NS,Financial Services,Financial Services,False,Cash,1
+Navin Fluorine International Limited,Chemicals,NAVINFLUOR,EQ,,NAVINFLUOR.NS,Basic Materials,Basic Materials,False,Cash,1
+3M India Limited,Conglomerates,3MINDIA,EQ,,3MINDIA.NS,Industrials,Industrials,False,Cash,1
+Sona BLW Precision Forgings Limited,Auto Parts,SONACOMS,EQ,,SONACOMS.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Delhivery Limited,Industrials,DELHIVERY,EQ,,DELHIVERY.NS,Industrials,Industrials,True,F&O,1
+Endurance Technologies Limited,Auto Parts,ENDURANCE,EQ,,ENDURANCE.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Ather Energy Limited,Auto Manufacturers,ATHERENERG,EQ,,ATHERENERG.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Garden Reach Shipbuilders & Engineers Limited,Aerospace & Defense,GRSE,EQ,,GRSE.NS,Industrials,Industrials,False,Cash,1
+Blue Star Limited,Building Products & Equipment,BLUESTARCO,EQ,,BLUESTARCO.NS,Industrials,Industrials,True,F&O,1
+Escorts Kubota Limited,Farm & Heavy Construction Machinery,ESCORTS,EQ,,ESCORTS.NS,Industrials,Industrials,False,Cash,1
+JB Chemicals & Pharmaceuticals Limited,Drug Manufacturers - Specialty & Generic,JBCHEPHARM,EQ,,JBCHEPHARM.NS,Healthcare,Healthcare,False,Cash,1
+ITC Hotels Limited,Consumer Cyclical,ITCHOTELS,EQ,,ITCHOTELS.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Dalmia Bharat Limited,Building Materials,DALBHARAT,EQ,,DALBHARAT.NS,Basic Materials,Basic Materials,True,F&O,1
+Welspun Corp Limited,Steel,WELCORP,EQ,,WELCORP.NS,Basic Materials,Basic Materials,False,Cash,1
+Cholamandalam Financial Holdings Limited,Credit Services,CHOLAHLDNG,EQ,,CHOLAHLDNG.NS,Financial Services,Financial Services,False,Cash,1
+Bandhan Bank Limited,Banks - Regional,BANDHANBNK,EQ,,BANDHANBNK.NS,Financial Services,Financial Services,True,F&O,1
+Central Bank of India,Banks - Regional,CENTRALBK,EQ,,CENTRALBK.NS,Financial Services,Financial Services,False,Cash,1
+K.P.R. Mill Limited,Textile Manufacturing,KPRMILL,EQ,,KPRMILL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Global Health Limited,Medical Care Facilities,MEDANTA,EQ,,MEDANTA.NS,Healthcare,Healthcare,False,Cash,1
+Procter & Gamble Hygiene and Health Care Limited,Household & Personal Products,PGHH,EQ,,PGHH.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Himadri Speciality Chemical Limited,Specialty Chemicals,HSCL,EQ,,HSCL.NS,Basic Materials,Basic Materials,False,Cash,1
+LIC Housing Finance Limited,Mortgage Finance,LICHSGFIN,EQ,,LICHSGFIN.NS,Financial Services,Financial Services,True,F&O,1
+Gland Pharma Limited,Drug Manufacturers - Specialty & Generic,GLAND,EQ,,GLAND.NS,Healthcare,Healthcare,False,Cash,1
+Emcure Pharmaceuticals Limited,Drug Manufacturers - Specialty & Generic,EMCURE,EQ,,EMCURE.NS,Healthcare,Healthcare,False,Cash,1
+Jubilant Foodworks Limited,Consumer Cyclical,JUBLFOOD,EQ,,JUBLFOOD.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Amber Enterprises India Limited,"Furnishings, Fixtures & Appliances",AMBER,EQ,,AMBER.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Physicswallah Limited,Consumer Defensive,PWL,EQ,,PWL.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Aditya Birla Sun Life AMC Limited,Asset Management,ABSLAMC,EQ,,ABSLAMC.NS,Financial Services,Financial Services,False,Cash,1
+SJVN Limited,Utilities - Renewable,SJVN,EQ,,SJVN.NS,Utilities,Utilities,False,Cash,1
+Exide Industries Limited,Auto Parts,EXIDEIND,EQ,,EXIDEIND.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Star Health and Allied Insurance Company Limited,Insurance - Life,STARHEALTH,EQ,,STARHEALTH.NS,Financial Services,Financial Services,False,Cash,1
+CRISIL Limited,Financial Services,CRISIL,EQ,,CRISIL.NS,Financial Services,Financial Services,False,Cash,1
+Kaynes Technology India Limited,Electronic Components,KAYNES,EQ,,KAYNES.NS,Technology,Technology,True,F&O,1
+Anand Rathi Wealth Limited,Asset Management,ANANDRATHI,EQ,,ANANDRATHI.NS,Financial Services,Financial Services,False,Cash,1
+Angel One Limited,Capital Markets,ANGELONE,EQ,,ANGELONE.NS,Financial Services,Financial Services,True,F&O,1
+Nuvama Wealth Management Limited,Asset Management,NUVAMA,EQ,,NUVAMA.NS,Financial Services,Financial Services,True,F&O,1
+Manappuram Finance Limited,Credit Services,MANAPPURAM,EQ,,MANAPPURAM.NS,Financial Services,Financial Services,True,F&O,1
+Hexaware Technologies Limited,Information Technology Services,HEXT,EQ,,HEXT.NS,Technology,Technology,False,Cash,1
+Aditya Infotech Limited,Building Products & Equipment,CPPLUS,EQ,,CPPLUS.NS,Industrials,Industrials,False,Cash,1
+Karur Vysya Bank Limited,Banks - Regional,KARURVYSYA,EQ,,KARURVYSYA.NS,Financial Services,Financial Services,False,Cash,1
+Mangalore Refinery and Petrochemicals Limited,Oil & Gas Refining & Marketing,MRPL,EQ,,MRPL.NS,Energy,Energy,False,Cash,1
+TVS Holdings Limited,Auto Parts,TVSHLTD,EQ,,TVSHLTD.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Go Digit General Insurance Limited,Financial Services,GODIGIT,EQ,,GODIGIT.NS,Financial Services,Financial Services,False,Cash,1
+ITI Limited,Communication Equipment,ITI,EQ,,ITI.NS,Technology,Technology,False,Cash,1
+Krishna Institute of Medical Sciences Limited,Medical Care Facilities,KIMS,EQ,,KIMS.NS,Healthcare,Healthcare,False,Cash,1
+Inventurus Knowledge Solutions Limited,Healthcare,IKS,EQ,,IKS.NS,Healthcare,Healthcare,False,Cash,1
+PNB Housing Finance Limited,Mortgage Finance,PNBHOUSING,EQ,,PNBHOUSING.NS,Financial Services,Financial Services,True,F&O,1
+Motherson Sumi Wiring India Limited,Auto Parts,MSUMI,EQ,,MSUMI.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Metro Brands Limited,Consumer Cyclical,METROBRAND,EQ,,METROBRAND.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+ZF Commercial Vehicle Control Systems India Limited,Auto Parts,ZFCVINDIA,EQ,,ZFCVINDIA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Dr. Lal Path Labs Ltd.,Diagnostics & Research,LALPATHLAB,EQ,,LALPATHLAB.NS,Healthcare,Healthcare,False,Cash,1
+FORCE MOTORS LTD,Auto Manufacturers,FORCEMOT,EQ,,FORCEMOT.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Gujarat Gas Limited,Utilities,GUJGASLTD,EQ,,GUJGASLTD.NS,Utilities,Utilities,False,Cash,1
+NBCC (India) Limited,Engineering & Construction,NBCC,EQ,,NBCC.NS,Industrials,Industrials,True,F&O,1
+The New India Assurance Company Limited,Financial Services,NIACL,EQ,,NIACL.NS,Financial Services,Financial Services,False,Cash,1
+Timken India Limited,Tools & Accessories,TIMKEN,EQ,,TIMKEN.NS,Industrials,Industrials,False,Cash,1
+Tata Elxsi Limited,Software - Application,TATAELXSI,EQ,,TATAELXSI.NS,Technology,Technology,True,F&O,1
+AWL Agri Business Limited,Packaged Foods,AWL,EQ,,AWL.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Honeywell Automation India Limited,Electrical Equipment & Parts,HONAUT,EQ,,HONAUT.NS,Industrials,Industrials,False,Cash,1
+Gillette India Limited,Household & Personal Products,GILLETTE,EQ,,GILLETTE.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Central Depository Services (India) Limited,Capital Markets,CDSL,EQ,,CDSL.NS,Financial Services,Financial Services,True,F&O,1
+ACC Limited,Building Materials,ACC,EQ,,ACC.NS,Basic Materials,Basic Materials,False,Cash,1
+Wockhardt Limited,Drug Manufacturers - Specialty & Generic,WOCKPHARMA,EQ,,WOCKPHARMA.NS,Healthcare,Healthcare,False,Cash,1
+Apollo Tyres Limited,Auto Parts,APOLLOTYRE,EQ,,APOLLOTYRE.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Tata Technologies Limited,Information Technology Services,TATATECH,EQ,,TATATECH.NS,Technology,Technology,False,Cash,1
+Deepak Nitrite Limited,Chemicals,DEEPAKNTR,EQ,,DEEPAKNTR.NS,Basic Materials,Basic Materials,False,Cash,1
+Aegis Logistics Limited,Oil & Gas Refining & Marketing,AEGISLOG,EQ,,AEGISLOG.NS,Energy,Energy,False,Cash,1
+Netweb Technologies India Limited,Technology,NETWEB,EQ,,NETWEB.NS,Technology,Technology,False,Cash,1
+PTC Industries Limited,Metal Fabrication,PTCIL,EQ,,PTCIL.NS,Industrials,Industrials,False,Cash,1
+Shyam Metalics and Energy Limited,Steel,SHYAMMETL,EQ,,SHYAMMETL.NS,Basic Materials,Basic Materials,False,Cash,1
+Kirloskar Oil Engines Limited,Specialty Industrial Machinery,KIRLOSENG,EQ,,KIRLOSENG.NS,Industrials,Industrials,False,Cash,1
+CESC Limited,Utilities,CESC,EQ,,CESC.NS,Utilities,Utilities,False,Cash,1
+KIOCL Limited,Steel,KIOCL,EQ,,KIOCL.NS,Basic Materials,Basic Materials,False,Cash,1
+Sumitomo Chemical India Limited,Agricultural Inputs,SUMICHEM,EQ,,SUMICHEM.NS,Basic Materials,Basic Materials,False,Cash,1
+CREDITACCESS GRAMEEN LIMITED,Credit Services,CREDITACC,EQ,,CREDITACC.NS,Financial Services,Financial Services,False,Cash,1
+Piramal Pharma Limited,Drug Manufacturers - Specialty & Generic,PPLPHARMA,EQ,,PPLPHARMA.NS,Healthcare,Healthcare,False,Cash,1
+Sai Life Sciences Limited,Diagnostics & Research,SAILIFE,EQ,,SAILIFE.NS,Healthcare,Healthcare,False,Cash,1
+HBL Engineering Limited,Electrical Equipment & Parts,HBLENGINE,EQ,,HBLENGINE.NS,Industrials,Industrials,False,Cash,1
+Aegis Vopak Terminals Limited,Energy,AEGISVOPAK,EQ,,AEGISVOPAK.NS,Energy,Energy,False,Cash,1
+Prime Focus Limited,Communication Services,PFOCUS,EQ,,PFOCUS.NS,Communication Services,Communication Services,False,Cash,1
+Indraprastha Gas Limited,Utilities,IGL,EQ,,IGL.NS,Utilities,Utilities,False,Cash,1
+Data Patterns (India) Limited,Aerospace & Defense,DATAPATTNS,EQ,,DATAPATTNS.NS,Industrials,Industrials,False,Cash,1
+The Great Eastern Shipping Company Limited,Marine Shipping,GESHIP,EQ,,GESHIP.NS,Industrials,Industrials,False,Cash,1
+The Ramco Cements Limited,Building Materials,RAMCOCEM,EQ,,RAMCOCEM.NS,Basic Materials,Basic Materials,False,Cash,1
+Neuland Laboratories Limited,Drug Manufacturers - Specialty & Generic,NEULANDLAB,EQ,,NEULANDLAB.NS,Healthcare,Healthcare,False,Cash,1
+Sun TV Network Limited,Communication Services,SUNTV,EQ,,SUNTV.NS,Communication Services,Communication Services,False,Cash,1
+Pine Labs Limited,Software - Infrastructure,PINELABS,EQ,,PINELABS.NS,Technology,Technology,False,Cash,1
+Acutaas Chemicals Limited,Specialty Chemicals,ACUTAAS,EQ,,ACUTAAS.NS,Basic Materials,Basic Materials,False,Cash,1
+Pfizer Limited,Drug Manufacturers - General,PFIZER,EQ,,PFIZER.NS,Healthcare,Healthcare,False,Cash,1
+Hatsun Agro Product Limited,Packaged Foods,HATSUN,EQ,,HATSUN.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+R R Kabel Limited,Electrical Equipment & Parts,RRKABEL,EQ,,RRKABEL.NS,Industrials,Industrials,False,Cash,1
+Aadhar Housing Finance Limited,Mortgage Finance,AADHARHFC,EQ,,AADHARHFC.NS,Financial Services,Financial Services,False,Cash,1
+Kalpataru Projects International Limited,Engineering & Construction,KPIL,EQ,,KPIL.NS,Industrials,Industrials,False,Cash,1
+Gujarat Mineral Development Corporation Limited,Energy,GMDCLTD,EQ,,GMDCLTD.NS,Energy,Energy,False,Cash,1
+HFCL Limited,Communication Equipment,HFCL,EQ,,HFCL.NS,Technology,Technology,False,Cash,1
+Urban Company Limited,Software - Application,URBANCO,EQ,,URBANCO.NS,Technology,Technology,False,Cash,1
+Craftsman Automation Limited,Auto Parts,CRAFTSMAN,EQ,,CRAFTSMAN.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Asahi India Glass Limited,Auto Parts,ASAHIINDIA,EQ,,ASAHIINDIA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+RBL Bank Limited,Banks - Regional,RBLBANK,EQ,,RBLBANK.NS,Financial Services,Financial Services,True,F&O,1
+AstraZeneca Pharma India Limited,Drug Manufacturers - Specialty & Generic,ASTRAZEN,EQ,,ASTRAZEN.NS,Healthcare,Healthcare,False,Cash,1
+Syrma SGS Technology Limited,Electronic Components,SYRMA,EQ,,SYRMA.NS,Technology,Technology,False,Cash,1
+Affle 3i Limited,Communication Services,AFFLE,EQ,,AFFLE.NS,Communication Services,Communication Services,False,Cash,1
+Natco Pharma Limited,Drug Manufacturers - Specialty & Generic,NATCOPHARM,EQ,,NATCOPHARM.NS,Healthcare,Healthcare,False,Cash,1
+Onesource Specialty Pharma Limited,Biotechnology,ONESOURCE,EQ,,ONESOURCE.NS,Healthcare,Healthcare,False,Cash,1
+EIH Limited,Lodging,EIHOTEL,EQ,,EIHOTEL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Gallantt Ispat Limited,Steel,GALLANTT,EQ,,GALLANTT.NS,Basic Materials,Basic Materials,False,Cash,1
+Atul Limited,Specialty Chemicals,ATUL,EQ,,ATUL.NS,Basic Materials,Basic Materials,False,Cash,1
+Sarda Energy & Minerals Limited,Steel,SARDAEN,EQ,,SARDAEN.NS,Basic Materials,Basic Materials,False,Cash,1
+Computer Age Management Services Limited,Information Technology Services,CAMS,EQ,,CAMS.NS,Technology,Technology,True,F&O,1
+Bayer Cropscience Limited,Agricultural Inputs,BAYERCROP,EQ,,BAYERCROP.NS,Basic Materials,Basic Materials,False,Cash,1
+SAGILITY LIMITED,Healthcare,SAGILITY,EQ,,SAGILITY.NS,Healthcare,Healthcare,False,Cash,1
+NAVA LIMITED,Conglomerates,NAVA,EQ,,NAVA.NS,Industrials,Industrials,False,Cash,1
+Anant Raj Limited,Real Estate,ANANTRAJ,EQ,,ANANTRAJ.NS,Real Estate,Real Estate,False,Cash,1
+Ratnamani Metals & Tubes Limited,Steel,RATNAMANI,EQ,,RATNAMANI.NS,Basic Materials,Basic Materials,False,Cash,1
+Emami Limited,Household & Personal Products,EMAMILTD,EQ,,EMAMILTD.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Tata Chemicals Limited,Chemicals,TATACHEM,EQ,,TATACHEM.NS,Basic Materials,Basic Materials,False,Cash,1
+Mtar Technologies Limited,Specialty Industrial Machinery,MTARTECH,EQ,,MTARTECH.NS,Industrials,Industrials,False,Cash,1
+KPIT Technologies Limited,Software - Infrastructure,KPITTECH,EQ,,KPITTECH.NS,Technology,Technology,True,F&O,1
+Belrise Industries Limited,Auto Parts,BELRISE,EQ,,BELRISE.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Jain Resource Recycling Limited,Basic Materials,JAINREC,EQ,,JAINREC.NS,Basic Materials,Basic Materials,False,Cash,1
+IIFL Finance Limited,Credit Services,IIFL,EQ,,IIFL.NS,Financial Services,Financial Services,False,Cash,1
+Carborundum Universal Limited,Conglomerates,CARBORUNIV,EQ,,CARBORUNIV.NS,Industrials,Industrials,False,Cash,1
+Avanti Feeds Limited,Packaged Foods,AVANTIFEED,EQ,,AVANTIFEED.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+City Union Bank Limited,Banks - Regional,CUB,EQ,,CUB.NS,Financial Services,Financial Services,False,Cash,1
+Eris Lifesciences Limited,Drug Manufacturers - Specialty & Generic,ERIS,EQ,,ERIS.NS,Healthcare,Healthcare,False,Cash,1
+Crompton Greaves Consumer Electricals Limited,"Furnishings, Fixtures & Appliances",CROMPTON,EQ,,CROMPTON.NS,Consumer Cyclical,Consumer Cyclical,True,F&O,1
+Godawari Power And Ispat limited,Steel,GPIL,EQ,,GPIL.NS,Basic Materials,Basic Materials,False,Cash,1
+DCM Shriram Limited,Conglomerates,DCMSHRIRAM,EQ,,DCMSHRIRAM.NS,Industrials,Industrials,False,Cash,1
+TD Power Systems Limited,Specialty Industrial Machinery,TDPOWERSYS,EQ,,TDPOWERSYS.NS,Industrials,Industrials,False,Cash,1
+Capri Global Capital Limited,Credit Services,CGCL,EQ,,CGCL.NS,Financial Services,Financial Services,False,Cash,1
+Triveni Turbine Limited,Specialty Industrial Machinery,TRITURBINE,EQ,,TRITURBINE.NS,Industrials,Industrials,False,Cash,1
+The India Cements Limited,Building Materials,INDIACEM,EQ,,INDIACEM.NS,Basic Materials,Basic Materials,False,Cash,1
+Firstsource Solutions Limited,Information Technology Services,FSL,EQ,,FSL.NS,Technology,Technology,False,Cash,1
+Cohance Lifesciences Limited,Drug Manufacturers - Specialty & Generic,COHANCE,EQ,,COHANCE.NS,Healthcare,Healthcare,False,Cash,1
+Granules India Limited,Drug Manufacturers - Specialty & Generic,GRANULES,EQ,,GRANULES.NS,Healthcare,Healthcare,False,Cash,1
+Grindwell Norton Limited,Building Products & Equipment,GRINDWELL,EQ,,GRINDWELL.NS,Industrials,Industrials,False,Cash,1
+Brigade Enterprises Limited,Real Estate,BRIGADE,EQ,,BRIGADE.NS,Real Estate,Real Estate,False,Cash,1
+Emmvee Photovoltaic Power Limited,Solar,EMMVEE,EQ,,EMMVEE.NS,Technology,Technology,False,Cash,1
+Fractal Analytics Limited,Software - Infrastructure,FRACTAL,EQ,,FRACTAL.NS,Technology,Technology,False,Cash,1
+Syngene International Limited,Diagnostics & Research,SYNGENE,EQ,,SYNGENE.NS,Healthcare,Healthcare,False,Cash,1
+Sterlite Technologies Limited,Communication Equipment,STLTECH,EQ,,STLTECH.NS,Technology,Technology,False,Cash,1
+Castrol India Limited,Oil & Gas Refining & Marketing,CASTROLIND,EQ,,CASTROLIND.NS,Energy,Energy,False,Cash,1
+Chambal Fertilizers & Chemicals Limited,Agricultural Inputs,CHAMBLFERT,EQ,,CHAMBLFERT.NS,Basic Materials,Basic Materials,False,Cash,1
+CIE Automotive India Limited,Auto Parts,CIEINDIA,EQ,,CIEINDIA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Cupid Limited,Household & Personal Products,CUPID,EQ,,CUPID.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Inox Wind Limited,Specialty Industrial Machinery,INOXWIND,EQ,,INOXWIND.NS,Industrials,Industrials,True,F&O,1
+Kansai Nerolac Paints Limited,Specialty Chemicals,KANSAINER,EQ,,KANSAINER.NS,Basic Materials,Basic Materials,False,Cash,1
+Sundram Fasteners Limited,Auto Parts,SUNDRMFAST,EQ,,SUNDRMFAST.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Century Plyboards (India) Limited,Basic Materials,CENTURYPLY,EQ,,CENTURYPLY.NS,Basic Materials,Basic Materials,False,Cash,1
+Elgi Equipments Limited,Specialty Industrial Machinery,ELGIEQUIP,EQ,,ELGIEQUIP.NS,Industrials,Industrials,False,Cash,1
+Aarti Industries Limited,Specialty Chemicals,AARTIIND,EQ,,AARTIIND.NS,Basic Materials,Basic Materials,False,Cash,1
+Kajaria Ceramics Limited,Building Products & Equipment,KAJARIACER,EQ,,KAJARIACER.NS,Industrials,Industrials,False,Cash,1
+Finolex Cables Limited,Electrical Equipment & Parts,FINCABLES,EQ,,FINCABLES.NS,Industrials,Industrials,False,Cash,1
+BASF India Limited,Specialty Chemicals,BASF,EQ,,BASF.NS,Basic Materials,Basic Materials,False,Cash,1
+Redington Limited,Information Technology Services,REDINGTON,EQ,,REDINGTON.NS,Technology,Technology,False,Cash,1
+Jyoti CNC Automation Limited,Specialty Industrial Machinery,JYOTICNC,EQ,,JYOTICNC.NS,Industrials,Industrials,False,Cash,1
+IFCI Limited,Credit Services,IFCI,EQ,,IFCI.NS,Financial Services,Financial Services,False,Cash,1
+Chalet Hotels Limited,Lodging,CHALET,EQ,,CHALET.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Acme Solar Holdings Limited,Utilities - Renewable,ACMESOLAR,EQ,,ACMESOLAR.NS,Utilities,Utilities,False,Cash,1
+Sammaan Capital Limited,Mortgage Finance,SAMMAANCAP,EQ,,SAMMAANCAP.NS,Financial Services,Financial Services,True,F&O,1
+Deepak Fertilizers and Petrochemicals Corporation Limited,Chemicals,DEEPAKFERT,EQ,,DEEPAKFERT.NS,Basic Materials,Basic Materials,False,Cash,1
+Bikaji Foods International Limited,Packaged Foods,BIKAJI,EQ,,BIKAJI.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Vardhman Textiles Limited,Textile Manufacturing,VTL,EQ,,VTL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Poly Medicure Limited,Healthcare,POLYMED,EQ,,POLYMED.NS,Healthcare,Healthcare,False,Cash,1
+JSW Cement Limited,Building Materials,JSWCEMENT,EQ,,JSWCEMENT.NS,Basic Materials,Basic Materials,False,Cash,1
+Allied Blenders and Distillers Limited,Consumer Defensive,ABDL,EQ,,ABDL.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Zydus Wellness Limited,Packaged Foods,ZYDUSWELL,EQ,,ZYDUSWELL.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Travel Food Services Limited,Consumer Cyclical,TRAVELFOOD,EQ,,TRAVELFOOD.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Aditya Birla Real Estate Limited,Real Estate Services,ABREL,EQ,,ABREL.NS,Real Estate,Real Estate,False,Cash,1
+Cemindia Projects Limited,Engineering & Construction,CEMPRO,EQ,,CEMPRO.NS,Industrials,Industrials,False,Cash,1
+Gujarat State Petronet Limited,Utilities,GSPL,EQ,,GSPL.NS,Utilities,Utilities,False,Cash,1
+Amara Raja Energy & Mobility Limited,Electrical Equipment & Parts,ARE&M,EQ,,ARE&M.NS,Industrials,Industrials,False,Cash,1
+Gabriel India Limited,Auto Parts,GABRIEL,EQ,,GABRIEL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+BEML Limited,Conglomerates,BEML,EQ,,BEML.NS,Industrials,Industrials,False,Cash,1
+Aether Industries Limited,Specialty Chemicals,AETHER,EQ,,AETHER.NS,Basic Materials,Basic Materials,False,Cash,1
+Chennai Petroleum Corporation Limited,Oil & Gas Refining & Marketing,CHENNPETRO,EQ,,CHENNPETRO.NS,Energy,Energy,False,Cash,1
+LMW Limited,Specialty Industrial Machinery,LMW,EQ,,LMW.NS,Industrials,Industrials,False,Cash,1
+Jubilant Pharmova Limited,Drug Manufacturers - Specialty & Generic,JUBLPHARMA,EQ,,JUBLPHARMA.NS,Healthcare,Healthcare,False,Cash,1
+KEC International Limited,Engineering & Construction,KEC,EQ,,KEC.NS,Industrials,Industrials,False,Cash,1
+Shriram Pistons & Rings Limited,Auto Parts,SHRIPISTON,EQ,,SHRIPISTON.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Kfin Technologies Limited,Software - Application,KFINTECH,EQ,,KFINTECH.NS,Technology,Technology,True,F&O,1
+Shipping Corporation Of India Limited,Marine Shipping,SCI,EQ,,SCI.NS,Industrials,Industrials,False,Cash,1
+Rubicon Research Limited,Drug Manufacturers - General,RUBICON,EQ,,RUBICON.NS,Healthcare,Healthcare,False,Cash,1
+Ventive Hospitality Limited,Lodging,VENTIVE,EQ,,VENTIVE.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Sansera Engineering Limited,Auto Parts,SANSERA,EQ,,SANSERA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Anupam Rasayan India Limited,Specialty Chemicals,ANURAS,EQ,,ANURAS.NS,Basic Materials,Basic Materials,False,Cash,1
+The Jammu & Kashmir Bank Limited,Banks - Regional,J&KBANK,EQ,,J&KBANK.NS,Financial Services,Financial Services,False,Cash,1
+Jindal Saw Limited,Steel,JINDALSAW,EQ,,JINDALSAW.NS,Basic Materials,Basic Materials,False,Cash,1
+eClerx Services Limited,Information Technology Services,ECLERX,EQ,,ECLERX.NS,Technology,Technology,False,Cash,1
+Alembic Pharmaceuticals Limited,Drug Manufacturers - Specialty & Generic,APLLTD,EQ,,APLLTD.NS,Healthcare,Healthcare,False,Cash,1
+JBM Auto Limited,Auto Parts,JBMA,EQ,,JBMA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Choice International Limited,Capital Markets,CHOICEIN,EQ,,CHOICEIN.NS,Financial Services,Financial Services,False,Cash,1
+International Gemological Institute Limited,Basic Materials,IGIL,EQ,,IGIL.NS,Basic Materials,Basic Materials,False,Cash,1
+Ksb Limited,Specialty Industrial Machinery,KSB,EQ,,KSB.NS,Industrials,Industrials,False,Cash,1
+Sobha Limited,Real Estate,SOBHA,EQ,,SOBHA.NS,Real Estate,Real Estate,False,Cash,1
+Ola Electric Mobility Limited,Auto Manufacturers,OLAELEC,EQ,,OLAELEC.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+PG Electroplast Limited,Electronic Components,PGEL,EQ,,PGEL.NS,Technology,Technology,True,F&O,1
+Niva Bupa Health Insurance Company Limited,Insurance - Life,NIVABUPA,EQ,,NIVABUPA.NS,Financial Services,Financial Services,False,Cash,1
+CCL Products (India) Limited,Packaged Foods,CCL,EQ,,CCL.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Azad Engineering Limited,Specialty Industrial Machinery,AZAD,EQ,,AZAD.NS,Industrials,Industrials,False,Cash,1
+LT Foods Limited,Packaged Foods,LTFOODS,EQ,,LTFOODS.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Ircon International Limited,Engineering & Construction,IRCON,EQ,,IRCON.NS,Industrials,Industrials,False,Cash,1
+EID Parry India Limited,Agricultural Inputs,EIDPARRY,EQ,,EIDPARRY.NS,Basic Materials,Basic Materials,False,Cash,1
+Maharashtra Scooters Limited,Asset Management,MAHSCOOTER,EQ,,MAHSCOOTER.NS,Financial Services,Financial Services,False,Cash,1
+Graphite India Limited,Electrical Equipment & Parts,GRAPHITE,EQ,,GRAPHITE.NS,Industrials,Industrials,False,Cash,1
+Techno Electric & Engineering Company Limited,Engineering & Construction,TECHNOE,EQ,,TECHNOE.NS,Industrials,Industrials,False,Cash,1
+Zen Technologies Limited,Aerospace & Defense,ZENTEC,EQ,,ZENTEC.NS,Industrials,Industrials,False,Cash,1
+Devyani International Limited,Consumer Cyclical,DEVYANI,EQ,,DEVYANI.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+V-Guard Industries Limited,Electrical Equipment & Parts,VGUARD,EQ,,VGUARD.NS,Industrials,Industrials,False,Cash,1
+Vinati Organics Limited,Specialty Chemicals,VINATIORGA,EQ,,VINATIORGA.NS,Basic Materials,Basic Materials,False,Cash,1
+Ingersoll Rand (India) Limited,Specialty Industrial Machinery,INGERRAND,EQ,,INGERRAND.NS,Industrials,Industrials,False,Cash,1
+Engineers India Limited,Engineering & Construction,ENGINERSIN,EQ,,ENGINERSIN.NS,Industrials,Industrials,False,Cash,1
+JSW Holdings Limited,Conglomerates,JSWHL,EQ,,JSWHL.NS,Industrials,Industrials,False,Cash,1
+Dr. Agarwal's Health Care Limited,Healthcare,AGARWALEYE,EQ,,AGARWALEYE.NS,Healthcare,Healthcare,False,Cash,1
+Usha Martin Limited,Steel,USHAMART,EQ,,USHAMART.NS,Basic Materials,Basic Materials,False,Cash,1
+Fine Organic Industries Limited,Specialty Chemicals,FINEORG,EQ,,FINEORG.NS,Basic Materials,Basic Materials,False,Cash,1
+DOMS Industries Limited,Industrials,DOMS,EQ,,DOMS.NS,Industrials,Industrials,False,Cash,1
+Aptus Value Housing Finance India Limited,Mortgage Finance,APTUS,EQ,,APTUS.NS,Financial Services,Financial Services,False,Cash,1
+Leela Palaces Hotels & Resorts Limited,Lodging,THELEELA,EQ,,THELEELA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Caplin Point Laboratories Limited,Drug Manufacturers - Specialty & Generic,CAPLIPOINT,EQ,,CAPLIPOINT.NS,Healthcare,Healthcare,False,Cash,1
+Clean Max Enviro Energy Solutions Limited,Utilities - Renewable,CLEANMAX,EQ,,CLEANMAX.NS,Utilities,Utilities,False,Cash,1
+Supreme Petrochem Limited,Specialty Chemicals,SPLPETRO,EQ,,SPLPETRO.NS,Basic Materials,Basic Materials,False,Cash,1
+JM Financial Limited,Capital Markets,JMFINANCIL,EQ,,JMFINANCIL.NS,Financial Services,Financial Services,False,Cash,1
+Aditya Birla Lifestyle Brands Limited,Consumer Cyclical,ABLBL,EQ,,ABLBL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Alivus Life Sciences Limited,Drug Manufacturers - Specialty & Generic,ALIVUS,EQ,,ALIVUS.NS,Healthcare,Healthcare,False,Cash,1
+Kirloskar Brothers Limited,Specialty Industrial Machinery,KIRLOSBROS,EQ,,KIRLOSBROS.NS,Industrials,Industrials,False,Cash,1
+Five-Star Business Finance Limited,Credit Services,FIVESTAR,EQ,,FIVESTAR.NS,Financial Services,Financial Services,False,Cash,1
+Privi Speciality Chemicals Limited,Specialty Chemicals,PRIVISCL,EQ,,PRIVISCL.NS,Basic Materials,Basic Materials,False,Cash,1
+Happy Forgings Limited,Metal Fabrication,HAPPYFORGE,EQ,,HAPPYFORGE.NS,Industrials,Industrials,False,Cash,1
+Blue Dart Express Limited,Industrials,BLUEDART,EQ,,BLUEDART.NS,Industrials,Industrials,False,Cash,1
+INOX India Limited,Specialty Industrial Machinery,INOXINDIA,EQ,,INOXINDIA.NS,Industrials,Industrials,False,Cash,1
+JSW Dulux Limited,Specialty Chemicals,JSWDULUX,EQ,,JSWDULUX.NS,Basic Materials,Basic Materials,False,Cash,1
+Canara HSBC Life Insurance Company Limited,Insurance - Life,CANHLIFE,EQ,,CANHLIFE.NS,Financial Services,Financial Services,False,Cash,1
+Aequs Limited,Aerospace & Defense,AEQUS,EQ,,AEQUS.NS,Industrials,Industrials,False,Cash,1
+CEAT Limited,Auto Parts,CEATLTD,EQ,,CEATLTD.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Black Box Limited,Software - Application,BBOX,EQ,,BBOX.NS,Technology,Technology,False,Cash,1
+Rainbow Childrens Medicare Limited,Medical Care Facilities,RAINBOW,EQ,,RAINBOW.NS,Healthcare,Healthcare,False,Cash,1
+TBO Tek Limited,Consumer Cyclical,TBOTEK,EQ,,TBOTEK.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Thangamayil Jewellery Limited,Luxury Goods,THANGAMAYL,EQ,,THANGAMAYL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Vijaya Diagnostic Centre Limited,Diagnostics & Research,VIJAYA,EQ,,VIJAYA.NS,Healthcare,Healthcare,False,Cash,1
+Paradeep Phosphates Limited,Agricultural Inputs,PARADEEP,EQ,,PARADEEP.NS,Basic Materials,Basic Materials,False,Cash,1
+Gravita India Limited,Metal Fabrication,GRAVITA,EQ,,GRAVITA.NS,Industrials,Industrials,False,Cash,1
+NMDC Steel Limited,Steel,NSLNISP,EQ,,NSLNISP.NS,Basic Materials,Basic Materials,False,Cash,1
+Welspun Living Limited,Textile Manufacturing,WELSPUNLIV,EQ,,WELSPUNLIV.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Jupiter Wagons Limited,Industrials,JWL,EQ,,JWL.NS,Industrials,Industrials,False,Cash,1
+Indegene Limited,Healthcare,INDGN,EQ,,INDGN.NS,Healthcare,Healthcare,False,Cash,1
+Signatureglobal (India) Limited,Real Estate,SIGNATURE,EQ,,SIGNATURE.NS,Real Estate,Real Estate,False,Cash,1
+Minda Corporation Limited,Auto Parts,MINDACORP,EQ,,MINDACORP.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Indiamart Intermesh Limited,Communication Services,INDIAMART,EQ,,INDIAMART.NS,Communication Services,Communication Services,False,Cash,1
+UTI Asset Management Company Limited,Asset Management,UTIAMC,EQ,,UTIAMC.NS,Financial Services,Financial Services,False,Cash,1
+Home First Finance Company India Limited,Mortgage Finance,HOMEFIRST,EQ,,HOMEFIRST.NS,Financial Services,Financial Services,False,Cash,1
+Afcons Infrastructure Limited,Engineering & Construction,AFCONS,EQ,,AFCONS.NS,Industrials,Industrials,False,Cash,1
+Elecon Engineering Company Limited,Specialty Industrial Machinery,ELECON,EQ,,ELECON.NS,Industrials,Industrials,False,Cash,1
+Tega Industries Limited,Specialty Industrial Machinery,TEGA,EQ,,TEGA.NS,Industrials,Industrials,False,Cash,1
+Shaily Engineering Plastics Limited,Specialty Chemicals,SHAILY,EQ,,SHAILY.NS,Basic Materials,Basic Materials,False,Cash,1
+Garware Hi-Tech Films Limited,Specialty Chemicals,GRWRHITECH,EQ,,GRWRHITECH.NS,Basic Materials,Basic Materials,False,Cash,1
+Concord Biotech Limited,Biotechnology,CONCORDBIO,EQ,,CONCORDBIO.NS,Healthcare,Healthcare,False,Cash,1
+Apollo Micro Systems Limited,Aerospace & Defense,APOLLO,EQ,,APOLLO.NS,Industrials,Industrials,False,Cash,1
+Ujjivan Small Finance Bank Limited,Banks - Regional,UJJIVANSFB,EQ,,UJJIVANSFB.NS,Financial Services,Financial Services,False,Cash,1
+Whirlpool of India Limited,"Furnishings, Fixtures & Appliances",WHIRLPOOL,EQ,,WHIRLPOOL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+PCBL Chemical Limited,Specialty Chemicals,PCBL,EQ,,PCBL.NS,Basic Materials,Basic Materials,False,Cash,1
+Indian Energy Exchange Limited,Capital Markets,IEX,EQ,,IEX.NS,Financial Services,Financial Services,True,F&O,1
+Zensar Technologies Limited,Information Technology Services,ZENSARTECH,EQ,,ZENSARTECH.NS,Technology,Technology,False,Cash,1
+BLS International Services Limited,Industrials,BLS,EQ,,BLS.NS,Industrials,Industrials,False,Cash,1
+Edelweiss Financial Services Limited,Financial Services,EDELWEISS,EQ,,EDELWEISS.NS,Financial Services,Financial Services,False,Cash,1
+Lumax Auto Technologies Limited,Auto Parts,LUMAXTECH,EQ,,LUMAXTECH.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Nuvoco Vistas Corporation Limited,Building Materials,NUVOCO,EQ,,NUVOCO.NS,Basic Materials,Basic Materials,False,Cash,1
+Sandur Manganese & Iron Ores Limited,Steel,SANDUMA,EQ,,SANDUMA.NS,Basic Materials,Basic Materials,False,Cash,1
+Prudent Corporate Advisory Services Limited,Asset Management,PRUDENT,EQ,,PRUDENT.NS,Financial Services,Financial Services,False,Cash,1
+Jubilant Ingrevia Limited,Specialty Chemicals,JUBLINGREA,EQ,,JUBLINGREA.NS,Basic Materials,Basic Materials,False,Cash,1
+Can Fin Homes Limited,Mortgage Finance,CANFINHOME,EQ,,CANFINHOME.NS,Financial Services,Financial Services,False,Cash,1
+JK Tyre & Industries Limited,Auto Parts,JKTYRE,EQ,,JKTYRE.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Honasa Consumer Limited,Household & Personal Products,HONASA,EQ,,HONASA.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Mahanagar Gas Limited,Utilities,MGL,EQ,,MGL.NS,Utilities,Utilities,False,Cash,1
+Tamilnad Mercantile Bank Limited,Banks - Regional,TMB,EQ,,TMB.NS,Financial Services,Financial Services,False,Cash,1
+HEG Limited,Electrical Equipment & Parts,HEG,EQ,,HEG.NS,Industrials,Industrials,False,Cash,1
+Aavas Financiers Limited,Mortgage Finance,AAVAS,EQ,,AAVAS.NS,Financial Services,Financial Services,False,Cash,1
+Brainbees Solutions Limited,Consumer Cyclical,FIRSTCRY,EQ,,FIRSTCRY.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Arvind Limited,Textile Manufacturing,ARVIND,EQ,,ARVIND.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Metropolis Healthcare Limited,Diagnostics & Research,METROPOLIS,EQ,,METROPOLIS.NS,Healthcare,Healthcare,False,Cash,1
+Godrej Agrovet Limited,Packaged Foods,GODREJAGRO,EQ,,GODREJAGRO.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Tilaknagar Industries Limited,Consumer Defensive,TI,EQ,,TI.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+TITAGARH RAIL SYSTEMS LIMITED,Industrials,TITAGARH,EQ,,TITAGARH.NS,Industrials,Industrials,False,Cash,1
+Action Construction Equipment Limited,Farm & Heavy Construction Machinery,ACE,EQ,,ACE.NS,Industrials,Industrials,False,Cash,1
+Intellect Design Arena Limited,Software - Application,INTELLECT,EQ,,INTELLECT.NS,Technology,Technology,False,Cash,1
+Jayaswal Neco Industries Limited,Steel,JAYNECOIND,EQ,,JAYNECOIND.NS,Basic Materials,Basic Materials,False,Cash,1
+Vedant Fashions Limited,Apparel Manufacturing,MANYAVAR,EQ,,MANYAVAR.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+IIFL Capital Services Limited,Capital Markets,IIFLCAPS,EQ,,IIFLCAPS.NS,Financial Services,Financial Services,False,Cash,1
+Ramkrishna Forgings Limited,Metal Fabrication,RKFORGE,EQ,,RKFORGE.NS,Industrials,Industrials,False,Cash,1
+SWAN CORP LIMITED,Conglomerates,SWANCORP,EQ,,SWANCORP.NS,Industrials,Industrials,False,Cash,1
+Olectra Greentech Limited,Farm & Heavy Construction Machinery,OLECTRA,EQ,,OLECTRA.NS,Industrials,Industrials,False,Cash,1
+Finolex Industries Limited,Building Products & Equipment,FINPIPE,EQ,,FINPIPE.NS,Industrials,Industrials,False,Cash,1
+Sanofi Consumer Healthcare India Limited,Drug Manufacturers - General,SANOFICONR,EQ,,SANOFICONR.NS,Healthcare,Healthcare,False,Cash,1
+Railtel Corporation Of India Limited,Telecom Services,RAILTEL,EQ,,RAILTEL.NS,Communication Services,Communication Services,False,Cash,1
+Lloyds Enterprises Limited,Steel,LLOYDSENT,EQ,,LLOYDSENT.NS,Basic Materials,Basic Materials,False,Cash,1
+SBFC Finance Limited,Credit Services,SBFC,EQ,,SBFC.NS,Financial Services,Financial Services,False,Cash,1
+RITES Limited,Engineering & Construction,RITES,EQ,,RITES.NS,Industrials,Industrials,False,Cash,1
+The Bombay Burmah Trading Corporation Limited,Packaged Foods,BBTC,EQ,,BBTC.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Astra Microwave Products Limited,Communication Equipment,ASTRAMICRO,EQ,,ASTRAMICRO.NS,Technology,Technology,False,Cash,1
+Park Medi World Limited,Medical Care Facilities,PARKHOSPS,EQ,,PARKHOSPS.NS,Healthcare,Healthcare,False,Cash,1
+Waaree Renewable Technologies Limited,Utilities - Renewable,WAAREERTL,EQ,,WAAREERTL.NS,Utilities,Utilities,False,Cash,1
+The South Indian Bank Limited,Banks - Regional,SOUTHBANK,EQ,,SOUTHBANK.NS,Financial Services,Financial Services,False,Cash,1
+Esab India Limited,Tools & Accessories,ESABINDIA,EQ,,ESABINDIA.NS,Industrials,Industrials,False,Cash,1
+NCC Limited,Engineering & Construction,NCC,EQ,,NCC.NS,Industrials,Industrials,False,Cash,1
+Strides Pharma Science Limited,Drug Manufacturers - Specialty & Generic,STAR,EQ,,STAR.NS,Healthcare,Healthcare,False,Cash,1
+SKF India (Industrial) Limited,Tools & Accessories,SKFINDUS,EQ,,SKFINDUS.NS,Industrials,Industrials,False,Cash,1
+Balrampur Chini Mills Limited,Consumer Defensive,BALRAMCHIN,EQ,,BALRAMCHIN.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+PVR INOX Limited,Communication Services,PVRINOX,EQ,,PVRINOX.NS,Communication Services,Communication Services,False,Cash,1
+BLACKBUCK LIMITED,Software - Application,BLACKBUCK,EQ,,BLACKBUCK.NS,Technology,Technology,False,Cash,1
+Medplus Health Services Limited,Healthcare,MEDPLUS,EQ,,MEDPLUS.NS,Healthcare,Healthcare,False,Cash,1
+Vesuvius India Limited,Specialty Industrial Machinery,VESUVIUS,EQ,,VESUVIUS.NS,Industrials,Industrials,False,Cash,1
+MMTC Limited,Conglomerates,MMTC,EQ,,MMTC.NS,Industrials,Industrials,False,Cash,1
+Genus Power Infrastructures Limited,Electrical Equipment & Parts,GENUSPOWER,EQ,,GENUSPOWER.NS,Industrials,Industrials,False,Cash,1
+Kirloskar Pneumatic Company Limited,Specialty Industrial Machinery,KIRLPNU,EQ,,KIRLPNU.NS,Industrials,Industrials,False,Cash,1
+Sharda Cropchem Limited,Agricultural Inputs,SHARDACROP,EQ,,SHARDACROP.NS,Basic Materials,Basic Materials,False,Cash,1
+BIRLASOFT LIMITED,Information Technology Services,BSOFT,EQ,,BSOFT.NS,Technology,Technology,False,Cash,1
+Cyient Limited,Conglomerates,CYIENT,EQ,,CYIENT.NS,Industrials,Industrials,False,Cash,1
+Nazara Technologies Limited,Communication Services,NAZARA,EQ,,NAZARA.NS,Communication Services,Communication Services,False,Cash,1
+Eureka Forbes Limited,"Furnishings, Fixtures & Appliances",EUREKAFORB,EQ,,EUREKAFORB.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Shadowfax Technologies Limited,Industrials,SHADOWFAX,EQ,,SHADOWFAX.NS,Industrials,Industrials,False,Cash,1
+P N Gadgil Jewellers Limited,Luxury Goods,PNGJL,EQ,,PNGJL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+The Karnataka Bank Limited,Banks - Regional,KTKBANK,EQ,,KTKBANK.NS,Financial Services,Financial Services,False,Cash,1
+Quality Power Electrical Equipments Limited,Electrical Equipment & Parts,QPOWER,EQ,,QPOWER.NS,Industrials,Industrials,False,Cash,1
+Transformers And Rectifiers (India) Limited,Electrical Equipment & Parts,TARIL,EQ,,TARIL.NS,Industrials,Industrials,False,Cash,1
+Embassy Developments Limited,Real Estate,EMBDL,EQ,,EMBDL.NS,Real Estate,Real Estate,False,Cash,1
+Voltamp Transformers Limited,Electrical Equipment & Parts,VOLTAMP,EQ,,VOLTAMP.NS,Industrials,Industrials,False,Cash,1
+Jyothy Labs Limited,Household & Personal Products,JYOTHYLAB,EQ,,JYOTHYLAB.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Viyash Scientific Limited,Drug Manufacturers - Specialty & Generic,VIYASH,EQ,,VIYASH.NS,Healthcare,Healthcare,False,Cash,1
+Star Cement Limited,Building Materials,STARCEMENT,EQ,,STARCEMENT.NS,Basic Materials,Basic Materials,False,Cash,1
+Lemon Tree Hotels Limited,Lodging,LEMONTREE,EQ,,LEMONTREE.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Clean Science and Technology Limited,Specialty Chemicals,CLEAN,EQ,,CLEAN.NS,Basic Materials,Basic Materials,False,Cash,1
+G R Infraprojects Limited,Engineering & Construction,GRINFRA,EQ,,GRINFRA.NS,Industrials,Industrials,False,Cash,1
+Manorama Industries Limited,Packaged Foods,MANORAMA,EQ,,MANORAMA.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+KPI Green Energy Limited,Utilities - Renewable,KPIGREEN,EQ,,KPIGREEN.NS,Utilities,Utilities,False,Cash,1
+Cartrade Tech Limited,Consumer Cyclical,CARTRADE,EQ,,CARTRADE.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Cello World Limited,"Furnishings, Fixtures & Appliances",CELLO,EQ,,CELLO.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Jeena Sikho Lifecare Limited,Medical Care Facilities,JSLL,EQ,,JSLL.NS,Healthcare,Healthcare,False,Cash,1
+TSF INVESTMENTS LIMITED,Asset Management,TSFINV,EQ,,TSFINV.NS,Financial Services,Financial Services,False,Cash,1
+Bata India Limited,Consumer Cyclical,BATAINDIA,EQ,,BATAINDIA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Avalon Technologies Limited,Electronic Components,AVALON,EQ,,AVALON.NS,Technology,Technology,False,Cash,1
+AXISCADES Technologies Limited,Engineering & Construction,AXISCADES,EQ,,AXISCADES.NS,Industrials,Industrials,False,Cash,1
+Nesco Limited,Conglomerates,NESCO,EQ,,NESCO.NS,Industrials,Industrials,False,Cash,1
+Time Technoplast Limited,Consumer Cyclical,TIMETECHNO,EQ,,TIMETECHNO.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+VA Tech Wabag Limited,Engineering & Construction,WABAG,EQ,,WABAG.NS,Industrials,Industrials,False,Cash,1
+Amagi Media Labs Limited,Software - Application,AMAGI,EQ,,AMAGI.NS,Technology,Technology,False,Cash,1
+Zee Entertainment Enterprises Limited,Communication Services,ZEEL,EQ,,ZEEL.NS,Communication Services,Communication Services,False,Cash,1
+Tejas Networks Limited,Communication Equipment,TEJASNET,EQ,,TEJASNET.NS,Technology,Technology,False,Cash,1
+Diamond Power Infrastructure Limited,Specialty Industrial Machinery,DIACABS,EQ,,DIACABS.NS,Industrials,Industrials,False,Cash,1
+Banco Products (I) Limited,Auto Parts,BANCOINDIA,EQ,,BANCOINDIA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+India Shelter Finance Corporation Limited,Mortgage Finance,INDIASHLTR,EQ,,INDIASHLTR.NS,Financial Services,Financial Services,False,Cash,1
+Healthcare Global Enterprises Limited,Medical Care Facilities,HCG,EQ,,HCG.NS,Healthcare,Healthcare,False,Cash,1
+ASK Automotive Limited,Auto Parts,ASKAUTOLTD,EQ,,ASKAUTOLTD.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Marksans Pharma Limited,Drug Manufacturers - General,MARKSANS,EQ,,MARKSANS.NS,Healthcare,Healthcare,False,Cash,1
+LLOYDS ENGINEERING WORKS LIMITED,Specialty Industrial Machinery,LLOYDSENGG,EQ,,LLOYDSENGG.NS,Industrials,Industrials,False,Cash,1
+SEDEMAC Mechatronics Limited,Auto Parts,SEDEMAC,EQ,,SEDEMAC.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Procter & Gamble Health Limited,Drug Manufacturers - Specialty & Generic,PGHL,EQ,,PGHL.NS,Healthcare,Healthcare,False,Cash,1
+Orkla India Limited,Packaged Foods,ORKLAINDIA,EQ,,ORKLAINDIA.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Triveni Engineering & Industries Limited,Consumer Defensive,TRIVENI,EQ,,TRIVENI.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Alkyl Amines Chemicals Limited,Specialty Chemicals,ALKYLAMINE,EQ,,ALKYLAMINE.NS,Basic Materials,Basic Materials,False,Cash,1
+SKF India Limited,Tools & Accessories,SKFINDIA,EQ,,SKFINDIA.NS,Industrials,Industrials,False,Cash,1
+Maharashtra Seamless Limited,Steel,MAHSEAMLES,EQ,,MAHSEAMLES.NS,Basic Materials,Basic Materials,False,Cash,1
+Tata Teleservices (Maharashtra) Limited,Telecom Services,TTML,EQ,,TTML.NS,Communication Services,Communication Services,False,Cash,1
+Varroc Engineering Limited,Auto Parts,VARROC,EQ,,VARROC.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Shilpa Medicare Limited,Drug Manufacturers - Specialty & Generic,SHILPAMED,EQ,,SHILPAMED.NS,Healthcare,Healthcare,False,Cash,1
+KRBL Limited,Packaged Foods,KRBL,EQ,,KRBL.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Akums Drugs and Pharmaceuticals Limited,Drug Manufacturers - Specialty & Generic,AKUMS,EQ,,AKUMS.NS,Healthcare,Healthcare,False,Cash,1
+Dynamatic Technologies Limited,Auto Parts,DYNAMATECH,EQ,,DYNAMATECH.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Blue Jet Healthcare Limited,Biotechnology,BLUEJET,EQ,,BLUEJET.NS,Healthcare,Healthcare,False,Cash,1
+RHI MAGNESITA INDIA LIMITED,Metal Fabrication,RHIM,EQ,,RHIM.NS,Industrials,Industrials,False,Cash,1
+GMR Power and Urban Infra Limited,Energy,GMRP&UI,EQ,,GMRP&UI.NS,Energy,Energy,False,Cash,1
+SKY GOLD AND DIAMONDS LIMITED,Luxury Goods,SKYGOLD,EQ,,SKYGOLD.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Indian Metals & Ferro Alloys Limited,Basic Materials,IMFA,EQ,,IMFA.NS,Basic Materials,Basic Materials,False,Cash,1
+Fujiyama Power Systems Limited,Solar,UTLSOLAR,EQ,,UTLSOLAR.NS,Technology,Technology,False,Cash,1
+63 moons technologies limited,Software - Application,63MOONS,EQ,,63MOONS.NS,Technology,Technology,False,Cash,1
+Yatharth Hospital & Trauma Care Services Limited,Medical Care Facilities,YATHARTH,EQ,,YATHARTH.NS,Healthcare,Healthcare,False,Cash,1
+Tips Music Limited,Communication Services,TIPSMUSIC,EQ,,TIPSMUSIC.NS,Communication Services,Communication Services,False,Cash,1
+Equitas Small Finance Bank Limited,Banks - Regional,EQUITASBNK,EQ,,EQUITASBNK.NS,Financial Services,Financial Services,False,Cash,1
+JK Lakshmi Cement Limited,Building Materials,JKLAKSHMI,EQ,,JKLAKSHMI.NS,Basic Materials,Basic Materials,False,Cash,1
+Power Mech Projects Limited,Engineering & Construction,POWERMECH,EQ,,POWERMECH.NS,Industrials,Industrials,False,Cash,1
+Sonata Software Limited,Information Technology Services,SONATSOFTW,EQ,,SONATSOFTW.NS,Technology,Technology,False,Cash,1
+Jupiter Life Line Hospitals Limited,Medical Care Facilities,JLHL,EQ,,JLHL.NS,Healthcare,Healthcare,False,Cash,1
+KRN Heat Exchanger and Refrigeration Limited,Electronic Components,KRN,EQ,,KRN.NS,Technology,Technology,False,Cash,1
+Aditya Birla Fashion and Retail Limited,Apparel Manufacturing,ABFRL,EQ,,ABFRL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+V2 Retail Limited,Consumer Cyclical,V2RETAIL,EQ,,V2RETAIL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Kalpataru Limited,Real Estate,KALPATARU,EQ,,KALPATARU.NS,Real Estate,Real Estate,False,Cash,1
+Isgec Heavy Engineering Limited,Specialty Industrial Machinery,ISGEC,EQ,,ISGEC.NS,Industrials,Industrials,False,Cash,1
+Mishra Dhatu Nigam Limited,Steel,MIDHANI,EQ,,MIDHANI.NS,Basic Materials,Basic Materials,False,Cash,1
+BOROSIL RENEWABLES LIMITED,Solar,BORORENEW,EQ,,BORORENEW.NS,Technology,Technology,False,Cash,1
+WESTLIFE FOODWORLD LIMITED,Consumer Cyclical,WESTLIFE,EQ,,WESTLIFE.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Vikram Solar Limited,Solar,VIKRAMSOLR,EQ,,VIKRAMSOLR.NS,Technology,Technology,False,Cash,1
+Dilip Buildcon Limited,Engineering & Construction,DBL,EQ,,DBL.NS,Industrials,Industrials,False,Cash,1
+Thyrocare Technologies Limited,Diagnostics & Research,THYROCARE,EQ,,THYROCARE.NS,Healthcare,Healthcare,False,Cash,1
+India Glycols Limited,Chemicals,INDIAGLYCO,EQ,,INDIAGLYCO.NS,Basic Materials,Basic Materials,False,Cash,1
+Valor Estate Limited,Real Estate,DBREALTY,EQ,,DBREALTY.NS,Real Estate,Real Estate,False,Cash,1
+Precision Wires India Limited,Electrical Equipment & Parts,PRECWIRE,EQ,,PRECWIRE.NS,Industrials,Industrials,False,Cash,1
+Relaxo Footwears Limited,Consumer Cyclical,RELAXO,EQ,,RELAXO.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Gujarat Pipavav Port Limited,Marine Shipping,GPPL,EQ,,GPPL.NS,Industrials,Industrials,False,Cash,1
+BlueStone Jewellery and Lifestyle Limited,Luxury Goods,BLUESTONE,EQ,,BLUESTONE.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Sanofi India Limited,Drug Manufacturers - General,SANOFI,EQ,,SANOFI.NS,Healthcare,Healthcare,False,Cash,1
+Campus Activewear Limited,Consumer Cyclical,CAMPUS,EQ,,CAMPUS.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Birla Corporation Limited,Building Materials,BIRLACORPN,EQ,,BIRLACORPN.NS,Basic Materials,Basic Materials,False,Cash,1
+Inox Green Energy Services Limited,Utilities - Renewable,INOXGREEN,EQ,,INOXGREEN.NS,Utilities,Utilities,False,Cash,1
+EPL Limited,Consumer Cyclical,EPL,EQ,,EPL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Gujarat Ambuja Exports Limited,Packaged Foods,GAEL,EQ,,GAEL.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Jai Balaji Industries Limited,Steel,JAIBALAJI,EQ,,JAIBALAJI.NS,Basic Materials,Basic Materials,False,Cash,1
+Transrail Lighting Limited,Engineering & Construction,TRANSRAILL,EQ,,TRANSRAILL.NS,Industrials,Industrials,False,Cash,1
+Pricol Limited,Auto Parts,PRICOLLTD,EQ,,PRICOLLTD.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+SG Mart Limited,Industrials,SGMART,EQ,,SGMART.NS,Industrials,Industrials,False,Cash,1
+Archean Chemical Industries Limited,Chemicals,ACI,EQ,,ACI.NS,Basic Materials,Basic Materials,False,Cash,1
+Rategain Travel Technologies Limited,Software - Application,RATEGAIN,EQ,,RATEGAIN.NS,Technology,Technology,False,Cash,1
+Sunflag Iron And Steel Company Limited,Steel,SUNFLAG,EQ,,SUNFLAG.NS,Basic Materials,Basic Materials,False,Cash,1
+Safari Industries (India) Limited,Consumer Cyclical,SAFARI,EQ,,SAFARI.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Tanla Platforms Limited,Software - Application,TANLA,EQ,,TANLA.NS,Technology,Technology,False,Cash,1
+Cera Sanitaryware Limited,Building Products & Equipment,CERA,EQ,,CERA.NS,Industrials,Industrials,False,Cash,1
+Sudarshan Chemical Industries Limited,Specialty Chemicals,SUDARSCHEM,EQ,,SUDARSCHEM.NS,Basic Materials,Basic Materials,False,Cash,1
+Transport Corporation of India Limited,Industrials,TCI,EQ,,TCI.NS,Industrials,Industrials,False,Cash,1
+Sudeep Pharma Limited,Drug Manufacturers - Specialty & Generic,SUDEEPPHRM,EQ,,SUDEEPPHRM.NS,Healthcare,Healthcare,False,Cash,1
+Religare Enterprises Limited,Insurance - Life,RELIGARE,EQ,,RELIGARE.NS,Financial Services,Financial Services,False,Cash,1
+Kirloskar Ferrous Industries Limited,Metal Fabrication,KIRLFER,EQ,,KIRLFER.NS,Industrials,Industrials,False,Cash,1
+Praj Industries Limited,Engineering & Construction,PRAJIND,EQ,,PRAJIND.NS,Industrials,Industrials,False,Cash,1
+Pearl Global Industries Limited,Apparel Manufacturing,PGIL,EQ,,PGIL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Redtape Limited,Consumer Cyclical,REDTAPE,EQ,,REDTAPE.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Le Travenues Technology Limited,Consumer Cyclical,IXIGO,EQ,,IXIGO.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+WeWork India Management Limited,Real Estate Services,WEWORK,EQ,,WEWORK.NS,Real Estate,Real Estate,False,Cash,1
+Gujarat Narmada Valley Fertilizers and Chemicals Limited,Chemicals,GNFC,EQ,,GNFC.NS,Basic Materials,Basic Materials,False,Cash,1
+Kingfa Science & Technology (India) Limited,Specialty Chemicals,KINGFA,EQ,,KINGFA.NS,Basic Materials,Basic Materials,False,Cash,1
+Rashtriya Chemicals and Fertilizers Limited,Agricultural Inputs,RCF,EQ,,RCF.NS,Basic Materials,Basic Materials,False,Cash,1
+Aditya Vision Limited,Consumer Cyclical,AVL,EQ,,AVL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Sri Lotus Developers and Realty Limited,Engineering & Construction,LOTUSDEV,EQ,,LOTUSDEV.NS,Industrials,Industrials,False,Cash,1
+Mahindra Lifespace Developers Limited,Real Estate,MAHLIFE,EQ,,MAHLIFE.NS,Real Estate,Real Estate,False,Cash,1
+Bajaj Consumer Care Limited,Household & Personal Products,BAJAJCON,EQ,,BAJAJCON.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Newgen Software Technologies Limited,Software - Infrastructure,NEWGEN,EQ,,NEWGEN.NS,Technology,Technology,False,Cash,1
+TTK Prestige Limited,"Furnishings, Fixtures & Appliances",TTKPRESTIG,EQ,,TTKPRESTIG.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Welspun Enterprises Limited,Engineering & Construction,WELENT,EQ,,WELENT.NS,Industrials,Industrials,False,Cash,1
+Gokul Agro Resources Limited,Packaged Foods,GOKULAGRO,EQ,,GOKULAGRO.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Galaxy Surfactants Limited,Specialty Chemicals,GALAXYSURF,EQ,,GALAXYSURF.NS,Basic Materials,Basic Materials,False,Cash,1
+Gujarat State Fertilizers & Chemicals Limited,Agricultural Inputs,GSFC,EQ,,GSFC.NS,Basic Materials,Basic Materials,False,Cash,1
+Paras Defence and Space Technologies Limited,Aerospace & Defense,PARAS,EQ,,PARAS.NS,Industrials,Industrials,False,Cash,1
+Aarti Pharmalabs Limited,Drug Manufacturers - Specialty & Generic,AARTIPHARM,EQ,,AARTIPHARM.NS,Healthcare,Healthcare,False,Cash,1
+Saregama India Limited,Communication Services,SAREGAMA,EQ,,SAREGAMA.NS,Communication Services,Communication Services,False,Cash,1
+Kennametal India Limited,Tools & Accessories,KENNAMET,EQ,,KENNAMET.NS,Industrials,Industrials,False,Cash,1
+JK Paper Limited,Basic Materials,JKPAPER,EQ,,JKPAPER.NS,Basic Materials,Basic Materials,False,Cash,1
+Dodla Dairy Limited,Consumer Defensive,DODLA,EQ,,DODLA.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Shreeji Shipping Global Limited,Marine Shipping,SHREEJISPG,EQ,,SHREEJISPG.NS,Industrials,Industrials,False,Cash,1
+Shakti Pumps (India) Limited,Specialty Industrial Machinery,SHAKTIPUMP,EQ,,SHAKTIPUMP.NS,Industrials,Industrials,False,Cash,1
+Balu Forge Industries Limited,Metal Fabrication,BALUFORGE,EQ,,BALUFORGE.NS,Industrials,Industrials,False,Cash,1
+Max Estates Limited,Real Estate,MAXESTATES,EQ,,MAXESTATES.NS,Real Estate,Real Estate,False,Cash,1
+Prism Johnson Limited,Building Materials,PRSMJOHNSN,EQ,,PRSMJOHNSN.NS,Basic Materials,Basic Materials,False,Cash,1
+PTC India Limited,Utilities,PTC,EQ,,PTC.NS,Utilities,Utilities,False,Cash,1
+Ceigall India Limited,Engineering & Construction,CEIGALL,EQ,,CEIGALL.NS,Industrials,Industrials,False,Cash,1
+Ashapura Minechem Limited,Basic Materials,ASHAPURMIN,EQ,,ASHAPURMIN.NS,Basic Materials,Basic Materials,False,Cash,1
+Latent View Analytics Limited,Industrials,LATENTVIEW,EQ,,LATENTVIEW.NS,Industrials,Industrials,False,Cash,1
+Hindustan Foods Limited,Conglomerates,HNDFDS,EQ,,HNDFDS.NS,Industrials,Industrials,False,Cash,1
+Powerica Limited,Specialty Industrial Machinery,POWERICA,EQ,,POWERICA.NS,Industrials,Industrials,False,Cash,1
+S.J.S. Enterprises Limited,Auto Parts,SJS,EQ,,SJS.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Ethos Limited,Luxury Goods,ETHOSLTD,EQ,,ETHOSLTD.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+MOIL Limited,Basic Materials,MOIL,EQ,,MOIL.NS,Basic Materials,Basic Materials,False,Cash,1
+Garware Technical Fibres Limited,Textile Manufacturing,GARFIBRES,EQ,,GARFIBRES.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Ajax Engineering Limited,Farm & Heavy Construction Machinery,AJAXENGG,EQ,,AJAXENGG.NS,Industrials,Industrials,False,Cash,1
+Sheela Foam Limited,"Furnishings, Fixtures & Appliances",SFL,EQ,,SFL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+MAS Financial Services Limited,Credit Services,MASFIN,EQ,,MASFIN.NS,Financial Services,Financial Services,False,Cash,1
+Kovai Medical Center & Hospital Limited,Medical Care Facilities,KOVAI,EQ,,KOVAI.NS,Healthcare,Healthcare,False,Cash,1
+Mrs. Bectors Food Specialities Limited,Packaged Foods,BECTORFOOD,EQ,,BECTORFOOD.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+FDC Limited,Drug Manufacturers - Specialty & Generic,FDC,EQ,,FDC.NS,Healthcare,Healthcare,False,Cash,1
+CSB Bank Limited,Banks - Regional,CSBBANK,EQ,,CSBBANK.NS,Financial Services,Financial Services,False,Cash,1
+Arvind Fashions Limited,Apparel Manufacturing,ARVINDFASN,EQ,,ARVINDFASN.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Piccadily Agro Industries Limited,Consumer Defensive,PICCADIL,EQ,,PICCADIL.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Suprajit Engineering Limited,Auto Parts,SUPRAJIT,EQ,,SUPRAJIT.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Indo Count Industries Limited,Textile Manufacturing,ICIL,EQ,,ICIL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Saatvik Green Energy Limited,Solar,SAATVIKGL,EQ,,SAATVIKGL.NS,Technology,Technology,False,Cash,1
+Senco Gold Limited,Luxury Goods,SENCO,EQ,,SENCO.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Fiem Industries Limited,Auto Parts,FIEMIND,EQ,,FIEMIND.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+GANESH HOUSING LIMITED,Real Estate,GANESHHOU,EQ,,GANESHHOU.NS,Real Estate,Real Estate,False,Cash,1
+Sapphire Foods India Limited,Consumer Cyclical,SAPPHIRE,EQ,,SAPPHIRE.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Suven Life Sciences Limited,Drug Manufacturers - Specialty & Generic,SUVEN,EQ,,SUVEN.NS,Healthcare,Healthcare,False,Cash,1
+Happiest Minds Technologies Limited,Information Technology Services,HAPPSTMNDS,EQ,,HAPPSTMNDS.NS,Technology,Technology,False,Cash,1
+DCB Bank Limited,Banks - Regional,DCBBANK,EQ,,DCBBANK.NS,Financial Services,Financial Services,False,Cash,1
+Aeroflex Industries Limited,Metal Fabrication,AEROFLEX,EQ,,AEROFLEX.NS,Industrials,Industrials,False,Cash,1
+Surya Roshni Limited,Steel,SURYAROSNI,EQ,,SURYAROSNI.NS,Basic Materials,Basic Materials,False,Cash,1
+PNC Infratech Limited,Engineering & Construction,PNCINFRA,EQ,,PNCINFRA.NS,Industrials,Industrials,False,Cash,1
+Greenlam Industries Limited,"Furnishings, Fixtures & Appliances",GREENLAM,EQ,,GREENLAM.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Epigral Limited,Chemicals,EPIGRAL,EQ,,EPIGRAL.NS,Basic Materials,Basic Materials,False,Cash,1
+Electrosteel Castings Limited,Building Products & Equipment,ELECTCAST,EQ,,ELECTCAST.NS,Industrials,Industrials,False,Cash,1
+Supriya Lifescience Limited,Biotechnology,SUPRIYA,EQ,,SUPRIYA.NS,Healthcare,Healthcare,False,Cash,1
+Ahluwalia Contracts (India) Limited,Engineering & Construction,AHLUCONT,EQ,,AHLUCONT.NS,Industrials,Industrials,False,Cash,1
+Technocraft Industries (India) Limited,Tools & Accessories,TIIL,EQ,,TIIL.NS,Industrials,Industrials,False,Cash,1
+Sun Pharma Advanced Research Company Limited,Drug Manufacturers - Specialty & Generic,SPARC,EQ,,SPARC.NS,Healthcare,Healthcare,False,Cash,1
+Fedbank Financial Services Limited,Credit Services,FEDFINA,EQ,,FEDFINA.NS,Financial Services,Financial Services,False,Cash,1
+SIS LIMITED,Industrials,SIS,EQ,,SIS.NS,Industrials,Industrials,False,Cash,1
+SML Mahindra Limited,Auto Manufacturers,SMLMAH,EQ,,SMLMAH.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Gujarat Alkalies and Chemicals Limited,Chemicals,GUJALKALI,EQ,,GUJALKALI.NS,Basic Materials,Basic Materials,False,Cash,1
+Keystone Realtors Limited,Real Estate,RUSTOMJEE,EQ,,RUSTOMJEE.NS,Real Estate,Real Estate,False,Cash,1
+Nephrocare Health Services Limited,Medical Care Facilities,NEPHROPLUS,EQ,,NEPHROPLUS.NS,Healthcare,Healthcare,False,Cash,1
+Symphony Limited,"Furnishings, Fixtures & Appliances",SYMPHONY,EQ,,SYMPHONY.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Man Infraconstruction Limited,Engineering & Construction,MANINFRA,EQ,,MANINFRA.NS,Industrials,Industrials,False,Cash,1
+Omnitech Engineering Limited,Specialty Industrial Machinery,OMNI,EQ,,OMNI.NS,Industrials,Industrials,False,Cash,1
+V-Mart Retail Limited,Consumer Cyclical,VMART,EQ,,VMART.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Lumax Industries Limited,Auto Parts,LUMAXIND,EQ,,LUMAXIND.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+LG Balakrishnan & Bros Limited,Auto Parts,LGBBROSLTD,EQ,,LGBBROSLTD.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Gokaldas Exports Limited,Apparel Manufacturing,GOKEX,EQ,,GOKEX.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Pilani Investment and Industries Corporation Limited,Asset Management,PILANIINVS,EQ,,PILANIINVS.NS,Financial Services,Financial Services,False,Cash,1
+Entero Healthcare Solutions Limited,Healthcare,ENTERO,EQ,,ENTERO.NS,Healthcare,Healthcare,False,Cash,1
+Unimech Aerospace and Manufacturing Limited,Aerospace & Defense,UNIMECH,EQ,,UNIMECH.NS,Industrials,Industrials,False,Cash,1
+Nirlon Limited,Real Estate Services,NIRLON,EQ,,NIRLON.NS,Real Estate,Real Estate,False,Cash,1
+ICRA Limited,Financial Services,ICRA,EQ,,ICRA.NS,Financial Services,Financial Services,False,Cash,1
+Skipper Limited,Engineering & Construction,SKIPPER,EQ,,SKIPPER.NS,Industrials,Industrials,False,Cash,1
+Jamna Auto Industries Limited,Auto Parts,JAMNAAUTO,EQ,,JAMNAAUTO.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Smartworks Coworking Spaces Limited,Real Estate Services,SMARTWORKS,EQ,,SMARTWORKS.NS,Real Estate,Real Estate,False,Cash,1
+C.E. Info Systems Limited,Software - Infrastructure,MAPMYINDIA,EQ,,MAPMYINDIA.NS,Technology,Technology,False,Cash,1
+Sharda Motor Industries Limited,Auto Parts,SHARDAMOTR,EQ,,SHARDAMOTR.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Subros Limited,Auto Parts,SUBROS,EQ,,SUBROS.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+RattanIndia Enterprises Limited,Consumer Cyclical,RTNINDIA,EQ,,RTNINDIA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Mastek Limited,Information Technology Services,MASTEK,EQ,,MASTEK.NS,Technology,Technology,False,Cash,1
+Rallis India Limited,Agricultural Inputs,RALLIS,EQ,,RALLIS.NS,Basic Materials,Basic Materials,False,Cash,1
+Knowledge Marine & Engineering Works Limited,Marine Shipping,KMEW,EQ,,KMEW.NS,Industrials,Industrials,False,Cash,1
+Puravankara Limited,Real Estate,PURVA,EQ,,PURVA.NS,Real Estate,Real Estate,False,Cash,1
+ION Exchange (India) Limited,Industrials,IONEXCHANG,EQ,,IONEXCHANG.NS,Industrials,Industrials,False,Cash,1
+Sterling and Wilson Renewable Energy Limited,Solar,SWSOLAR,EQ,,SWSOLAR.NS,Technology,Technology,False,Cash,1
+Kaveri Seed Company Limited,Agricultural Inputs,KSCL,EQ,,KSCL.NS,Basic Materials,Basic Materials,False,Cash,1
+Sunteck Realty Limited,Real Estate,SUNTECK,EQ,,SUNTECK.NS,Real Estate,Real Estate,False,Cash,1
+Madhya Bharat Agro Products Limited,Agricultural Inputs,MBAPL,EQ,,MBAPL.NS,Basic Materials,Basic Materials,False,Cash,1
+Midwest Limited,Building Materials,MIDWESTLTD,EQ,,MIDWESTLTD.NS,Basic Materials,Basic Materials,False,Cash,1
+Innova Captab Limited,Drug Manufacturers - Specialty & Generic,INNOVACAP,EQ,,INNOVACAP.NS,Healthcare,Healthcare,False,Cash,1
+India Tourism Development Corporation Limited,Lodging,ITDC,EQ,,ITDC.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Bansal Wire Industries Limited,Steel,BANSALWIRE,EQ,,BANSALWIRE.NS,Basic Materials,Basic Materials,False,Cash,1
+Websol Energy System Limited,Solar,WEBELSOLAR,EQ,,WEBELSOLAR.NS,Technology,Technology,False,Cash,1
+Canara Robeco Asset Management Company Limited,Asset Management,CRAMC,EQ,,CRAMC.NS,Financial Services,Financial Services,False,Cash,1
+CARE Ratings Limited,Financial Services,CARERATING,EQ,,CARERATING.NS,Financial Services,Financial Services,False,Cash,1
+Dhanuka Agritech Limited,Agricultural Inputs,DHANUKA,EQ,,DHANUKA.NS,Basic Materials,Basic Materials,False,Cash,1
+Gulf Oil Lubricants India Limited,Specialty Chemicals,GULFOILLUB,EQ,,GULFOILLUB.NS,Basic Materials,Basic Materials,False,Cash,1
+Aurionpro Solutions Limited,Software - Application,AURIONPRO,EQ,,AURIONPRO.NS,Technology,Technology,False,Cash,1
+Shilchar Technologies Limited,Electrical Equipment & Parts,SHILCTECH,EQ,,SHILCTECH.NS,Industrials,Industrials,False,Cash,1
+Goldiam International Limited,Luxury Goods,GOLDIAM,EQ,,GOLDIAM.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Swaraj Engines Limited,Auto Parts,SWARAJENG,EQ,,SWARAJENG.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Neogen Chemicals Limited,Specialty Chemicals,NEOGEN,EQ,,NEOGEN.NS,Basic Materials,Basic Materials,False,Cash,1
+Rain Industries Limited,Specialty Chemicals,RAIN,EQ,,RAIN.NS,Basic Materials,Basic Materials,False,Cash,1
+Datamatics Global Services Limited,Information Technology Services,DATAMATICS,EQ,,DATAMATICS.NS,Technology,Technology,False,Cash,1
+Mahindra Holidays & Resorts India Limited,Consumer Cyclical,MHRIL,EQ,,MHRIL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Balaji Amines Limited,Specialty Chemicals,BALAMINES,EQ,,BALAMINES.NS,Basic Materials,Basic Materials,False,Cash,1
+IFB Industries Limited,"Furnishings, Fixtures & Appliances",IFBIND,EQ,,IFBIND.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Raymond Lifestyle Limited,Apparel Manufacturing,RAYMONDLSL,EQ,,RAYMONDLSL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+GNG Electronics Limited,Technology,EBGNG,EQ,,EBGNG.NS,Technology,Technology,False,Cash,1
+Jana Small Finance Bank Limited,Banks - Regional,JSFB,EQ,,JSFB.NS,Financial Services,Financial Services,False,Cash,1
+CMS Info Systems Limited,Industrials,CMSINFO,EQ,,CMSINFO.NS,Industrials,Industrials,False,Cash,1
+Goodluck India Limited,Steel,GOODLUCK,EQ,,GOODLUCK.NS,Basic Materials,Basic Materials,False,Cash,1
+Juniper Hotels Limited,Lodging,JUNIPER,EQ,,JUNIPER.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+GHCL Limited,Chemicals,GHCL,EQ,,GHCL.NS,Basic Materials,Basic Materials,False,Cash,1
+Responsive Industries Limited,Specialty Chemicals,RESPONIND,EQ,,RESPONIND.NS,Basic Materials,Basic Materials,False,Cash,1
+Lux Industries Limited,Apparel Manufacturing,LUXIND,EQ,,LUXIND.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Bajaj Electricals Limited,"Furnishings, Fixtures & Appliances",BAJAJELEC,EQ,,BAJAJELEC.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Oswal Pumps Limited,Electrical Equipment & Parts,OSWALPUMPS,EQ,,OSWALPUMPS.NS,Industrials,Industrials,False,Cash,1
+Texmaco Rail & Engineering Limited,Industrials,TEXRAIL,EQ,,TEXRAIL.NS,Industrials,Industrials,False,Cash,1
+Indigo Paints Limited,Specialty Chemicals,INDIGOPNTS,EQ,,INDIGOPNTS.NS,Basic Materials,Basic Materials,False,Cash,1
+Northern Arc Capital Limited,Credit Services,NORTHARC,EQ,,NORTHARC.NS,Financial Services,Financial Services,False,Cash,1
+Agi Infra Limited,Real Estate,AGIIL,EQ,,AGIIL.NS,Real Estate,Real Estate,False,Cash,1
+Just Dial Limited,Communication Services,JUSTDIAL,EQ,,JUSTDIAL.NS,Communication Services,Communication Services,False,Cash,1
+VRL Logistics Limited,Industrials,VRLLOG,EQ,,VRLLOG.NS,Industrials,Industrials,False,Cash,1
+Electronics Mart India Limited,Consumer Cyclical,EMIL,EQ,,EMIL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Centum Electronics Limited,Electronic Components,CENTUM,EQ,,CENTUM.NS,Technology,Technology,False,Cash,1
+Laxmi Organic Industries Limited,Specialty Chemicals,LXCHEM,EQ,,LXCHEM.NS,Basic Materials,Basic Materials,False,Cash,1
+Capillary Technologies India Limited,Software - Infrastructure,CAPILLARY,EQ,,CAPILLARY.NS,Technology,Technology,False,Cash,1
+Bannari Amman Sugars Limited,Consumer Defensive,BANARISUG,EQ,,BANARISUG.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Thomas Cook  (India)  Limited,Consumer Cyclical,THOMASCOOK,EQ,,THOMASCOOK.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Paisalo Digital Limited,Credit Services,PAISALO,EQ,,PAISALO.NS,Financial Services,Financial Services,False,Cash,1
+VST Industries Limited,Consumer Defensive,VSTIND,EQ,,VSTIND.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+V.S.T Tillers Tractors Limited,Farm & Heavy Construction Machinery,VSTTILLERS,EQ,,VSTTILLERS.NS,Industrials,Industrials,False,Cash,1
+Senores Pharmaceuticals Limited,Drug Manufacturers - General,SENORES,EQ,,SENORES.NS,Healthcare,Healthcare,False,Cash,1
+Moschip Technologies Limited,Technology,MOSCHIP,EQ,,MOSCHIP.NS,Technology,Technology,False,Cash,1
+Seshaasai Technologies Limited,Software - Infrastructure,STYL,EQ,,STYL.NS,Technology,Technology,False,Cash,1
+Hemisphere Properties India Limited,Real Estate,HEMIPROP,EQ,,HEMIPROP.NS,Real Estate,Real Estate,False,Cash,1
+VIP Industries Limited,Consumer Cyclical,VIPIND,EQ,,VIPIND.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Pondy Oxides & Chemicals Limited,Specialty Chemicals,POCL,EQ,,POCL.NS,Basic Materials,Basic Materials,False,Cash,1
+Avantel Limited,Communication Equipment,AVANTEL,EQ,,AVANTEL.NS,Technology,Technology,False,Cash,1
+NIIT Learning Systems Limited,Consumer Defensive,NIITMTS,EQ,,NIITMTS.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Gujarat Themis Biosyn Limited,Drug Manufacturers - Specialty & Generic,GUJTHEM,EQ,,GUJTHEM.NS,Healthcare,Healthcare,False,Cash,1
+Krishana Phoschem Limited,Agricultural Inputs,KRISHANA,EQ,,KRISHANA.NS,Basic Materials,Basic Materials,False,Cash,1
+The Anup Engineering Limited,Specialty Industrial Machinery,ANUP,EQ,,ANUP.NS,Industrials,Industrials,False,Cash,1
+Stylam Industries Limited,"Furnishings, Fixtures & Appliances",STYLAMIND,EQ,,STYLAMIND.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+eMudhra Limited,Software - Application,EMUDHRA,EQ,,EMUDHRA.NS,Technology,Technology,False,Cash,1
+PDS Limited,Industrials,PDSL,EQ,,PDSL.NS,Industrials,Industrials,False,Cash,1
+KSH International Limited,Electrical Equipment & Parts,KSHINTL,EQ,,KSHINTL.NS,Industrials,Industrials,False,Cash,1
+Wakefit Innovations Limited,"Furnishings, Fixtures & Appliances",WAKEFIT,EQ,,WAKEFIT.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Raymond Realty Limited,Real Estate,RAYMONDREL,EQ,,RAYMONDREL.NS,Real Estate,Real Estate,False,Cash,1
+NACL Industries Limited,Agricultural Inputs,NACLIND,EQ,,NACLIND.NS,Basic Materials,Basic Materials,False,Cash,1
+TruAlt Bioenergy Limited,Oil & Gas Refining & Marketing,TRUALT,EQ,,TRUALT.NS,Energy,Energy,False,Cash,1
+Ram Ratna Wires Limited,Electrical Equipment & Parts,RAMRAT,EQ,,RAMRAT.NS,Industrials,Industrials,False,Cash,1
+Gopal Snacks Limited,Packaged Foods,GOPAL,EQ,,GOPAL.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+D.B.Corp Limited,Communication Services,DBCORP,EQ,,DBCORP.NS,Communication Services,Communication Services,False,Cash,1
+Rolex Rings Limited,Metal Fabrication,ROLEXRINGS,EQ,,ROLEXRINGS.NS,Industrials,Industrials,False,Cash,1
+Styrenix Performance Materials Limited,Chemicals,STYRENIX,EQ,,STYRENIX.NS,Basic Materials,Basic Materials,False,Cash,1
+Optiemus Infracom Limited,Technology,OPTIEMUS,EQ,,OPTIEMUS.NS,Technology,Technology,False,Cash,1
+H.G. Infra Engineering Limited,Engineering & Construction,HGINFRA,EQ,,HGINFRA.NS,Industrials,Industrials,False,Cash,1
+Pace Digitek Limited,Communication Equipment,PACEDIGITK,EQ,,PACEDIGITK.NS,Technology,Technology,False,Cash,1
+RPG Life Sciences Limited,Drug Manufacturers - Specialty & Generic,RPGLIFE,EQ,,RPGLIFE.NS,Healthcare,Healthcare,False,Cash,1
+AGI Greenpac Limited,Consumer Cyclical,AGI,EQ,,AGI.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+TARC Limited,Real Estate,TARC,EQ,,TARC.NS,Real Estate,Real Estate,False,Cash,1
+Vishnu Chemicals Limited,Specialty Chemicals,VISHNU,EQ,,VISHNU.NS,Basic Materials,Basic Materials,False,Cash,1
+Jtekt India Limited,Auto Parts,JTEKTINDIA,EQ,,JTEKTINDIA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+GMM Pfaudler Limited,Specialty Industrial Machinery,GMMPFAUDLR,EQ,,GMMPFAUDLR.NS,Industrials,Industrials,False,Cash,1
+Orient Electric Limited,"Furnishings, Fixtures & Appliances",ORIENTELEC,EQ,,ORIENTELEC.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Ellenbarrie Industrial Gases Limited,Chemicals,ELLEN,EQ,,ELLEN.NS,Basic Materials,Basic Materials,False,Cash,1
+Advanced Enzyme Technologies Limited,Specialty Chemicals,ADVENZYMES,EQ,,ADVENZYMES.NS,Basic Materials,Basic Materials,False,Cash,1
+Greaves Cotton Limited,Specialty Industrial Machinery,GREAVESCOT,EQ,,GREAVESCOT.NS,Industrials,Industrials,False,Cash,1
+Man Industries (India) Limited,Steel,MANINDS,EQ,,MANINDS.NS,Basic Materials,Basic Materials,False,Cash,1
+Restaurant Brands Asia Limited,Consumer Cyclical,RBA,EQ,,RBA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Universal Cables Limited,Electrical Equipment & Parts,UNIVCABLES,EQ,,UNIVCABLES.NS,Industrials,Industrials,False,Cash,1
+SG Finserve Limited,Capital Markets,SGFIN,EQ,,SGFIN.NS,Financial Services,Financial Services,False,Cash,1
+Mahindra Logistics Limited,Industrials,MAHLOG,EQ,,MAHLOG.NS,Industrials,Industrials,False,Cash,1
+BOSCH HOME COMFORT INDIA LIMITED,"Furnishings, Fixtures & Appliances",BOSCH-HCIL,EQ,,BOSCH-HCIL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Shoppers Stop Limited,Consumer Cyclical,SHOPERSTOP,EQ,,SHOPERSTOP.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Vaibhav Global Limited,Luxury Goods,VAIBHAVGBL,EQ,,VAIBHAVGBL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Zota Health Care LImited,Biotechnology,ZOTA,EQ,,ZOTA.NS,Healthcare,Healthcare,False,Cash,1
+SMS Pharmaceuticals Limited,Drug Manufacturers - General,SMSPHARMA,EQ,,SMSPHARMA.NS,Healthcare,Healthcare,False,Cash,1
+Indraprastha Medical Corporation Limited,Medical Care Facilities,INDRAMEDCO,EQ,,INDRAMEDCO.NS,Healthcare,Healthcare,False,Cash,1
+Harsha Engineers International Limited,Tools & Accessories,HARSHA,EQ,,HARSHA.NS,Industrials,Industrials,False,Cash,1
+J.Kumar Infraprojects Limited,Engineering & Construction,JKIL,EQ,,JKIL.NS,Industrials,Industrials,False,Cash,1
+Tourism Finance Corporation of India Limited,Credit Services,TFCILTD,EQ,,TFCILTD.NS,Financial Services,Financial Services,False,Cash,1
+National Fertilizers Limited,Agricultural Inputs,NFL,EQ,,NFL.NS,Basic Materials,Basic Materials,False,Cash,1
+Ashoka Buildcon Limited,Engineering & Construction,ASHOKA,EQ,,ASHOKA.NS,Industrials,Industrials,False,Cash,1
+Seamec Limited,Marine Shipping,SEAMECLTD,EQ,,SEAMECLTD.NS,Industrials,Industrials,False,Cash,1
+Sanathan Textiles Limited,Textile Manufacturing,SANATHAN,EQ,,SANATHAN.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Foseco India Limited,Chemicals,FOSECOIND,EQ,,FOSECOIND.NS,Basic Materials,Basic Materials,False,Cash,1
+Chemplast Sanmar Limited,Chemicals,CHEMPLASTS,EQ,,CHEMPLASTS.NS,Basic Materials,Basic Materials,False,Cash,1
+Sambhv Steel Tubes Limited,Steel,SAMBHV,EQ,,SAMBHV.NS,Basic Materials,Basic Materials,False,Cash,1
+Crizac Limited,Consumer Defensive,CRIZAC,EQ,,CRIZAC.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Enviro Infra Engineers Limited,Engineering & Construction,EIEL,EQ,,EIEL.NS,Industrials,Industrials,False,Cash,1
+Indo Thai Securities Limited,Capital Markets,INDOTHAI,EQ,,INDOTHAI.NS,Financial Services,Financial Services,False,Cash,1
+Ashiana Housing Limited,Real Estate,ASHIANA,EQ,,ASHIANA.NS,Real Estate,Real Estate,False,Cash,1
+Kalyani Steels Limited,Steel,KSL,EQ,,KSL.NS,Basic Materials,Basic Materials,False,Cash,1
+Cigniti Technologies Limited,Information Technology Services,CIGNITITEC,EQ,,CIGNITITEC.NS,Technology,Technology,False,Cash,1
+KNR Constructions Limited,Engineering & Construction,KNRCON,EQ,,KNRCON.NS,Industrials,Industrials,False,Cash,1
+Anand Rathi Share and Stock Brokers Limited,Financial Services,ARSSBL,EQ,,ARSSBL.NS,Financial Services,Financial Services,False,Cash,1
+Aye Finance Limited,Credit Services,AYE,EQ,,AYE.NS,Financial Services,Financial Services,False,Cash,1
+HeidelbergCement India Limited,Building Materials,HEIDELBERG,EQ,,HEIDELBERG.NS,Basic Materials,Basic Materials,False,Cash,1
+Shivalik Bimetal Controls Limited,Metal Fabrication,SBCL,EQ,,SBCL.NS,Industrials,Industrials,False,Cash,1
+R Systems International Limited,Information Technology Services,RSYSTEMS,EQ,,RSYSTEMS.NS,Technology,Technology,False,Cash,1
+Raghav Productivity Enhancers Limited,Chemicals,RPEL,EQ,,RPEL.NS,Basic Materials,Basic Materials,False,Cash,1
+Pitti Engineering Limited,Metal Fabrication,PITTIENG,EQ,,PITTIENG.NS,Industrials,Industrials,False,Cash,1
+Refex Industries Limited,Energy,REFEX,EQ,,REFEX.NS,Energy,Energy,False,Cash,1
+RPSG VENTURES LIMITED,Information Technology Services,RPSGVENT,EQ,,RPSGVENT.NS,Technology,Technology,False,Cash,1
+Indiqube Spaces Limited,Real Estate Services,INDIQUBE,EQ,,INDIQUBE.NS,Real Estate,Real Estate,False,Cash,1
+Interarch Building Solutions Limited,Engineering & Construction,INTERARCH,EQ,,INTERARCH.NS,Industrials,Industrials,False,Cash,1
+Orchid Pharma Limited,Drug Manufacturers - Specialty & Generic,ORCHPHARMA,EQ,,ORCHPHARMA.NS,Healthcare,Healthcare,False,Cash,1
+Flair Writing Industries Limited,Industrials,FLAIR,EQ,,FLAIR.NS,Industrials,Industrials,False,Cash,1
+Kirloskar Industries Limited,Metal Fabrication,KIRLOSIND,EQ,,KIRLOSIND.NS,Industrials,Industrials,False,Cash,1
+Shanthi Gears Limited,Specialty Industrial Machinery,SHANTIGEAR,EQ,,SHANTIGEAR.NS,Industrials,Industrials,False,Cash,1
+IndoStar Capital Finance Limited,Credit Services,INDOSTAR,EQ,,INDOSTAR.NS,Financial Services,Financial Services,False,Cash,1
+Aarti Drugs Limited,Drug Manufacturers - Specialty & Generic,AARTIDRUGS,EQ,,AARTIDRUGS.NS,Healthcare,Healthcare,False,Cash,1
+Ideaforge Technology Limited,Technology,IDEAFORGE,EQ,,IDEAFORGE.NS,Technology,Technology,False,Cash,1
+OnEMI Technology Solutions Limited,Credit Services,KISSHT,EQ,,KISSHT.NS,Financial Services,Financial Services,False,Cash,1
+Fusion Finance Limited,Credit Services,FUSION,EQ,,FUSION.NS,Financial Services,Financial Services,False,Cash,1
+Samhi Hotels Limited,Lodging,SAMHI,EQ,,SAMHI.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Rashi Peripherals Limited,Technology,RPTECH,EQ,,RPTECH.NS,Technology,Technology,False,Cash,1
+Zaggle Prepaid Ocean Services Limited,Software - Infrastructure,ZAGGLE,EQ,,ZAGGLE.NS,Technology,Technology,False,Cash,1
+Ramky Infrastructure Limited,Engineering & Construction,RAMKY,EQ,,RAMKY.NS,Industrials,Industrials,False,Cash,1
+ROUTE MOBILE LIMITED,Telecom Services,ROUTE,EQ,,ROUTE.NS,Communication Services,Communication Services,False,Cash,1
+West Coast Paper Mills Limited,Basic Materials,WSTCSTPAPR,EQ,,WSTCSTPAPR.NS,Basic Materials,Basic Materials,False,Cash,1
+Marathon Nextgen Realty Limited,Real Estate,MARATHON,EQ,,MARATHON.NS,Real Estate,Real Estate,False,Cash,1
+Rossell Techsys Limited,Aerospace & Defense,ROSSTECH,EQ,,ROSSTECH.NS,Industrials,Industrials,False,Cash,1
+Cyient DLM Limited,Electronic Components,CYIENTDLM,EQ,,CYIENTDLM.NS,Technology,Technology,False,Cash,1
+Raymond Limited,Specialty Industrial Machinery,RAYMOND,EQ,,RAYMOND.NS,Industrials,Industrials,False,Cash,1
+Kitex Garments Limited,Apparel Manufacturing,KITEX,EQ,,KITEX.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Greenply Industries Limited,Basic Materials,GREENPLY,EQ,,GREENPLY.NS,Basic Materials,Basic Materials,False,Cash,1
+Kolte - Patil Developers Limited,Real Estate,KOLTEPATIL,EQ,,KOLTEPATIL.NS,Real Estate,Real Estate,False,Cash,1
+Heritage Foods Limited,Packaged Foods,HERITGFOOD,EQ,,HERITGFOOD.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Muthoot Microfin Limited,Credit Services,MUTHOOTMF,EQ,,MUTHOOTMF.NS,Financial Services,Financial Services,False,Cash,1
+Balmer Lawrie & Company Limited,Conglomerates,BALMLAWRIE,EQ,,BALMLAWRIE.NS,Industrials,Industrials,False,Cash,1
+GRM Overseas Limited,Packaged Foods,GRMOVER,EQ,,GRMOVER.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Quess Corp Limited,Industrials,QUESS,EQ,,QUESS.NS,Industrials,Industrials,False,Cash,1
+Bhagiradha Chemicals & Industries Limited,Agricultural Inputs,BHAGCHEM,EQ,,BHAGCHEM.NS,Basic Materials,Basic Materials,False,Cash,1
+Steel Strips Wheels Limited,Auto Parts,SSWL,EQ,,SSWL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Vadilal Industries Limited,Packaged Foods,VADILALIND,EQ,,VADILALIND.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+PSP Projects Limited,Engineering & Construction,PSPPROJECT,EQ,,PSPPROJECT.NS,Industrials,Industrials,False,Cash,1
+Carraro India Limited,Auto Parts,CARRARO,EQ,,CARRARO.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Sundaram Clayton Limited,Metal Fabrication,SUNCLAY,EQ,,SUNCLAY.NS,Industrials,Industrials,False,Cash,1
+Navneet Education Limited,Communication Services,NAVNETEDUL,EQ,,NAVNETEDUL.NS,Communication Services,Communication Services,False,Cash,1
+DEE Development Engineers Limited,Metal Fabrication,DEEDEV,EQ,,DEEDEV.NS,Industrials,Industrials,False,Cash,1
+Wheels India Limited,Auto Parts,WHEELS,EQ,,WHEELS.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Share India Securities Limited,Capital Markets,SHAREINDIA,EQ,,SHAREINDIA.NS,Financial Services,Financial Services,False,Cash,1
+Sandhar Technologies Limited,Auto Parts,SANDHAR,EQ,,SANDHAR.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Marine Electricals (India) Limited,Electrical Equipment & Parts,MARINE,EQ,,MARINE.NS,Industrials,Industrials,False,Cash,1
+Hubtown Limited,Real Estate,HUBTOWN,EQ,,HUBTOWN.NS,Real Estate,Real Estate,False,Cash,1
+Wonderla Holidays Limited,Consumer Cyclical,WONDERLA,EQ,,WONDERLA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Hind Rectifiers Limited,Electrical Equipment & Parts,HIRECT,EQ,,HIRECT.NS,Industrials,Industrials,False,Cash,1
+Mstc Limited,Conglomerates,MSTCLTD,EQ,,MSTCLTD.NS,Industrials,Industrials,False,Cash,1
+JTL INDUSTRIES LIMITED,Steel,JTLIND,EQ,,JTLIND.NS,Basic Materials,Basic Materials,False,Cash,1
+Grauer & Weil India Limited,Specialty Chemicals,GRAUWEIL,EQ,,GRAUWEIL.NS,Basic Materials,Basic Materials,False,Cash,1
+UFLEX Limited,Consumer Cyclical,UFLEX,EQ,,UFLEX.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Tatva Chintan Pharma Chem Limited,Specialty Chemicals,TATVA,EQ,,TATVA.NS,Basic Materials,Basic Materials,False,Cash,1
+Bharat Bijlee Limited,Electrical Equipment & Parts,BBL,EQ,,BBL.NS,Industrials,Industrials,False,Cash,1
+Dalmia Bharat Sugar and Industries Limited,Consumer Defensive,DALMIASUG,EQ,,DALMIASUG.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Jindal Poly Films Limited,Consumer Cyclical,JINDALPOLY,EQ,,JINDALPOLY.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Baazar Style Retail Limited,Consumer Cyclical,STYLEBAAZA,EQ,,STYLEBAAZA.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+NRB Bearing Limited,Auto Parts,NRBBEARING,EQ,,NRBBEARING.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Borosil Limited,"Furnishings, Fixtures & Appliances",BOROLTD,EQ,,BOROLTD.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+NOCIL Limited,Specialty Chemicals,NOCIL,EQ,,NOCIL.NS,Basic Materials,Basic Materials,False,Cash,1
+Gufic Biosciences Limited,Drug Manufacturers - Specialty & Generic,GUFICBIO,EQ,,GUFICBIO.NS,Healthcare,Healthcare,False,Cash,1
+KDDL Limited,Luxury Goods,KDDL,EQ,,KDDL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+TVS Srichakra Limited,Auto Parts,TVSSRICHAK,EQ,,TVSSRICHAK.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Nalwa Sons Investments Limited,Asset Management,NSIL,EQ,,NSIL.NS,Financial Services,Financial Services,False,Cash,1
+Kewal Kiran Clothing Limited,Apparel Manufacturing,KKCL,EQ,,KKCL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Rossari Biotech Limited,Specialty Chemicals,ROSSARI,EQ,,ROSSARI.NS,Basic Materials,Basic Materials,False,Cash,1
+Indo Tech Transformers Limited,Electrical Equipment & Parts,INDOTECH,EQ,,INDOTECH.NS,Industrials,Industrials,False,Cash,1
+Savita Oil Technologies Limited,Specialty Chemicals,SOTL,EQ,,SOTL.NS,Basic Materials,Basic Materials,False,Cash,1
+ADF Foods Limited,Packaged Foods,ADFFOODS,EQ,,ADFFOODS.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Gateway Distriparks Limited,Industrials,GATEWAY,EQ,,GATEWAY.NS,Industrials,Industrials,False,Cash,1
+Maithan Alloys Limited,Steel,MAITHANALL,EQ,,MAITHANALL.NS,Basic Materials,Basic Materials,False,Cash,1
+Polyplex Corporation Limited,Specialty Chemicals,POLYPLEX,EQ,,POLYPLEX.NS,Basic Materials,Basic Materials,False,Cash,1
+Premier Explosives Limited,Specialty Chemicals,PREMEXPLN,EQ,,PREMEXPLN.NS,Basic Materials,Basic Materials,False,Cash,1
+Dishman Carbogen Amcis Limited,Biotechnology,DCAL,EQ,,DCAL.NS,Healthcare,Healthcare,False,Cash,1
+Sanghvi Movers Limited,Industrials,SANGHVIMOV,EQ,,SANGHVIMOV.NS,Industrials,Industrials,False,Cash,1
+Deep Industries Limited,Energy,DEEPINDS,EQ,,DEEPINDS.NS,Energy,Energy,False,Cash,1
+Windsor Machines Limited,Specialty Industrial Machinery,WINDMACHIN,EQ,,WINDMACHIN.NS,Industrials,Industrials,False,Cash,1
+Steelcast Limited,Steel,STEELCAS,EQ,,STEELCAS.NS,Basic Materials,Basic Materials,False,Cash,1
+Orient Cement Limited,Building Materials,ORIENTCEM,EQ,,ORIENTCEM.NS,Basic Materials,Basic Materials,False,Cash,1
+Arvind SmartSpaces Limited,Real Estate,ARVSMART,EQ,,ARVSMART.NS,Real Estate,Real Estate,False,Cash,1
+Venus Pipes & Tubes Limited,Steel,VENUSPIPES,EQ,,VENUSPIPES.NS,Basic Materials,Basic Materials,False,Cash,1
+Globus Spirits Limited,Consumer Defensive,GLOBUSSPR,EQ,,GLOBUSSPR.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+MPS Limited,Communication Services,MPSLTD,EQ,,MPSLTD.NS,Communication Services,Communication Services,False,Cash,1
+Prince Pipes And Fittings Limited,Building Products & Equipment,PRINCEPIPE,EQ,,PRINCEPIPE.NS,Industrials,Industrials,False,Cash,1
+Bliss GVS Pharma Limited,Drug Manufacturers - Specialty & Generic,BLISSGVS,EQ,,BLISSGVS.NS,Healthcare,Healthcare,False,Cash,1
+Ganesha Ecosphere Limited,Textile Manufacturing,GANECOS,EQ,,GANECOS.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+IOL Chemicals and Pharmaceuticals Limited,Drug Manufacturers - Specialty & Generic,IOLCP,EQ,,IOLCP.NS,Healthcare,Healthcare,False,Cash,1
+Euro Pratik Sales Limited,Building Materials,EUROPRATIK,EQ,,EUROPRATIK.NS,Basic Materials,Basic Materials,False,Cash,1
+Medi Assist Healthcare Services Limited,Healthcare,MEDIASSIST,EQ,,MEDIASSIST.NS,Healthcare,Healthcare,False,Cash,1
+Bombay Dyeing & Mfg Company Limited,Textile Manufacturing,BOMDYEING,EQ,,BOMDYEING.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Standard Engineering Technology Limited,Specialty Industrial Machinery,SETL,EQ,,SETL.NS,Industrials,Industrials,False,Cash,1
+Automotive Axles Limited,Auto Parts,AUTOAXLES,EQ,,AUTOAXLES.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Parag Milk Foods Limited,Packaged Foods,PARAGMILK,EQ,,PARAGMILK.NS,Consumer Defensive,Consumer Defensive,False,Cash,1
+Apeejay Surrendra Park Hotels Limited,Lodging,PARKHOTELS,EQ,,PARKHOTELS.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Greenpanel Industries Limited,Basic Materials,GREENPANEL,EQ,,GREENPANEL.NS,Basic Materials,Basic Materials,False,Cash,1
+Marsons Limited,Electrical Equipment & Parts,MARSONS,EQ,,MARSONS.NS,Industrials,Industrials,False,Cash,1
+Jubilant Agri and Consumer Products Limited,Specialty Chemicals,JUBLCPL,EQ,,JUBLCPL.NS,Basic Materials,Basic Materials,False,Cash,1
+Kiri Industries Limited,Specialty Chemicals,KIRIINDUS,EQ,,KIRIINDUS.NS,Basic Materials,Basic Materials,False,Cash,1
+Novartis India Limited,Drug Manufacturers - Specialty & Generic,NOVARTIND,EQ,,NOVARTIND.NS,Healthcare,Healthcare,False,Cash,1
+Pokarna Limited,Building Products & Equipment,POKARNA,EQ,,POKARNA.NS,Industrials,Industrials,False,Cash,1
+K.P. Energy Limited,Engineering & Construction,KPEL,EQ,,KPEL.NS,Industrials,Industrials,False,Cash,1
+Mayur Uniquoters Ltd,Textile Manufacturing,MAYURUNIQ,EQ,,MAYURUNIQ.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Prakash Industries Limited,Steel,PRAKASH,EQ,,PRAKASH.NS,Basic Materials,Basic Materials,False,Cash,1
+Unichem Laboratories Limited,Drug Manufacturers - Specialty & Generic,UNICHEMLAB,EQ,,UNICHEMLAB.NS,Healthcare,Healthcare,False,Cash,1
+Awfis Space Solutions Limited,Industrials,AWFIS,EQ,,AWFIS.NS,Industrials,Industrials,False,Cash,1
+Shankara Buildpro Limited,Consumer Cyclical,BUILDPRO,EQ,,BUILDPRO.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Xpro India Limited,Specialty Chemicals,XPROINDIA,EQ,,XPROINDIA.NS,Basic Materials,Basic Materials,False,Cash,1
+CARYSIL LIMITED,"Furnishings, Fixtures & Appliances",CARYSIL,EQ,,CARYSIL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Nitin Spinners Limited,Textile Manufacturing,NITINSPIN,EQ,,NITINSPIN.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Apcotex Industries Limited,Specialty Chemicals,APCOTEXIND,EQ,,APCOTEXIND.NS,Basic Materials,Basic Materials,False,Cash,1
+Siyaram Silk Mills Limited,Textile Manufacturing,SIYSIL,EQ,,SIYSIL.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Dredging Corporation of India Limited,Engineering & Construction,DREDGECORP,EQ,,DREDGECORP.NS,Industrials,Industrials,False,Cash,1
+Kernex Microsystems (India) Limited,Software - Application,KERNEX,EQ,,KERNEX.NS,Technology,Technology,False,Cash,1
+Vardhman Special Steels Limited,Steel,VSSL,EQ,,VSSL.NS,Basic Materials,Basic Materials,False,Cash,1
+Imagicaaworld Entertainment Limited,Communication Services,IMAGICAA,EQ,,IMAGICAA.NS,Communication Services,Communication Services,False,Cash,1
+EFC (I) Limited,Real Estate Services,EFCIL,EQ,,EFCIL.NS,Real Estate,Real Estate,False,Cash,1
+Federal-Mogul Goetze (India) Limited.,Auto Parts,FMGOETZE,EQ,,FMGOETZE.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Jash Engineering Limited,Specialty Industrial Machinery,JASH,EQ,,JASH.NS,Industrials,Industrials,False,Cash,1
+Thirumalai Chemicals Limited,Specialty Chemicals,TIRUMALCHM,EQ,,TIRUMALCHM.NS,Basic Materials,Basic Materials,False,Cash,1
+Hikal Limited,Drug Manufacturers - Specialty & Generic,HIKAL,EQ,,HIKAL.NS,Healthcare,Healthcare,False,Cash,1
+Network People Services Technologies Limited,Software - Application,NPST,EQ,,NPST.NS,Technology,Technology,False,Cash,1
+GK Energy Limited,Utilities - Renewable,GKENERGY,EQ,,GKENERGY.NS,Utilities,Utilities,False,Cash,1
+Nitco Limited,Building Products & Equipment,NITCO,EQ,,NITCO.NS,Industrials,Industrials,False,Cash,1
+TCPL Packaging Limited,Consumer Cyclical,TCPLPACK,EQ,,TCPLPACK.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+The Orissa Minerals Development Company Limited,Steel,ORISSAMINE,EQ,,ORISSAMINE.NS,Basic Materials,Basic Materials,False,Cash,1
+Veedol Corporation Limited,Specialty Chemicals,VEEDOL,EQ,,VEEDOL.NS,Basic Materials,Basic Materials,False,Cash,1
+Ddev Plastiks Industries Limited,Specialty Chemicals,DDEVPLSTIK,EQ,,DDEVPLSTIK.NS,Basic Materials,Basic Materials,False,Cash,1
+Sangam (India) Limited,Textile Manufacturing,SANGAMIND,EQ,,SANGAMIND.NS,Consumer Cyclical,Consumer Cyclical,False,Cash,1
+Jain Irrigation Systems Limited,Conglomerates,JISLJALEQS,EQ,,JISLJALEQS.NS,Industrials,Industrials,False,Cash,1
