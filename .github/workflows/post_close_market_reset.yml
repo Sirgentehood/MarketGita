@@ -1,49 +1,120 @@
+# `.github/workflows/post_close_market_reset.yml`
+
+```yaml
 name: Post Close Market Reset
 
 on:
   schedule:
-    # 4:00 PM IST = 10:30 AM UTC, Monday-Friday
-    - cron: "30 10 * * 1-5"
+    # 4:00 PM IST = 10:30 UTC
+    - cron: '30 10 * * 1-5'
+
   workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  run-post-close:
+  market-reset:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
+          python-version: '3.11'
 
-      - name: Install dependencies
+      - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run post-close pipeline
+      - name: Create Required Folders
         run: |
-          python run_post_close_pipeline.py
+          mkdir -p outputs
+          mkdir -p data/yahoo_prices
 
-      - name: Commit generated outputs
+      - name: Download Yahoo Data
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          python yahoo_data_downloader.py \
+            --universe data/universe_2026.csv \
+            --outdir data/yahoo_prices \
+            --period 24mo \
+            --market-index ^NSEI
+
+      - name: Run VCP Engine
+        run: |
+          python vcp_engine.py \
+            --universe data/universe_2026.csv \
+            --wide-price data/yahoo_prices \
+            --outdir outputs \
+            --chart-scope dashboard
+
+      - name: Commit Updated Outputs
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
           git add outputs/
+          git add data/yahoo_prices/
 
-          if git diff --cached --quiet; then
-            echo "No output changes to commit"
-            exit 0
-          fi
+          git commit -m "Daily market update" || echo "No changes to commit"
 
-          git commit -m "Update post-close market outputs"
+          git pull --rebase origin main
           git push origin HEAD:main
+```
+
+# Important
+
+Your repository must contain:
+
+```text
+requirements.txt
+vcp_engine.py
+yahoo_data_downloader.py
+run_post_close_pipeline.py
+streamlit_app.py
+```
+
+And folders:
+
+```text
+outputs/
+data/
+data/yahoo_prices/
+```
+
+# Recommended `.gitignore`
+
+```gitignore
+__pycache__/
+*.pyc
+.env
+.DS_Store
+.streamlit/secrets.toml
+```
+
+# Streamlit Cloud Settings
+
+Main file:
+
+```text
+streamlit_app.py
+```
+
+Python version:
+
+```text
+3.11
+```
+
+# Notes
+
+* Cron runs Monday-Friday at 4 PM IST.
+* Workflow auto-updates outputs and pushes them back to GitHub.
+* `git pull --rebase origin main` prevents the push rejection error you encountered.
+* `fetch-depth: 0` is required for rebase/pull operations inside GitHub Actions.
