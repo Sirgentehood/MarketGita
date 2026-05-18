@@ -155,6 +155,26 @@ div[role="radiogroup"] label {background: rgba(255,255,255,0.72); border:1px sol
   .stock-meta, .signal-line {font-size:0.84rem;}
   .chart-wrap img {width:100% !important;}
 }
+
+/* v32 mobile chart readability */
+@media (max-width: 768px) {
+  .chart-wrap {
+    margin-top: 0.48rem !important;
+    border-radius: 16px !important;
+  }
+  .chart-wrap img,
+  .stImage img,
+  div[data-testid="stImage"] img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    image-rendering: auto !important;
+  }
+  div[data-testid="stImage"] {
+    width: 100% !important;
+  }
+}
+
 </style>
 """,
     unsafe_allow_html=True,
@@ -402,6 +422,57 @@ st.markdown(
   box-shadow: 0 10px 24px rgba(29,95,209,0.20);
 }
 
+
+
+/* Compact stock-card action buttons: keep Like / Daily / Weekly on one row on mobile. */
+.stock-actions-marker + div [data-testid="stHorizontalBlock"] {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 0.32rem !important;
+}
+.stock-actions-marker + div [data-testid="column"] {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  width: 33.33% !important;
+}
+.stock-actions-marker + div .stButton > button {
+  min-height: 2.22rem !important;
+  padding: 0.32rem 0.22rem !important;
+  font-size: 0.82rem !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.stock-actions-marker + div .stButton > button p,
+.stock-actions-marker + div .stButton > button span {
+  white-space: nowrap !important;
+  font-size: 0.82rem !important;
+}
+@media (max-width: 768px) {
+  .stock-actions-marker + div [data-testid="stHorizontalBlock"] {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 0.24rem !important;
+  }
+  .stock-actions-marker + div [data-testid="column"] {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: 33.33% !important;
+  }
+  .stock-actions-marker + div .stButton > button {
+    min-height: 2.05rem !important;
+    padding: 0.26rem 0.12rem !important;
+    font-size: 0.76rem !important;
+    letter-spacing: 0 !important;
+  }
+  .stock-actions-marker + div .stButton > button p,
+  .stock-actions-marker + div .stButton > button span {
+    font-size: 0.76rem !important;
+  }
+}
+
 @media (max-width: 768px) {
   .today-summary-row { grid-template-columns: 1fr; gap: 0.15rem; }
 }
@@ -438,6 +509,52 @@ st.markdown(
     border-radius: 22px !important;
   }
 }
+
+/* v31 prevent F&O/rank badges from occupying removed Daily/Weekly top-right slot */
+.stock-head {
+  display: block !important;
+}
+.stock-head > div {
+  width: 100% !important;
+}
+.stock-head > div:nth-child(2):empty {
+  display: none !important;
+}
+.badge-strip {
+  margin-top: 0.42rem !important;
+}
+
+
+/* v31 mobile stock action buttons: force Like / Daily / Weekly into one row */
+@media (max-width: 768px) {
+  div[data-testid="stHorizontalBlock"]:has(.stButton) {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.28rem !important;
+    align-items: stretch !important;
+  }
+  div[data-testid="stHorizontalBlock"]:has(.stButton) > div[data-testid="column"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 0 !important;
+  }
+  .stButton > button {
+    min-height: 2.05rem !important;
+    height: 2.05rem !important;
+    padding: 0.18rem 0.18rem !important;
+    font-size: 0.70rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    width: 100% !important;
+  }
+  .stButton > button p,
+  .stButton > button span {
+    font-size: 0.70rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+}
+
 </style>
 """,
     unsafe_allow_html=True,
@@ -824,7 +941,7 @@ def build_today_summary_html(mode_text: str, stage2_count: int, leaders: list[st
   <div class="market-story-box">{story_lines}</div>
   <div class="today-summary-title today-summary-title-small">Scan Snapshot</div>
   <div class="today-summary-grid">{body}</div>
-</div>
+
 """
 
 
@@ -1462,13 +1579,13 @@ def volume_text(row: pd.Series, chart_mode: str = "Daily") -> str:
 
 def rs_text(value, months: str) -> str:
     val = pd.to_numeric(value, errors="coerce")
-    label_map = {"3m": "3 months", "6m": "6 months", "1m": "1 month", "12m": "12 months"}
+    label_map = {"3m": "3 Months", "6m": "6 Months", "1m": "1 Month", "12m": "12 Months"}
     label = label_map.get(str(months).strip().lower(), str(months))
     if pd.isna(val):
-        return f"Nifty relative {label}: not available"
+        return f"Nifty Relative: not available for {label}"
     arrow = "↑" if float(val) >= 0 else "↓"
     verb = "Outperformed" if float(val) >= 0 else "Underperformed"
-    return f"{arrow} {verb} Nifty by {abs(float(val)):.1f}% in {label}"
+    return f"{verb} {arrow} Nifty : {abs(float(val)):.1f}% in {label}"
 
 
 def safe_key(text: str) -> str:
@@ -1489,7 +1606,7 @@ def render_metric(title: str, value: str, subtitle: str = ""):
   <div class="kicker">{h(title)}</div>
   <div class="metric-value">{h(value)}</div>
   <div class="metric-sub">{h(subtitle)}</div>
-</div>
+
 """,
         unsafe_allow_html=True,
     )
@@ -1550,8 +1667,6 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
     badge_line = "".join([badge_html(label, css_class) for label, css_class in badges])
 
     extra_meta = []
-    if sector_raw and sector_raw.lower() not in {"nan", "none", "unknown", "-"}:
-        extra_meta.append(f"Sector: {h(sector_raw)}")
 
     extra_meta_line = ""
     if extra_meta:
@@ -1568,13 +1683,12 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
       {variant_line}
       <div class="stock-meta">Industry: {h(industry)}</div>
       {extra_meta_line}
-    </div>
-    <div class="stage-pill">{h(chart_mode)}</div>
-  </div>
+
+
   <div class="badge-strip">{badge_line}</div>
   <div class="signal-line">{h(volume_text(row, chart_mode))}</div>
   <div class="signal-line">{h(rs_text(row.get('rs_3m_pct'), '3m'))}</div>
-</div>
+
 """,
             unsafe_allow_html=True,
         )
@@ -1586,6 +1700,7 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
         else:
             st.markdown('<div class="chart-missing">Chart not available for this stock yet.</div>', unsafe_allow_html=True)
 
+        st.markdown('<div class="stock-actions-marker"></div>', unsafe_allow_html=True)
         c1, c2, c3 = st.columns(3)
         with c1:
             like_label = "♥ Liked" if is_liked else "♡ Like"
@@ -1595,12 +1710,12 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
                     liked.append(ticker)
                 rerun()
         with c2:
-            daily_label = "Daily ✓" if chart_mode == "Daily" else "Daily"
+            daily_label = "Daily"
             if st.button(daily_label, key=f"daily_{key}_{idx}", use_container_width=True, type=("primary" if chart_mode == "Daily" else "secondary")):
                 st.session_state[mode_key] = "Daily"
                 rerun()
         with c3:
-            weekly_label = "Weekly ✓" if chart_mode == "Weekly" else "Weekly"
+            weekly_label = "Weekly"
             if st.button(weekly_label, key=f"weekly_{key}_{idx}", use_container_width=True, type=("primary" if chart_mode == "Weekly" else "secondary")):
                 st.session_state[mode_key] = "Weekly"
                 rerun()
@@ -1623,7 +1738,7 @@ def render_connect_feedback_section():
 <div class="feedback-card">
   <div class="feedback-title">Connect & Feedback</div>
   <div class="feedback-sub">Share your view on this market-structure page, what felt useful, what was confusing, and your email ID if you want a reply.</div>
-</div>
+
 """,
         unsafe_allow_html=True,
     )
@@ -1693,7 +1808,7 @@ st.markdown(
   <div class="subtitle">A Holy-Grail for serious market participants who believe in long term structures over short term volatility. Not Investment Advice</div>
 
   <div class="unlock-line">{h(generated_line)}</div>
-</div>
+
 """,
     unsafe_allow_html=True,
 )
@@ -1771,7 +1886,7 @@ st.markdown(
     f"""
 <div class="disclaimer-card">
 <b>Public-data disclaimer:</b> This page shows rule-based structure, stage, sector and chart data only. It is not investment advice, research advice, portfolio advice, a recommendation, or a solicitation to buy/sell securities. Any mention of “interesting”, “leader”, “stage”, “outperformed”, or “underperformed” is a descriptive label from the dataset only. Liked stocks in this session: {liked_count}. Liked-watchlist memory is intentionally kept for the next update.
-</div>
+
 """,
     unsafe_allow_html=True,
 )
