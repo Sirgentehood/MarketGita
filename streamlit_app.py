@@ -83,7 +83,7 @@ html, body, .stApp, [data-testid="stAppViewContainer"] {
     rgba(255,255,255,0.96);
 }
 .stockgita-brand-line {display:flex; align-items:baseline; justify-content:center; gap:0.38rem; margin-bottom:0.18rem;}
-.stockgita-brand {font-size:1.78rem; line-height:1.02; font-weight:950; letter-spacing:-0.045em; color:#0f172a;}
+.stockgita-brand {font-size:2rem; line-height:1.02; font-weight:950; letter-spacing:-0.045em; color:#0f172a;}
 .stockgita-brand span {color:var(--amber);}
 .stockgita-tagline {font-size:0.75rem; text-transform:uppercase; letter-spacing:0.16em; color:#607085; font-weight:900; margin-bottom:0.75rem;}
 .gita-opening-card {
@@ -1047,7 +1047,7 @@ def generated_at_text(outdir: Path, history: pd.DataFrame) -> str:
         return "Updated time not available yet · Latest date: Not available"
     time_text = ts.strftime("%I:%M %p").lstrip("0")
     date_text = ts.strftime("%d-%b-%y")
-    return f"· Engine ran on {date_text} {time_text} IST · "
+    return f"· Engine ran on {date_text} {time_text} IST · No Live Data · "
 
 
 def market_mode_text(regime: pd.DataFrame, combined: pd.DataFrame) -> str:
@@ -2236,7 +2236,7 @@ st.markdown(
     <div class="gita-shlok">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।</div>
     <div class="gita-translation">Karmanye Vadhikaraste, Ma Phaleshu Kadachana.</div>
     <div class="gita-message">You control your process, not the market’s outcome.</div>
-    <div class="gita-subtext">Market Structure and Leadership Insights for Everyone. Really Learnings, No Investment Advice.<br><span class="engine-run-line">· Engine ran on 18-May-26 2:52 PM IST · No Live Data ·</span>.</div>
+    <div class="gita-subtext">Market Structure and Leadership Insights for Everyone. Really Learnings, No Investment Advice.</div>
   </div>
 
   <div class="stockgita-generated">{h(generated_line)}</div>
