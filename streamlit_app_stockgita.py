@@ -1168,10 +1168,10 @@ def build_today_summary_html(mode_text: str, stage2_count: int, leaders: list[st
     )
     return f"""
 <div class="today-summary-card">
-  <div class="today-summary-title"><span class="gold-text">Today's Market Story</span></div>
+  <div class="today-summary-title">Today's Market Story</div>
   <div class="market-story-box">{story_lines}</div>
   <div class="today-summary-title today-summary-title-small">
-    <span class="gold-text">Scan Snapshot</span>
+    <span>Scan Snapshot</span>
     <span class="stage-help-button" title="What do stages mean?">?</span>
   </div>
   <details>
@@ -2040,20 +2040,20 @@ generated_line = generated_at_text(OUTPUT_DIR, history)
 dropped_tickers = previous_tickers - interesting_tickers
 
 
-# v36 final override: keep key dashboard labels in Gita gold after all Streamlit/theme CSS.
+# v38 final override: section headings/labels black, only selected values stay in Gita gold.
 st.markdown(
     """
 <style>
 .gold-text,
+.stage-count-number {
+  color: var(--amber) !important;
+  font-weight: 950 !important;
+}
 .section-title,
 .stock-selection-title,
 .today-summary-title,
 .today-summary-label,
 .stage-section-title,
-.stage-count-number {
-  color: var(--amber) !important;
-  font-weight: 950 !important;
-}
 .black-text,
 .market-story-line,
 .today-summary-value,
@@ -2062,13 +2062,20 @@ st.markdown(
 .simple-note {
   color: #111827 !important;
 }
+.section-title,
+.stock-selection-title,
+.today-summary-title,
+.today-summary-label,
+.stage-section-title {
+  font-weight: 950 !important;
+}
 .market-story-line {
-  background: linear-gradient(135deg, rgba(196,122,0,0.08) 0%, rgba(255,255,255,0.92) 100%) !important;
-  border-color: rgba(196,122,0,0.18) !important;
+  background: linear-gradient(135deg, rgba(196,122,0,0.05) 0%, rgba(255,255,255,0.94) 100%) !important;
+  border-color: rgba(17,24,39,0.10) !important;
 }
 .today-summary-row {
-  background: rgba(255,255,255,0.90) !important;
-  border-color: rgba(196,122,0,0.14) !important;
+  background: rgba(255,255,255,0.92) !important;
+  border-color: rgba(17,24,39,0.10) !important;
 }
 </style>
 """,
