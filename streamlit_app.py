@@ -83,7 +83,7 @@ html, body, .stApp, [data-testid="stAppViewContainer"] {
     rgba(255,255,255,0.96);
 }
 .stockgita-brand-line {display:flex; align-items:baseline; justify-content:center; gap:0.38rem; margin-bottom:0.18rem;}
-.stockgita-brand {font-size:2rem; line-height:1.02; font-weight:950; letter-spacing:-0.045em; color:#0f172a;}
+.stockgita-brand {font-size:3rem; line-height:1.02; font-weight:950; letter-spacing:-0.045em; color:#0f172a;}
 .stockgita-brand span {color:var(--amber);}
 .stockgita-tagline {font-size:0.75rem; text-transform:uppercase; letter-spacing:0.16em; color:#607085; font-weight:900; margin-bottom:0.75rem;}
 .gita-opening-card {
@@ -524,6 +524,7 @@ st.markdown(
   border: 1px solid rgba(35,72,108,0.09);
 }
 .today-summary-label {
+  font-size: 1rem !important; 
   font-weight: 950;
   color: #344256;
 }
@@ -1293,8 +1294,7 @@ def build_today_summary_html(mode_text: str, stage2_count: int, leaders: list[st
 
     repeated = int(reset_summary.get("repeated", 0) or 0)
     new_stage2 = int(reset_summary.get("new_stage2", 0) or 0)
-    if new_stage2 > 0:
-        rows.append(("Fresh Stage 2", f"<span class='gold-text'>{new_stage2} names</span>"))
+    
     if repeated > 0:
         rows.append(("Interesting 20", f"<span class='gold-text'>{repeated} repeated</span> <span class='black-text'>from yesterday</span>"))
 
