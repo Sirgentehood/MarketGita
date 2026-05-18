@@ -14,19 +14,28 @@ plt.switch_backend("Agg")
 
 # Mobile-first chart readability defaults.
 # These affect generated PNG chart text, unlike dashboard CSS which cannot resize text inside images.
-CHART_DPI = 320
-CHART_FIGSIZE_DAILY = (16, 10)
-CHART_FIGSIZE_WEEKLY = (16, 10)
+CHART_DPI = 360
+CHART_FIGSIZE_DAILY = (18, 11)
+CHART_FIGSIZE_WEEKLY = (18, 11)
 plt.rcParams.update({
-    "font.size": 15,
-    "axes.titlesize": 18,
-    "axes.labelsize": 18,
-    "xtick.labelsize": 18,
-    "ytick.labelsize": 18,
-    "legend.fontsize": 18,
-    "figure.titlesize": 20,
-    "lines.linewidth": 2.2,
+    "font.size": 22,
+    "axes.titlesize": 26,
+    "axes.labelsize": 22,
+    "xtick.labelsize": 20,
+    "ytick.labelsize": 20,
+    "legend.fontsize": 19,
+    "figure.titlesize": 26,
+    "lines.linewidth": 2.8,
 })
+
+# Explicit sizes used inside chart functions. Increase these if mobile chart text is still hard to read.
+CHART_TITLE_FONTSIZE = 28
+CHART_AXIS_FONTSIZE = 22
+CHART_TICK_FONTSIZE = 20
+CHART_LEGEND_FONTSIZE = 19
+CHART_ANNOTATION_FONTSIZE = 20
+CHART_SMALL_ANNOTATION_FONTSIZE = 18
+
 
 import numpy as np
 import pandas as pd
@@ -1908,7 +1917,7 @@ def export_chart(
             textcoords="data",
             ha="center",
             va="top",
-            fontsize=14,
+            fontsize=CHART_ANNOTATION_FONTSIZE,
             fontweight="bold",
             color="#0f172a",
             bbox=dict(boxstyle="round,pad=0.18", alpha=0.10, facecolor="#e2e8f0", edgecolor="none"),
@@ -1916,12 +1925,12 @@ def export_chart(
 
     chart_suffix = "Weekly" if is_weekly else "Daily"
     ax1.set_title(f"{symbol} - {chart_suffix} - {stage}", pad=12, fontweight="bold", color="#0f172a")
-    fig.text(0.5, 0.52, "StockGita", ha="center", va="center", fontsize=54, alpha=0.055, rotation=24, weight="bold", color="#0f172a")
+    fig.text(0.5, 0.52, "StockGita", ha="center", va="center", fontsize=CHART_TITLE_FONTSIZE, alpha=0.055, rotation=24, weight="bold", color="#0f172a")
     # No grid lines: cleaner chart surface for dashboard viewing.
     ax1.grid(False)
     ax1.legend(loc="upper left", ncol=4, frameon=False, handlelength=2.6, columnspacing=1.4, borderaxespad=0.6)
-    ax1.tick_params(axis="both", labelsize=20, pad=7)
-    ax1.set_ylabel("Price", fontweight="bold", fontsize=22)
+    ax1.tick_params(axis="both", labelsize=CHART_TICK_FONTSIZE, pad=7)
+    ax1.set_ylabel("Price", fontweight="bold", fontsize=CHART_TITLE_FONTSIZE)
 
     if len(x) >= 2:
         if hasattr(x, "dtype") and "datetime" in str(x.dtype):
@@ -1947,10 +1956,10 @@ def export_chart(
 
     # No grid lines on volume panel.
     ax2.grid(False)
-    ax2.set_ylabel("Volume", fontweight="bold", fontsize=22)
+    ax2.set_ylabel("Volume", fontweight="bold", fontsize=CHART_TITLE_FONTSIZE)
     ax2.set_yticks([])
     ax2.tick_params(axis="y", which="both", length=0, labelleft=False)
-    ax2.tick_params(axis="x", labelsize=20, pad=7)
+    ax2.tick_params(axis="x", labelsize=CHART_TICK_FONTSIZE, pad=7)
     if len(x) >= 2:
         if hasattr(x, "dtype") and "datetime" in str(x.dtype):
             step = x[-1] - x[-2]
@@ -1961,10 +1970,11 @@ def export_chart(
             right_pad = 3 if is_weekly else 6
         ax2.set_xlim(x[0], x[-1] + right_pad)
     if vol_ma.notna().sum() == len(volume):
-        ax2.legend(loc="upper left", frameon=False, fontsize=16)
+        ax2.legend(loc="upper left", frameon=False, fontsize=CHART_ANNOTATION_FONTSIZE)
 
     fig.tight_layout()
     outfile.parent.mkdir(parents=True, exist_ok=True)
+    apply_mobile_chart_readability(fig)
     fig.savefig(outfile, dpi=dpi, facecolor=fig.get_facecolor(), pad_inches=0.12)
     plt.close(fig)
 
@@ -2386,6 +2396,26 @@ def save_interesting20_archive(out_path: Path, snapshot_df: pd.DataFrame, chart_
     return paths
 
 
+
+
+def apply_mobile_chart_readability(fig) -> None:
+    """Force readable chart text for mobile PNG rendering."""
+    try:
+        fig.set_size_inches(*CHART_FIGSIZE_DAILY, forward=True)
+    except Exception:
+        pass
+    for ax in getattr(fig, "axes", []):
+        try:
+            ax.tick_params(axis="both", labelsize=CHART_TICK_FONTSIZE)
+            ax.xaxis.label.set_size(CHART_AXIS_FONTSIZE)
+            ax.yaxis.label.set_size(CHART_AXIS_FONTSIZE)
+            ax.title.set_size(CHART_TITLE_FONTSIZE)
+            legend = ax.get_legend()
+            if legend:
+                for item in legend.get_texts():
+                    item.set_fontsize(CHART_LEGEND_FONTSIZE)
+        except Exception:
+            pass
 
 def build_outputs(
     universe_path: str,

@@ -230,6 +230,25 @@ div[role="radiogroup"] label {background: rgba(255,255,255,0.72); border:1px sol
   font-weight: 850;
 }
 
+
+/* v34 compact scan snapshot values */
+.today-summary-value .stage-count-inline {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28rem;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+.today-summary-value .stage-count-number {
+  font-size: 1.18rem;
+  font-weight: 950;
+}
+.today-summary-value .stage-count-note {
+  font-size: 0.86rem;
+  color: #46586f;
+  font-weight: 850;
+}
+
 </style>
 """,
     unsafe_allow_html=True,
@@ -1007,9 +1026,13 @@ def simple_market_mood(mode_text: str) -> str:
 
 
 def bold_first_sentence(text_value: str) -> str:
+    """Bold only the lead phrase before ':'."""
     text_value = str(text_value or "").strip()
     if not text_value:
         return ""
+    if ":" in text_value:
+        first, rest = text_value.split(":", 1)
+        return f"<strong>{h(first)}:</strong>{h(rest)}"
     parts = re.split(r"(?<=[.!?])\s+", text_value, maxsplit=1)
     first = parts[0]
     rest = parts[1] if len(parts) > 1 else ""
@@ -1041,7 +1064,7 @@ def build_today_summary_html(mode_text: str, stage2_count: int, leaders: list[st
     # Keep this compact: remove repeated "Leader Industries" row because it already appears in the story.
     rows = [
         ("Market Mood", mood_display),
-        ("Stage 2 Stocks", f"{int(stage2_count):,}<br><span class='simple-note'>out of top {int(universe_count or 1000):,}</span>"),
+        ("Stage 2 Stocks", f"<span class='stage-count-inline'><span class='stage-count-number'>{int(stage2_count):,}</span><span class='stage-count-note'>out of top {int(universe_count or 1000):,}</span></span>"),
     ]
 
     repeated = int(reset_summary.get("repeated", 0) or 0)
