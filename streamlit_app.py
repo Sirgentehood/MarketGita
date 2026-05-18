@@ -1294,7 +1294,8 @@ def build_today_summary_html(mode_text: str, stage2_count: int, leaders: list[st
 
     repeated = int(reset_summary.get("repeated", 0) or 0)
     new_stage2 = int(reset_summary.get("new_stage2", 0) or 0)
-    
+    if new_stage2 > 0:
+        rows.append(("Fresh Stage 2", f"<span class='gold-text'>{new_stage2} names</span>"))
     if repeated > 0:
         rows.append(("Interesting 20", f"<span class='gold-text'>{repeated} repeated</span> <span class='black-text'>from yesterday</span>"))
 
@@ -2235,7 +2236,7 @@ st.markdown(
     <div class="gita-symbol"></div>
     <div class="gita-shlok">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।</div>
     <div class="gita-translation">Karmanye Vadhikaraste, Ma Phaleshu Kadachana.</div>
-    <div class="gita-message">You control your process, not the market’s outcome.</div>
+    <div class="gita-message">You control your process,<br>not the market’s outcome.</div>
     <div class="gita-subtext">Market Structure and Leadership Insights for Everyone. Really Learnings, No Investment Advice.</div>
   </div>
 
