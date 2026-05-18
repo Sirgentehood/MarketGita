@@ -211,7 +211,7 @@ def load_nifty500_universe(file_path: str) -> pd.DataFrame:
     if industry_group_col:
         out["industry_group"] = df[industry_group_col].astype(str).str.strip().replace("", "Unknown")
     elif sector_col:
-        # New universe files may use sector as the broader industry group.
+         New universe files may use sector as the broader industry group.
         out["industry_group"] = df[sector_col].astype(str).str.strip().replace("", "Unknown")
     else:
         out["industry_group"] = "Unknown"
@@ -325,7 +325,7 @@ def _read_wide_csv_selected(path: Path, wanted_cols: List[str], max_rows: Option
 
 
 def _read_wide_excel_selected(path: Path, attr: str, wanted_cols: List[str], max_rows: Optional[int] = None) -> pd.DataFrame:
-    # Excel is inherently slower than CSV/Parquet. Use the wide CSV folder when possible.
+     Excel is inherently slower than CSV/Parquet. Use the wide CSV folder when possible.
     header = pd.read_excel(path, sheet_name=attr, nrows=0)
     original_cols = list(header.columns)
     col_lookup = {str(c).strip().upper(): c for c in original_cols}
@@ -1015,8 +1015,8 @@ def determine_stage(close: pd.Series, ma50: float, ma150: float, ma200: float) -
     positive_medium_momentum = (finite(ret_13w) and ret_13w >= 3) or (finite(ret_26w) and ret_26w >= 8)
     strong_advance_from_low = finite(advance_from_low) and advance_from_low >= 25
 
-    # ---- Stage 2: advancing structure / breakout / continuation ----
-    # Hard guard: a stock near 52W high, above 50/200DMA, with rising 50DMA should not become Stage 3.
+     ---- Stage 2: advancing structure / breakout / continuation ----
+     Hard guard: a stock near 52W high, above 50/200DMA, with rising 50DMA should not become Stage 3.
     stage2_near_high_guard = (
         near_high
         and above_50 and above_200
@@ -1048,7 +1048,7 @@ def determine_stage(close: pd.Series, ma50: float, ma150: float, ma200: float) -
     if stage2_near_high_guard or stage2_breakout_or_recovery or stage2_continuation:
         return "Stage 2"
 
-    # ---- Stage 4: persistent downtrend ----
+     ---- Stage 4: persistent downtrend ----
     persistent_decline = (
         below_150 and below_200
         and (ma150_falling or ma200_falling or weekly_30_falling)
@@ -1073,8 +1073,8 @@ def determine_stage(close: pd.Series, ma50: float, ma150: float, ma200: float) -
     if persistent_decline or failed_rally_decline or deep_decline:
         return "Stage 4"
 
-    # ---- Stage 3: true top / distribution / damaged uptrend ----
-    # Stage 3 should be a narrow bucket: prior strength + visible deterioration.
+     ---- Stage 3: true top / distribution / damaged uptrend ----
+     Stage 3 should be a narrow bucket: prior strength + visible deterioration.
     prior_strength = (
         above_200
         and finite(dist_from_high) and dist_from_high >= -30
@@ -1101,8 +1101,8 @@ def determine_stage(close: pd.Series, ma50: float, ma150: float, ma200: float) -
     if prior_strength and (distribution_damage or weekly_damage or wide_churn_after_advance):
         return "Stage 3"
 
-    # ---- Stage 1: repair / base / early turn ----
-    # Most non-declining, non-advancing structures should be Stage 1, not Stage 3.
+     ---- Stage 1: repair / base / early turn ----
+     Most non-declining, non-advancing structures should be Stage 1, not Stage 3.
     near_ma150 = finite(ma150_now) and 0.90 * ma150_now <= last <= 1.12 * ma150_now
     near_ma200 = finite(ma200_now) and 0.90 * ma200_now <= last <= 1.12 * ma200_now
     long_ma_not_collapsing = ma200_flat_or_rising or not ma200_falling
@@ -1122,7 +1122,7 @@ def determine_stage(close: pd.Series, ma50: float, ma150: float, ma200: float) -
     if basing_or_repair or early_recovery:
         return "Stage 1"
 
-    # Conservative fallback.
+     Conservative fallback.
     if below_200 and (ma200_falling or weekly_bear):
         return "Stage 4"
     return "Stage 1"
@@ -1199,7 +1199,7 @@ def determine_stage_details(close: pd.Series, ma50: float, ma150: float, ma200: 
     far_above_200 = finite(ma200_now) and last >= ma200_now * 1.45
     near_long_ma = (finite(ma150_now) and 0.94 * ma150_now <= last <= 1.10 * ma150_now) or (finite(ma200_now) and 0.94 * ma200_now <= last <= 1.10 * ma200_now)
 
-    # Stage 2 variants
+     Stage 2 variants
     if stage == "Stage 2":
         if far_above_50 or far_above_200 or (finite(advance_from_low) and advance_from_low >= 120 and finite(ret_13w) and ret_13w >= 25):
             return stage, "Extended Stage 2", 0.78, "Advancing structure remains intact, but price is stretched versus key moving averages or far above the 52-week low."
@@ -1213,7 +1213,7 @@ def determine_stage_details(close: pd.Series, ma50: float, ma150: float, ma200: 
             return stage, "Stage 2 Pullback", 0.68, "Prior advancing structure is pulling back, but long-term moving averages are still supportive."
         return stage, "Stage 2", 0.76, "Advancing structure detected."
 
-    # Stage 1 variants
+     Stage 1 variants
     if stage == "Stage 1":
         if above_50 and (above_150 or above_200) and (ma50_rising or weekly_10_rising) and finite(ret_13w) and ret_13w > 0:
             return stage, "Stage 1 - Early Turn", 0.66, "The stock is improving from a repair/base area but has not confirmed a clean Stage 2 yet."
@@ -1221,13 +1221,13 @@ def determine_stage_details(close: pd.Series, ma50: float, ma150: float, ma200: 
             return stage, "Stage 1 - Base/Repair", 0.70, "Price is near long-term moving averages with no strong long-term downtrend signal."
         return stage, "Stage 1 - Unclear/Repair", 0.58, "Not enough evidence for Stage 2 or Stage 4; classified as repair/unclear structure."
 
-    # Stage 3 variants
+     Stage 3 variants
     if stage == "Stage 3":
         if above_200 and below_50 and (ma50_falling or weekly_bear or weekly_30_falling):
             return stage, "Stage 3 - Distribution/Damage", 0.76, "Prior strength exists, but short-term and/or weekly structure is deteriorating."
         return stage, "Stage 3 - Transition", 0.62, "The structure is transitioning after prior strength, but it is not yet a confirmed Stage 4 decline."
 
-    # Stage 4 variants
+     Stage 4 variants
     if stage == "Stage 4":
         if ma_stack_bear and ma50_falling and (ma150_falling or ma200_falling or weekly_30_falling):
             return stage, "Stage 4 - Confirmed Downtrend", 0.86, "Price is below a bearish moving-average stack with falling trend signals."
@@ -1391,9 +1391,9 @@ def analyze_symbol(ticker: str, df: pd.DataFrame, benchmark_df: pd.DataFrame, re
 
     volume_dryup_ratio = volume_ratio(volume, config["volume_short_window"], config["volume_long_window"])
     weekly_volume_dryup_ratio = volume_ratio(weekly_df["Volume"].astype(float), 4, 12) if len(weekly_df) >= 12 else np.nan
-    # Daily card volume: current day / previous 30 trading-day average.
+     Daily card volume: current day / previous 30 trading-day average.
     breakout_volume_ratio = recent_breakout_volume_ratio(volume, 30)
-    # Weekly card volume: latest 5 trading days / previous 10 completed weekly volumes.
+     Weekly card volume: latest 5 trading days / previous 10 completed weekly volumes.
     weekly_volume_ratio = current_week_volume_ratio(volume, weekly_df["Volume"].astype(float), current_days=5, weekly_window=10)
     avg_turnover_inr = avg_turnover(close, volume, 20)
     liquidity_ok = pd.notna(avg_turnover_inr) and avg_turnover_inr >= config["min_avg_turnover_inr"]
@@ -1718,9 +1718,9 @@ def blue_volume_intensity_colors(volume: pd.Series, window: int) -> list[str]:
     for r in ratio:
         r = float(r)
         if r < 0.65:
-            colors.append("#dbeafe")  # very low volume
+            colors.append("dbeafe")   very low volume
         elif r < 0.90:
-            colors.append("#bfdbfe")  # below average
+            colors.append("bfdbfe")   below average
         elif r < 1.20:
             colors.append("#93c5fd")  # around average
         elif r < 1.70:
@@ -1859,11 +1859,11 @@ def export_chart(
     ax1.set_facecolor("#ffffff")
     ax2.set_facecolor("#ffffff")
 
-    ax1.plot(x, close.values, label="Close", linewidth=2.2, color="#1d4ed8")
+    ax1.plot(x, close.values, label="Close", linewidth=2.2, color="#4F81BD")
     if ma_fast is not None:
-        ax1.plot(x, ma_fast.values, label=("10W MA" if is_weekly else "50DMA"), linewidth=2.7, alpha=0.96, color="#0f766e")
+        ax1.plot(x, ma_fast.values, label=("10W MA" if is_weekly else "50DMA"), linewidth=2.7, alpha=0.96, color="C0504D")
     if ma_slow is not None:
-        ax1.plot(x, ma_slow.values, label=("30W MA" if is_weekly else "200DMA"), linewidth=2.7, alpha=0.92, color="#b45309")
+        ax1.plot(x, ma_slow.values, label=("30W MA" if is_weekly else "200DMA"), linewidth=2.7, alpha=0.92, color="#339933")
 
     if pd.notna(pivot_low) and pd.notna(pivot_high):
         ax1.axhspan(float(pivot_low), float(pivot_high), alpha=0.18, label="Pivot zone", color="#f59e0b")
@@ -1949,10 +1949,10 @@ def export_chart(
     bar_width = 4 if is_weekly else 0.9
     vol_window = 10 if is_weekly else 20
     # Keep volume visually simple: one neutral dark-gray bar color.
-    ax2.bar(x, volume.values, width=bar_width, alpha=0.72, color="#374151")
+    ax2.bar(x, volume.values, width=bar_width, alpha=0.72, color="#8064A2")
     vol_ma = volume.rolling(vol_window).mean()
     if vol_ma.notna().sum() == len(volume):
-        ax2.plot(x, vol_ma.values, linewidth=2.3, label=("10W Vol MA" if is_weekly else "20D Vol MA"), color="#475569")
+        ax2.plot(x, vol_ma.values, linewidth=2.3, label=("10W Vol MA" if is_weekly else "20D Vol MA"), color="#8064A2")
 
     # No grid lines on volume panel.
     ax2.grid(False)
