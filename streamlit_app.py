@@ -54,10 +54,10 @@ html, body, .stApp, [data-testid="stAppViewContainer"] {
 }
 .block-container {
   padding-top: 0.55rem;
-  padding-bottom: 0.55rem;
+  padding-bottom: 2rem;
   padding-left: 0.72rem;
   padding-right: 0.72rem;
-  max-width: 1280px;
+  max-width: 980px;
 }
 [data-testid="stSidebar"], section[data-testid="stSidebar"], [data-testid="collapsedControl"] {display:none;}
 #MainMenu, footer, header {visibility: hidden;}
@@ -179,7 +179,7 @@ div[role="radiogroup"] label {background: rgba(255,255,255,0.72); border:1px sol
 
 @media (max-width: 768px) {
   .stockgita-hero {padding:0.9rem 0.68rem;}
-  .stockgita-brand {font-size:1.88rem;}
+  .stockgita-brand {font-size:1.48rem;}
   .stockgita-tagline {font-size:0.65rem; letter-spacing:0.11em; margin-bottom:0.58rem;}
   .gita-opening-card {padding:0.78rem 0.58rem; border-radius:18px;}
   .gita-shlok {font-size:1.02rem; line-height:1.35;}
@@ -293,9 +293,9 @@ div[role="radiogroup"] label {background: rgba(255,255,255,0.72); border:1px sol
   font-weight: 950;
 }
 .today-summary-value .stage-count-note {
-  font-size: 1.18rem;
+  font-size: 0.86rem;
   color: #46586f;
-  font-weight: 950;
+  font-weight: 850;
 }
 
 </style>
@@ -907,7 +907,7 @@ def generated_at_text(outdir: Path, history: pd.DataFrame) -> str:
         return "Updated time not available yet · Latest date: Not available"
     time_text = ts.strftime("%I:%M %p").lstrip("0")
     date_text = ts.strftime("%d-%b-%y")
-    return f"· Engine ran on {date_text} {time_text} IST · No Live Data ·"
+    return f"· Engine ran on {date_text} {time_text} IST · "
 
 
 def market_mode_text(regime: pd.DataFrame, combined: pd.DataFrame) -> str:
@@ -2092,11 +2092,11 @@ st.markdown(
   <div class="stockgita-tagline">Process over prediction · Clarity over noise</div>
 
   <div class="gita-opening-card">
-    
+    <div class="gita-symbol">ॐ</div>
     <div class="gita-shlok">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।</div>
     <div class="gita-translation">Karmanye Vadhikaraste, Ma Phaleshu Kadachana.</div>
     <div class="gita-message">You control your process,<br>not the market’s outcome.</div>
-    <div class="gita-subtext">Market Structure and Leadership Insights for Everyone. Really Learnings, No Investment Advice.</div>
+    <div class="gita-subtext">Post-close market structure and leadership insights for disciplined market participants. Not investment advice.</div>
   </div>
 
   <div class="stockgita-generated">{h(generated_line)}</div>
