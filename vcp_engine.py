@@ -1705,30 +1705,6 @@ def sanitize_filename(name: str) -> str:
     return "".join(ch if ch.isalnum() or ch in ("-", "_") else "_" for ch in name)
 
 
-def blue_volume_intensity_colors(volume: pd.Series, window: int) -> list[str]:
-    """Blue-only volume intensity for the original chart style.
-
-    Keeps the original chart layout unchanged. Only the volume bars change:
-    lighter blue = lower than average volume, darker blue = higher than average.
-    """
-    vol = pd.to_numeric(volume, errors="coerce").astype(float)
-    avg = vol.rolling(window, min_periods=max(3, window // 3)).mean()
-    ratio = (vol / avg).replace([np.inf, -np.inf], np.nan).fillna(1.0)
-    colors = []
-    for r in ratio:
-        r = float(r)
-        if r < 0.65:
-            colors.append("#dbeafe")  # very low volume
-        elif r < 0.90:
-            colors.append("#bfdbfe")  # below average
-        elif r < 1.20:
-            colors.append("#93c5fd")  # around average
-        elif r < 1.70:
-            colors.append("#3b82f6")  # above average
-        else:
-            colors.append("#1d4ed8")  # very high volume
-    return colors
-
 
 def export_chart(
     df: pd.DataFrame,
@@ -1861,9 +1837,9 @@ def export_chart(
 
     ax1.plot(x, close.values, label="Close", linewidth=2.2, color="#4F81BD")
     if ma_fast is not None:
-        ax1.plot(x, ma_fast.values, label=("10W MA" if is_weekly else "50DMA"), linewidth=2.7, alpha=0.96, color="C0504D")
+        ax1.plot(x, ma_fast.values, label=("10W MA" if is_weekly else "50DMA"), linewidth=2.7, alpha=0.96, color="#339933")
     if ma_slow is not None:
-        ax1.plot(x, ma_slow.values, label=("30W MA" if is_weekly else "200DMA"), linewidth=2.7, alpha=0.92, color="#339933")
+        ax1.plot(x, ma_slow.values, label=("30W MA" if is_weekly else "200DMA"), linewidth=2.7, alpha=0.92, color="#C0504D")
 
     if pd.notna(pivot_low) and pd.notna(pivot_high):
         ax1.axhspan(float(pivot_low), float(pivot_high), alpha=0.18, label="Pivot zone", color="#f59e0b")
@@ -1948,7 +1924,7 @@ def export_chart(
 
     bar_width = 4 if is_weekly else 0.9
     vol_window = 10 if is_weekly else 20
-    # Keep volume visually simple: one neutral dark-gray bar color.
+    # Keep volume visually simple: one Excel violet pastel bar color.
     ax2.bar(x, volume.values, width=bar_width, alpha=0.72, color="#8064A2")
     vol_ma = volume.rolling(vol_window).mean()
     if vol_ma.notna().sum() == len(volume):
