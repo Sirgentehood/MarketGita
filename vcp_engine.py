@@ -14,17 +14,17 @@ plt.switch_backend("Agg")
 
 # Mobile-first chart readability defaults.
 # These affect generated PNG chart text, unlike dashboard CSS which cannot resize text inside images.
-CHART_DPI = 260
-CHART_FIGSIZE_DAILY = (14, 8)
-CHART_FIGSIZE_WEEKLY = (14, 8)
+CHART_DPI = 320
+CHART_FIGSIZE_DAILY = (16, 10)
+CHART_FIGSIZE_WEEKLY = (16, 10)
 plt.rcParams.update({
     "font.size": 15,
     "axes.titlesize": 18,
-    "axes.labelsize": 15,
-    "xtick.labelsize": 13,
-    "ytick.labelsize": 13,
-    "legend.fontsize": 13,
-    "figure.titlesize": 18,
+    "axes.labelsize": 18,
+    "xtick.labelsize": 18,
+    "ytick.labelsize": 18,
+    "legend.fontsize": 18,
+    "figure.titlesize": 20,
     "lines.linewidth": 2.2,
 })
 
@@ -1834,9 +1834,9 @@ def export_chart(
         "font.size": base_font,
         "axes.titlesize": 30,
         "axes.labelsize": 22,
-        "xtick.labelsize": 17,
-        "ytick.labelsize": 17,
-        "legend.fontsize": 17,
+        "xtick.labelsize": 20,
+        "ytick.labelsize": 20,
+        "legend.fontsize": 20,
     })
 
     fig, (ax1, ax2) = plt.subplots(
@@ -1916,11 +1916,11 @@ def export_chart(
 
     chart_suffix = "Weekly" if is_weekly else "Daily"
     ax1.set_title(f"{symbol} - {chart_suffix} - {stage}", pad=12, fontweight="bold", color="#0f172a")
-    fig.text(0.5, 0.52, "test", ha="center", va="center", fontsize=54, alpha=0.055, rotation=24, weight="bold", color="#0f172a")
+    fig.text(0.5, 0.52, "StockGita", ha="center", va="center", fontsize=54, alpha=0.055, rotation=24, weight="bold", color="#0f172a")
     # No grid lines: cleaner chart surface for dashboard viewing.
     ax1.grid(False)
     ax1.legend(loc="upper left", ncol=4, frameon=False, handlelength=2.6, columnspacing=1.4, borderaxespad=0.6)
-    ax1.tick_params(axis="both", labelsize=17, pad=7)
+    ax1.tick_params(axis="both", labelsize=20, pad=7)
     ax1.set_ylabel("Price", fontweight="bold", fontsize=22)
 
     if len(x) >= 2:
@@ -1950,7 +1950,7 @@ def export_chart(
     ax2.set_ylabel("Volume", fontweight="bold", fontsize=22)
     ax2.set_yticks([])
     ax2.tick_params(axis="y", which="both", length=0, labelleft=False)
-    ax2.tick_params(axis="x", labelsize=17, pad=7)
+    ax2.tick_params(axis="x", labelsize=20, pad=7)
     if len(x) >= 2:
         if hasattr(x, "dtype") and "datetime" in str(x.dtype):
             step = x[-1] - x[-2]
@@ -2099,7 +2099,7 @@ def export_selected_charts(
     tickers_to_export: Optional[List[str]] = None,
     *,
     skip_existing: bool = False,
-    dpi: int = 140,
+    dpi: int = 240,
 ) -> Dict[str, str]:
     charts_root = outdir / "charts"
     daily_dir = charts_root / "daily"
@@ -2686,7 +2686,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--no-charts", action="store_true", help="Skip chart generation for fast testing.")
     parser.add_argument("--chart-scope", choices=["dashboard", "all", "none"], default="dashboard", help="dashboard = generate only charts used by dashboard views; all = every included stock; none = no charts. Default: dashboard.")
     parser.add_argument("--skip-existing-charts", action="store_true", help="Do not regenerate chart PNGs that already exist. Fastest for reruns after non-price changes.")
-    parser.add_argument("--chart-dpi", type=int, default=140, help="PNG DPI for dashboard charts. 130-160 is usually enough for Streamlit.")
+    parser.add_argument("--chart-dpi", type=int, default=240, help="PNG DPI for dashboard charts. 130-160 is usually enough for Streamlit.")
     parser.add_argument("--init-history", action="store_true", help="Backfill historical stage_action_history. Slow; off by default.")
     return parser.parse_args()
 
