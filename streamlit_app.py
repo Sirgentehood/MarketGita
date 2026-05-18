@@ -2232,7 +2232,7 @@ st.markdown(
   <div class="stockgita-tagline">Process over prediction · Clarity over noise</div>
 
   <div class="gita-opening-card">
-    
+    <div class="gita-symbol">ॐ</div>
     <div class="gita-shlok">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।</div>
     <div class="gita-translation">Karmanye Vadhikaraste, Ma Phaleshu Kadachana.</div>
     <div class="gita-message">You control your process,<br>not the market’s outcome.</div>
