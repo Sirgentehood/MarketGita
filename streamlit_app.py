@@ -1,4 +1,5 @@
 import html
+import json
 import re
 import zipfile
 from datetime import timedelta
@@ -702,7 +703,30 @@ def load_outputs(outdir: Path):
     return combined, daily, weekly, industry, changes, industry_changes, moves, regime, history
 
 
+
+def engine_run_timestamp(outdir: Path) -> pd.Timestamp | None:
+    """Read actual engine run timestamp written by vcp_engine.py."""
+    metadata_path = outdir / "engine_run_metadata.json"
+    if not metadata_path.exists():
+        return None
+    try:
+        data = json.loads(metadata_path.read_text(encoding="utf-8"))
+        value = data.get("engine_ran_at_ist") or data.get("engine_ran_at_utc")
+        if not value:
+            return None
+        ts = pd.Timestamp(value)
+        if ts.tzinfo is None:
+            return ts.tz_localize("Asia/Kolkata")
+        return ts.tz_convert("Asia/Kolkata")
+    except Exception:
+        return None
+
 def latest_output_timestamp(outdir: Path, history: pd.DataFrame) -> pd.Timestamp | None:
+    run_ts = engine_run_timestamp(outdir)
+    if run_ts is not None:
+        return run_ts
+
+    # Fallback for old output folders without engine_run_metadata.json.
     files = [
         outdir / "vcp_combined_ranked.csv",
         outdir / "industry_strength.csv",
@@ -716,7 +740,8 @@ def latest_output_timestamp(outdir: Path, history: pd.DataFrame) -> pd.Timestamp
     if not history.empty and "snapshot_date" in history.columns:
         dates = pd.to_datetime(history["snapshot_date"], errors="coerce")
         if dates.notna().any():
-            return pd.Timestamp(dates.max()).tz_localize("Asia/Kolkata") if pd.Timestamp(dates.max()).tzinfo is None else pd.Timestamp(dates.max()).tz_convert("Asia/Kolkata")
+            ts = pd.Timestamp(dates.max())
+            return ts.tz_localize("Asia/Kolkata") if ts.tzinfo is None else ts.tz_convert("Asia/Kolkata")
     return None
 
 
@@ -733,7 +758,7 @@ def generated_at_text(outdir: Path, history: pd.DataFrame) -> str:
         return "Updated time not available yet · Latest date: Not available"
     time_text = ts.strftime("%I:%M %p").lstrip("0")
     date_text = ts.strftime("%d-%b-%y")
-    return f"· Updated on {date_text} {time_text} IST · "
+    return f"· Engine ran on {date_text} {time_text} IST · "
 
 
 def market_mode_text(regime: pd.DataFrame, combined: pd.DataFrame) -> str:

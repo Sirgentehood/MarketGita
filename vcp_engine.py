@@ -1,5 +1,6 @@
 from __future__ import annotations
 import argparse
+import json
 import shutil
 import time
 from dataclasses import dataclass, asdict
@@ -10,6 +11,23 @@ from typing import Dict, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
 plt.switch_backend("Agg")
+
+# Mobile-first chart readability defaults.
+# These affect generated PNG chart text, unlike dashboard CSS which cannot resize text inside images.
+CHART_DPI = 260
+CHART_FIGSIZE_DAILY = (14, 8)
+CHART_FIGSIZE_WEEKLY = (14, 8)
+plt.rcParams.update({
+    "font.size": 15,
+    "axes.titlesize": 18,
+    "axes.labelsize": 15,
+    "xtick.labelsize": 13,
+    "ytick.labelsize": 13,
+    "legend.fontsize": 13,
+    "figure.titlesize": 18,
+    "lines.linewidth": 2.2,
+})
+
 import numpy as np
 import pandas as pd
 try:
@@ -1834,9 +1852,9 @@ def export_chart(
 
     ax1.plot(x, close.values, label="Close", linewidth=2.2, color="#1d4ed8")
     if ma_fast is not None:
-        ax1.plot(x, ma_fast.values, label=("10W MA" if is_weekly else "50DMA"), linewidth=1.7, alpha=0.96, color="#0f766e")
+        ax1.plot(x, ma_fast.values, label=("10W MA" if is_weekly else "50DMA"), linewidth=2.2.7, alpha=0.96, color="#0f766e")
     if ma_slow is not None:
-        ax1.plot(x, ma_slow.values, label=("30W MA" if is_weekly else "200DMA"), linewidth=1.7, alpha=0.92, color="#b45309")
+        ax1.plot(x, ma_slow.values, label=("30W MA" if is_weekly else "200DMA"), linewidth=2.2.7, alpha=0.92, color="#b45309")
 
     if pd.notna(pivot_low) and pd.notna(pivot_high):
         ax1.axhspan(float(pivot_low), float(pivot_high), alpha=0.18, label="Pivot zone", color="#f59e0b")
@@ -1925,7 +1943,7 @@ def export_chart(
     ax2.bar(x, volume.values, width=bar_width, alpha=0.72, color="#374151")
     vol_ma = volume.rolling(vol_window).mean()
     if vol_ma.notna().sum() == len(volume):
-        ax2.plot(x, vol_ma.values, linewidth=1.2, label=("10W Vol MA" if is_weekly else "20D Vol MA"), color="#475569")
+        ax2.plot(x, vol_ma.values, linewidth=2.2.2, label=("10W Vol MA" if is_weekly else "20D Vol MA"), color="#475569")
 
     # No grid lines on volume panel.
     ax2.grid(False)
@@ -2642,6 +2660,23 @@ def update_stage_action_history(out_path: Path, current_snapshot: pd.DataFrame, 
     return history_file
 
 
+
+def write_engine_run_metadata(out_path: Path) -> None:
+    """Persist actual engine run time for dashboard display.
+
+    Dashboard should not infer freshness from current time. It should read this file.
+    """
+    metadata = {
+        "engine_ran_at_ist": pd.Timestamp.now(tz="Asia/Kolkata").isoformat(),
+        "engine_ran_at_utc": pd.Timestamp.utcnow().isoformat(),
+    }
+    try:
+        out_path.mkdir(parents=True, exist_ok=True)
+        (out_path / "engine_run_metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
+    except Exception as exc:
+        print(f"Warning: could not write engine_run_metadata.json: {exc}")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Daily + Weekly VCP Screener with local Yahoo wide-file support")
     parser.add_argument("--universe", required=True, help="Path to universe CSV. New schema supports Include and f&o columns.")
@@ -2672,7 +2707,8 @@ def main() -> None:
         skip_existing_charts=bool(args.skip_existing_charts),
         chart_dpi=int(args.chart_dpi),
     )
-    print("Saved files:")
+        write_engine_run_metadata(out_path)
+print("Saved files:")
     for key, value in outputs.items():
         print(f"- {key}: {value}")
 
