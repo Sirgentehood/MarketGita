@@ -1,0 +1,2096 @@
+import html
+import base64
+import json
+import re
+import zipfile
+from datetime import timedelta
+from pathlib import Path
+from urllib.parse import quote
+
+import pandas as pd
+import streamlit as st
+
+
+st.set_page_config(
+    page_title="Post-Close Market Reset",
+    layout="wide",
+    initial_sidebar_state="collapsed",
+)
+
+OUTPUT_DIR = Path("outputs")
+ARCHIVE_DIRNAME = "interesting20_archive"
+BUILD_ID = "v35-stockgita-opening-card"
+FEEDBACK_EMAIL = "investingwithstrategy@gmail.com"
+
+STAGE_ANALYSIS_IMAGE_B64 = "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"
+
+
+st.markdown(
+    """
+<style>
+:root {
+  --page-bg-1: #edf7ff;
+  --page-bg-2: #f8fbf4;
+  --page-bg-3: #fff3df;
+  --card-bg: rgba(255,255,255,0.86);
+  --card-bg-strong: rgba(255,255,255,0.96);
+  --ink: #122033;
+  --ink-soft: #46586f;
+  --ink-faint: #718095;
+  --border: rgba(35,72,108,0.15);
+  --blue: #1d5fd1;
+  --teal: #008f8c;
+  --amber: #c47a00;
+  --green: #168253;
+  --red: #bd3c3c;
+  --violet: #7058c9;
+}
+html, body, .stApp, [data-testid="stAppViewContainer"] {
+  background:
+    radial-gradient(circle at 15% 0%, rgba(74,144,226,0.18) 0, rgba(74,144,226,0.00) 32%),
+    radial-gradient(circle at 90% 10%, rgba(255,185,80,0.24) 0, rgba(255,185,80,0.00) 30%),
+    linear-gradient(135deg, var(--page-bg-1) 0%, var(--page-bg-2) 50%, var(--page-bg-3) 100%) !important;
+  color: var(--ink) !important;
+}
+.block-container {
+  padding-top: 0.55rem;
+  padding-bottom: 2rem;
+  padding-left: 0.72rem;
+  padding-right: 0.72rem;
+  max-width: 980px;
+}
+[data-testid="stSidebar"], section[data-testid="stSidebar"], [data-testid="collapsedControl"] {display:none;}
+#MainMenu, footer, header {visibility: hidden;}
+.reset-shell {max-width: 920px; margin: 0 auto;}
+.top-card, .metric-card, .info-card, .stock-card, .summary-card, .disclaimer-card, .stage-section-card {
+  border: 1px solid var(--border);
+  background: var(--card-bg);
+  color: var(--ink);
+  border-radius: 24px;
+  padding: 0.95rem 1rem;
+  box-shadow: 0 18px 45px rgba(31,56,88,0.10);
+  backdrop-filter: blur(12px);
+}
+.top-card {padding: 1.12rem 1.05rem; margin-bottom: 0.75rem; background: var(--card-bg-strong);}
+.stockgita-hero {
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  border-color: rgba(196,122,0,0.28);
+  background:
+    radial-gradient(circle at 0% 50%, rgba(29,95,209,0.10) 0, rgba(29,95,209,0.00) 28%),
+    radial-gradient(circle at 100% 20%, rgba(196,122,0,0.13) 0, rgba(196,122,0,0.00) 30%),
+    rgba(255,255,255,0.96);
+}
+.stockgita-brand-line {display:flex; align-items:baseline; justify-content:center; gap:0.38rem; margin-bottom:0.18rem;}
+.stockgita-brand {font-size:1.78rem; line-height:1.02; font-weight:950; letter-spacing:-0.045em; color:#0f172a;}
+.stockgita-brand span {color:var(--amber);}
+.stockgita-tagline {font-size:0.75rem; text-transform:uppercase; letter-spacing:0.16em; color:#607085; font-weight:900; margin-bottom:0.75rem;}
+.gita-opening-card {
+  max-width: 720px;
+  margin: 0 auto;
+  border: 1px solid rgba(196,122,0,0.26);
+  border-radius: 22px;
+  padding: 0.95rem 0.85rem;
+  background: rgba(255,255,255,0.72);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.90);
+}
+.gita-symbol {font-size:1.2rem; color:var(--amber); font-weight:950; line-height:1; margin-bottom:0.22rem;}
+.gita-shlok {font-size:1.34rem; line-height:1.28; font-weight:950; color:#0f172a; letter-spacing:-0.02em;}
+.gita-translation {font-size:0.95rem; color:var(--amber); font-weight:900; margin-top:0.42rem;}
+.gita-message {font-size:1.05rem; line-height:1.35; font-weight:950; color:#111827; margin-top:0.58rem;}
+.gita-subtext {font-size:0.88rem; color:#46586f; line-height:1.35; margin-top:0.38rem;}
+.stockgita-generated {font-size:0.82rem; color:var(--amber); font-weight:900; margin-top:0.72rem;}
+.title {font-size: 1.78rem; line-height: 1.04; font-weight: 950; letter-spacing: -0.045em; margin: 0 0 0.35rem 0; color: var(--ink);}
+.subtitle {font-size: 0.96rem; color: var(--ink-soft); line-height: 1.38;}
+.kicker {font-size: 0.71rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-faint); font-weight: 900; margin-bottom: 0.16rem;}
+.metric-value {font-size: 1.13rem; font-weight: 950; line-height: 1.15; color: var(--ink);}
+.metric-sub {font-size: 0.82rem; color: var(--ink-soft); line-height: 1.25; margin-top: 0.15rem;}
+.build-pill, .safe-pill, .leader-pill, .stage-pill, .fresh-pill, .summary-pill {
+  display:inline-flex; align-items:center; gap:0.25rem; border-radius:999px; padding: 0.27rem 0.58rem;
+  font-size: 0.76rem; font-weight: 900; border: 1px solid var(--border); background: rgba(255,255,255,0.72); color: var(--ink);
+}
+.safe-pill {border-color: rgba(22,130,83,0.25); color: var(--green); background: rgba(22,130,83,0.08);}
+.build-pill {border-color: rgba(29,95,209,0.20); color: var(--blue); background: rgba(29,95,209,0.08);}
+.stage-pill {color: var(--blue);}
+.fresh-pill.new {color: var(--green); background: rgba(22,130,83,0.09); border-color: rgba(22,130,83,0.24);}
+.fresh-pill.repeat {color: var(--blue); background: rgba(29,95,209,0.08); border-color: rgba(29,95,209,0.22);}
+.fresh-pill.drop {color: var(--red); background: rgba(189,60,60,0.08); border-color: rgba(189,60,60,0.22);}
+.fresh-pill.stage2 {color: var(--violet); background: rgba(112,88,201,0.08); border-color: rgba(112,88,201,0.22);}
+.fresh-pill.fo {color:#7c3aed; background: rgba(124,58,237,0.08); border-color: rgba(124,58,237,0.24);}
+.fresh-pill.support {color: var(--green); background: rgba(22,130,83,0.09); border-color: rgba(22,130,83,0.24);}
+.fresh-pill.weak {color: var(--red); background: rgba(189,60,60,0.08); border-color: rgba(189,60,60,0.24);}
+.fresh-pill.rank {color: var(--blue); background: rgba(29,95,209,0.08); border-color: rgba(29,95,209,0.22);}
+.mover-up {font-weight:950; color: var(--green);}
+.mover-down {font-weight:950; color: var(--red);}
+.reset-summary-lines {font-size:1.03rem; font-weight:950; color:var(--ink); line-height:1.46;}
+.reset-summary-lines div {margin:0.1rem 0;}
+.leader-strip, .badge-strip, .summary-strip {display:flex; gap:0.45rem; flex-wrap:wrap; margin-top: 0.46rem;}
+.section-title {font-size: 1.18rem; font-weight: 950; margin: 1.18rem 0 0.45rem 0; letter-spacing: -0.025em; color: var(--ink);}
+.section-note {font-size:0.86rem; color: var(--ink-soft); margin-top:-0.2rem; margin-bottom:0.58rem; line-height:1.38;}
+.summary-card {margin-top:0.72rem; background: rgba(255,255,255,0.91);}
+.summary-main {font-size:1.03rem; font-weight:950; color:var(--ink); line-height:1.28;}
+.summary-sub {font-size:0.86rem; color:var(--ink-soft); line-height:1.35; margin-top:0.28rem;}
+.unlock-line {font-size:0.84rem; color:var(--amber); font-weight:900; margin-top:0.52rem;}
+.stock-card {margin: 0.78rem 0 1.08rem 0; padding: 0.9rem 0.82rem 0.82rem 0.82rem; background: var(--card-bg-strong); scroll-snap-align: start;}
+.stock-head {display:flex; justify-content:space-between; gap:0.6rem; align-items:flex-start; margin-bottom:0.36rem;}
+.stock-name {font-size: 1.08rem; line-height: 1.18; font-weight: 950; letter-spacing:-0.024em; color: var(--ink);}
+.stock-meta {font-size:0.9rem; color:var(--ink-soft); line-height:1.25; margin-top:0.2rem;}
+.stage-variant {font-size:0.88rem; color:#000000; font-weight:850; line-height:1.25; margin-top:0.18rem;}
+.signal-line {font-size:0.88rem; color:var(--ink-soft); line-height:1.32; margin-top:0.36rem;}
+.chart-wrap {border:1px solid var(--border); border-radius:18px; overflow:hidden; margin-top:0.58rem; background: #ffffff; box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);}
+.chart-missing {border:1px dashed var(--border); border-radius:18px; padding:1.2rem; color:var(--ink-soft); text-align:center; font-size:0.9rem; margin-top:0.58rem; background: rgba(255,255,255,0.58);}
+.disclaimer-card {border-left:4px solid rgba(22,130,83,0.45); font-size:0.84rem; color:var(--ink-soft); line-height:1.38; margin-top:0.85rem; background: rgba(255,255,255,0.90);}
+.liked-note {font-size:0.8rem; color:var(--ink-soft); margin-top:0.25rem;}
+.stage-section-card {margin:0.7rem 0 0.5rem 0; padding:0.72rem 0.85rem; background: rgba(255,255,255,0.72);}
+.stage-section-title {font-size:1rem; font-weight:950; color:var(--ink);}
+[data-testid="stDataFrame"] {border-radius: 18px; overflow: hidden; border: 1px solid var(--border); background:#fff;}
+button[kind="secondary"] {border-radius: 999px !important; font-weight: 900 !important; border-color: rgba(35,72,108,0.22) !important; color: var(--ink) !important; background: rgba(255,255,255,0.72) !important;}
+div[role="radiogroup"] label {background: rgba(255,255,255,0.72); border:1px solid var(--border); padding:0.25rem 0.55rem; border-radius:999px;}
+
+/* v16: force card/subtext readability on Streamlit light backgrounds */
+.top-card, .metric-card, .info-card, .stock-card, .summary-card, .disclaimer-card, .stage-section-card,
+.subtitle, .metric-sub, .section-note, .summary-sub, .stock-meta, .signal-line, .liked-note, .kicker, .stock-name, .metric-value, .stage-section-title {
+  color: #111827 !important;
+}
+.fresh-pill, .summary-pill, .leader-pill, .stage-pill {
+  color: #111827 !important;
+}
+
+
+.feedback-card {
+  border: 1px solid rgba(29,95,209,0.18);
+  background: rgba(255,255,255,0.92);
+  color: #111827;
+  border-radius: 24px;
+  padding: 1.05rem 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 18px 45px rgba(31,56,88,0.10);
+}
+.feedback-title {font-size:1.12rem; font-weight:950; color:#111827; margin-bottom:0.25rem;}
+.feedback-sub {font-size:0.88rem; color:#111827; line-height:1.4; margin-bottom:0.55rem;}
+.feedback-mail-link {
+  display:inline-flex; align-items:center; justify-content:center;
+  border-radius:999px; padding:0.58rem 0.9rem; margin-top:0.45rem;
+  color:#ffffff !important; text-decoration:none !important; font-weight:950;
+  background: linear-gradient(90deg, #1d5fd1 0%, #008f8c 100%);
+  box-shadow: 0 10px 24px rgba(29,95,209,0.20);
+}
+
+@media (max-width: 768px) {
+  .stockgita-hero {padding:0.9rem 0.68rem;}
+  .stockgita-brand {font-size:1.48rem;}
+  .stockgita-tagline {font-size:0.65rem; letter-spacing:0.11em; margin-bottom:0.58rem;}
+  .gita-opening-card {padding:0.78rem 0.58rem; border-radius:18px;}
+  .gita-shlok {font-size:1.02rem; line-height:1.35;}
+  .gita-translation {font-size:0.84rem;}
+  .gita-message {font-size:0.95rem;}
+  .gita-subtext {font-size:0.8rem;}
+  html {scroll-snap-type: y proximity;}
+  .block-container {padding-left:0.42rem; padding-right:0.42rem; padding-top:0.35rem;}
+  .title {font-size: 1.43rem;}
+  .subtitle {font-size: 0.89rem;}
+  .metric-card {padding:0.72rem 0.75rem;}
+  .metric-value {font-size:1rem;}
+  .stock-card {border-radius:24px; padding:0.76rem 0.66rem; min-height: calc(100vh - 26px); display:flex; flex-direction:column; justify-content:flex-start;}
+  .stock-name {font-size:1.01rem;}
+  .stock-meta, .signal-line {font-size:0.84rem;}
+  .chart-wrap img {width:100% !important;}
+}
+
+/* v32 mobile chart readability */
+@media (max-width: 768px) {
+  .chart-wrap {
+    margin-top: 0.48rem !important;
+    border-radius: 16px !important;
+  }
+  .chart-wrap img,
+  .stImage img,
+  div[data-testid="stImage"] img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    image-rendering: auto !important;
+  }
+  div[data-testid="stImage"] {
+    width: 100% !important;
+  }
+}
+
+
+/* v33 dashboard copy + stage explanation */
+.stage-help-button {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width: 1.15rem;
+  height: 1.15rem;
+  border-radius: 999px;
+  border: 1px solid rgba(29,95,209,0.35);
+  background: rgba(29,95,209,0.08);
+  color: #1d5fd1;
+  font-weight: 950;
+  font-size: 0.78rem;
+  margin-left: 0.28rem;
+  vertical-align: middle;
+}
+.stage-help-panel {
+  border: 1px solid rgba(35,72,108,0.15);
+  background: rgba(255,255,255,0.96);
+  border-radius: 20px;
+  padding: 0.75rem;
+  margin: 0.55rem 0 0.8rem 0;
+  box-shadow: 0 14px 35px rgba(31,56,88,0.10);
+}
+.stage-help-panel img {
+  width: 100%;
+  max-width: 760px;
+  display: block;
+  margin: 0.2rem auto 0.55rem auto;
+  border-radius: 14px;
+}
+.stage-help-note {
+  font-size: 0.86rem;
+  color: #344256;
+  line-height: 1.35;
+  background: rgba(29,95,209,0.07);
+  border: 1px solid rgba(29,95,209,0.10);
+  border-radius: 14px;
+  padding: 0.55rem 0.65rem;
+}
+.market-story-line strong {
+  font-weight: 950;
+  color: #0f172a;
+}
+.today-summary-value .simple-note {
+  color: #46586f;
+  font-weight: 850;
+}
+
+
+/* v34 compact scan snapshot values */
+.today-summary-value .stage-count-inline {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.28rem;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+.today-summary-value .stage-count-number {
+  font-size: 1.18rem;
+  font-weight: 950;
+}
+.today-summary-value .stage-count-note {
+  font-size: 0.86rem;
+  color: #46586f;
+  font-weight: 850;
+}
+
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
+# v15 hard override: Streamlit sometimes paints inner white containers over body/app background.
+# This block forces the visible app surface to keep the designed pastel market-reset background.
+st.markdown(
+    """
+<style>
+.stApp,
+[data-testid="stAppViewContainer"],
+[data-testid="stMain"],
+section.main,
+.main,
+[data-testid="stAppViewContainer"] > .main {
+  background:
+    radial-gradient(circle at 8% 8%, rgba(29,95,209,0.22) 0, rgba(29,95,209,0.00) 30%),
+    radial-gradient(circle at 92% 4%, rgba(0,143,140,0.18) 0, rgba(0,143,140,0.00) 28%),
+    radial-gradient(circle at 82% 78%, rgba(196,122,0,0.18) 0, rgba(196,122,0,0.00) 34%),
+    linear-gradient(135deg, #e6f2ff 0%, #f8fbff 42%, #fff0d9 100%) !important;
+  background-attachment: fixed !important;
+}
+.block-container,
+[data-testid="stMainBlockContainer"],
+[data-testid="stVerticalBlock"],
+[data-testid="stElementContainer"] {
+  background: transparent !important;
+}
+[data-testid="stHeader"] {
+  background: rgba(230,242,255,0.35) !important;
+  backdrop-filter: blur(10px) !important;
+}
+.v15-visible-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin: 0.15rem 0 0.55rem 0;
+  padding: 0.36rem 0.68rem;
+  border-radius: 999px;
+  color: #ffffff;
+  font-weight: 950;
+  font-size: 0.78rem;
+  letter-spacing: 0.01em;
+  background: linear-gradient(90deg, #1d5fd1 0%, #008f8c 100%);
+  box-shadow: 0 10px 24px rgba(29,95,209,0.20);
+}
+.reset-summary-lines {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.44rem;
+  margin-top: 0.45rem;
+}
+.reset-summary-lines div {
+  color: #122033;
+  font-weight: 950;
+  font-size: 1.04rem;
+  line-height: 1.18;
+  padding: 0.48rem 0.62rem;
+  border-radius: 14px;
+  border-left: 5px solid #1d5fd1;
+  background: rgba(255,255,255,0.78);
+}
+.top-card, .metric-card, .info-card, .stock-card, .summary-card, .disclaimer-card, .stage-section-card {
+  background: rgba(255,255,255,0.88) !important;
+}
+.stock-card {
+  box-shadow: 0 22px 55px rgba(31,56,88,0.12) !important;
+}
+.chart-wrap {
+  background: linear-gradient(135deg, #f6fbff 0%, #ffffff 100%) !important;
+}
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
+
+
+# v29: real card/container + button readability overrides.
+st.markdown(
+    """
+<style>
+/* Let long stock text wrap instead of clipping. */
+.stock-card,
+.stock-card * {
+  box-sizing: border-box !important;
+}
+.stock-card {
+  overflow: visible !important;
+  height: auto !important;
+  min-height: auto !important;
+}
+.stock-head {
+  flex-wrap: wrap !important;
+  align-items: flex-start !important;
+}
+.stock-head > div:first-child {
+  min-width: 0 !important;
+  flex: 1 1 280px !important;
+}
+.stock-name,
+.stock-meta,
+.stage-variant,
+.signal-line,
+.liked-note,
+.fresh-pill,
+.stage-pill {
+  white-space: normal !important;
+  overflow-wrap: anywhere !important;
+  word-break: normal !important;
+}
+.stock-meta,
+.stage-variant,
+.signal-line,
+.liked-note {
+  color: #000000 !important;
+}
+
+/* Style the real Streamlit bordered container used for each stock card. */
+[data-testid="stVerticalBlockBorderWrapper"] {
+  border-radius: 24px !important;
+  border: 1px solid rgba(35,72,108,0.16) !important;
+  background: rgba(255,255,255,0.96) !important;
+  box-shadow: 0 22px 55px rgba(31,56,88,0.12) !important;
+  overflow: visible !important;
+}
+[data-testid="stVerticalBlockBorderWrapper"] > div {
+  overflow: visible !important;
+}
+
+/* Better Like / Daily / Weekly button surface. */
+.stButton > button {
+  border-radius: 999px !important;
+  min-height: 2.65rem !important;
+  font-weight: 950 !important;
+  letter-spacing: 0.01em !important;
+  border: 1px solid rgba(29,95,209,0.26) !important;
+  color: #0f172a !important;
+  background: linear-gradient(180deg, #ffffff 0%, #e9f3ff 100%) !important;
+  box-shadow: 0 9px 20px rgba(29,95,209,0.12) !important;
+}
+.stButton > button:hover {
+  border-color: rgba(29,95,209,0.62) !important;
+  background: linear-gradient(180deg, #f8fbff 0%, #dbeafe 100%) !important;
+  transform: translateY(-1px);
+}
+.stButton > button:active {
+  transform: translateY(0px);
+  box-shadow: inset 0 2px 5px rgba(15,23,42,0.14) !important;
+}
+.stButton > button[kind="primary"] {
+  color: #ffffff !important;
+  border-color: rgba(15,118,110,0.42) !important;
+  background: linear-gradient(135deg, #1d5fd1 0%, #0f766e 100%) !important;
+  box-shadow: 0 10px 24px rgba(15,118,110,0.25) !important;
+}
+.stButton > button[kind="primary"] p,
+.stButton > button[kind="primary"] span {
+  color: #ffffff !important;
+}
+.stButton > button[kind="secondary"] p,
+.stButton > button[kind="secondary"] span {
+  color: #0f172a !important;
+}
+.today-summary-card {
+  margin-top: 0.72rem;
+  border: 1px solid rgba(35,72,108,0.14);
+  background: rgba(255,255,255,0.92);
+  border-radius: 24px;
+  padding: 1rem 1.05rem;
+  box-shadow: 0 18px 45px rgba(31,56,88,0.10);
+}
+.today-summary-title {
+  font-size: 1.05rem;
+  font-weight: 950;
+  color: #111827;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.55rem;
+}
+.today-summary-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.48rem;
+}
+.today-summary-row {
+  display: grid;
+  grid-template-columns: 125px 1fr;
+  gap: 0.55rem;
+  align-items: start;
+  color: #111827;
+  font-size: 0.96rem;
+  line-height: 1.35;
+  padding: 0.5rem 0.6rem;
+  border-radius: 14px;
+  background: rgba(248,251,255,0.88);
+  border: 1px solid rgba(35,72,108,0.09);
+}
+.today-summary-label {
+  font-weight: 950;
+  color: #344256;
+}
+.today-summary-value {
+  font-weight: 900;
+  color: #111827;
+}
+.today-summary-title-small {
+  margin-top: 0.82rem;
+  margin-bottom: 0.42rem;
+  font-size: 0.94rem;
+  color: #344256;
+}
+.market-story-box {
+  display: grid;
+  gap: 0.44rem;
+  margin-bottom: 0.72rem;
+}
+.market-story-line {
+  color: #111827;
+  font-weight: 950;
+  font-size: 1.02rem;
+  line-height: 1.32;
+  padding: 0.55rem 0.68rem;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(29,95,209,0.08) 0%, rgba(0,143,140,0.08) 100%);
+  border: 1px solid rgba(35,72,108,0.10);
+}
+
+.feedback-card {
+  border: 1px solid rgba(29,95,209,0.18);
+  background: rgba(255,255,255,0.92);
+  color: #111827;
+  border-radius: 24px;
+  padding: 1.05rem 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 18px 45px rgba(31,56,88,0.10);
+}
+.feedback-title {font-size:1.12rem; font-weight:950; color:#111827; margin-bottom:0.25rem;}
+.feedback-sub {font-size:0.88rem; color:#111827; line-height:1.4; margin-bottom:0.55rem;}
+.feedback-mail-link {
+  display:inline-flex; align-items:center; justify-content:center;
+  border-radius:999px; padding:0.58rem 0.9rem; margin-top:0.45rem;
+  color:#ffffff !important; text-decoration:none !important; font-weight:950;
+  background: linear-gradient(90deg, #1d5fd1 0%, #008f8c 100%);
+  box-shadow: 0 10px 24px rgba(29,95,209,0.20);
+}
+
+
+
+/* Compact stock-card action buttons: keep Like / Daily / Weekly on one row on mobile. */
+.stock-actions-marker + div [data-testid="stHorizontalBlock"] {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  gap: 0.32rem !important;
+}
+.stock-actions-marker + div [data-testid="column"] {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  width: 33.33% !important;
+}
+.stock-actions-marker + div .stButton > button {
+  min-height: 2.22rem !important;
+  padding: 0.32rem 0.22rem !important;
+  font-size: 0.82rem !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+.stock-actions-marker + div .stButton > button p,
+.stock-actions-marker + div .stButton > button span {
+  white-space: nowrap !important;
+  font-size: 0.82rem !important;
+}
+@media (max-width: 768px) {
+  .stock-actions-marker + div [data-testid="stHorizontalBlock"] {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: nowrap !important;
+    gap: 0.24rem !important;
+  }
+  .stock-actions-marker + div [data-testid="column"] {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    width: 33.33% !important;
+  }
+  .stock-actions-marker + div .stButton > button {
+    min-height: 2.05rem !important;
+    padding: 0.26rem 0.12rem !important;
+    font-size: 0.76rem !important;
+    letter-spacing: 0 !important;
+  }
+  .stock-actions-marker + div .stButton > button p,
+  .stock-actions-marker + div .stButton > button span {
+    font-size: 0.76rem !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .today-summary-row { grid-template-columns: 1fr; gap: 0.15rem; }
+}
+
+/* Mobile: do not force one-card viewport height when text is long. */
+
+.feedback-card {
+  border: 1px solid rgba(29,95,209,0.18);
+  background: rgba(255,255,255,0.92);
+  color: #111827;
+  border-radius: 24px;
+  padding: 1.05rem 1rem;
+  margin-top: 1rem;
+  box-shadow: 0 18px 45px rgba(31,56,88,0.10);
+}
+.feedback-title {font-size:1.12rem; font-weight:950; color:#111827; margin-bottom:0.25rem;}
+.feedback-sub {font-size:0.88rem; color:#111827; line-height:1.4; margin-bottom:0.55rem;}
+.feedback-mail-link {
+  display:inline-flex; align-items:center; justify-content:center;
+  border-radius:999px; padding:0.58rem 0.9rem; margin-top:0.45rem;
+  color:#ffffff !important; text-decoration:none !important; font-weight:950;
+  background: linear-gradient(90deg, #1d5fd1 0%, #008f8c 100%);
+  box-shadow: 0 10px 24px rgba(29,95,209,0.20);
+}
+
+@media (max-width: 768px) {
+  .stock-card {
+    min-height: auto !important;
+    height: auto !important;
+    display: block !important;
+    overflow: visible !important;
+  }
+  [data-testid="stVerticalBlockBorderWrapper"] {
+    border-radius: 22px !important;
+  }
+}
+
+/* v31 prevent F&O/rank badges from occupying removed Daily/Weekly top-right slot */
+.stock-head {
+  display: block !important;
+}
+.stock-head > div {
+  width: 100% !important;
+}
+.stock-head > div:nth-child(2):empty {
+  display: none !important;
+}
+.badge-strip {
+  margin-top: 0.42rem !important;
+}
+
+
+/* v31 mobile stock action buttons: force Like / Daily / Weekly into one row */
+@media (max-width: 768px) {
+  div[data-testid="stHorizontalBlock"]:has(.stButton) {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.28rem !important;
+    align-items: stretch !important;
+  }
+  div[data-testid="stHorizontalBlock"]:has(.stButton) > div[data-testid="column"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 0 !important;
+  }
+  .stButton > button {
+    min-height: 2.05rem !important;
+    height: 2.05rem !important;
+    padding: 0.18rem 0.18rem !important;
+    font-size: 0.70rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    width: 100% !important;
+  }
+  .stButton > button p,
+  .stButton > button span {
+    font-size: 0.70rem !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+  }
+}
+
+</style>
+""",
+    unsafe_allow_html=True,
+)
+
+
+def h(value) -> str:
+    try:
+        if pd.isna(value):
+            return "-"
+    except Exception:
+        pass
+    return html.escape(str(value))
+
+
+@st.cache_data(show_spinner=False)
+def read_csv_cached(path: str, mtime_ns: int) -> pd.DataFrame:
+    return pd.read_csv(path)
+
+
+def safe_read(path: Path) -> pd.DataFrame:
+    if not path.exists():
+        return pd.DataFrame()
+    try:
+        return read_csv_cached(str(path), path.stat().st_mtime_ns)
+    except Exception:
+        return pd.DataFrame()
+
+
+def boolish(value) -> bool:
+    if isinstance(value, bool):
+        return value
+    try:
+        if pd.isna(value):
+            return False
+    except Exception:
+        pass
+    if isinstance(value, (int, float)):
+        return bool(value)
+    return str(value).strip().lower() in {"1", "true", "yes", "y", "t"}
+
+
+def normalize_columns(df: pd.DataFrame) -> pd.DataFrame:
+    if df.empty:
+        return df
+    out = df.copy()
+    if "Company Name" not in out.columns:
+        for col in ["Company Name_x", "Company Name_y", "company", "company_name", "name"]:
+            if col in out.columns:
+                out["Company Name"] = out[col]
+                break
+    if "Industry" not in out.columns:
+        for col in ["Industry_x", "Industry_y", "industry", "sector", "Sector"]:
+            if col in out.columns:
+                out["Industry"] = out[col]
+                break
+    if "ticker" not in out.columns:
+        for col in ["Ticker", "symbol", "Symbol", "SYMBOL"]:
+            if col in out.columns:
+                out["ticker"] = out[col].astype(str)
+                break
+    if "ticker" in out.columns:
+        out["ticker"] = out["ticker"].astype(str).str.strip()
+    return out
+
+
+def numeric(df: pd.DataFrame, cols) -> pd.DataFrame:
+    out = df.copy()
+    for col in cols:
+        if col in out.columns:
+            out[col] = pd.to_numeric(out[col], errors="coerce")
+    return out
+
+
+def filter_include_signal(df: pd.DataFrame) -> pd.DataFrame:
+    """Keep only the universe rows explicitly marked Include == 1 when the column exists."""
+    if df.empty:
+        return df
+    out = df.copy()
+    include_col = next((c for c in ["Include", "include", "include_signal", "include signal"] if c in out.columns), None)
+    if include_col is None:
+        return out
+    mask = out[include_col].apply(boolish)
+    return out[mask].copy()
+
+
+def is_fo_row(row: pd.Series) -> bool:
+    if boolish(row.get("is_fo_stock", False)):
+        return True
+    raw = str(row.get("fo_category", row.get("f&o", row.get("F&O", ""))) or "").strip().lower()
+    return raw in {"f&o", "fo", "fno", "yes", "true", "1"}
+
+
+def ensure_current_rank(df: pd.DataFrame, score_col: str = "final_combined_score") -> pd.DataFrame:
+    if df.empty:
+        return df
+    out = normalize_columns(df).copy()
+    rank_candidates = ["current_rank", "rank", "rs_rank", "daily_rank", "weekly_rank", "final_rank", "combined_rank", "stock_rank"]
+    existing = next((c for c in rank_candidates if c in out.columns), None)
+    if existing:
+        out["current_rank"] = pd.to_numeric(out[existing], errors="coerce")
+    else:
+        fallback_cols = [score_col, "combined_score", "final_daily_score", "daily_score", "avg_combined_score"]
+        sort_col = next((c for c in fallback_cols if c in out.columns), None)
+        if sort_col:
+            out = out.sort_values(sort_col, ascending=False, na_position="last").reset_index(drop=True)
+        out["current_rank"] = range(1, len(out) + 1)
+    return out
+
+
+def load_outputs(outdir: Path):
+    combined = ensure_current_rank(safe_read(outdir / "vcp_combined_ranked.csv"))
+    daily = ensure_current_rank(safe_read(outdir / "vcp_daily_ranked.csv"), "final_daily_score")
+    weekly = ensure_current_rank(safe_read(outdir / "vcp_weekly_ranked.csv"), "final_weekly_score")
+    industry = ensure_current_rank(safe_read(outdir / "industry_strength.csv"), "avg_combined_score")
+    changes = ensure_current_rank(safe_read(outdir / "stock_changes.csv"))
+    industry_changes = ensure_current_rank(safe_read(outdir / "industry_changes.csv"), "avg_combined_score")
+    moves = normalize_columns(safe_read(outdir / "stock_price_moves.csv"))
+    regime = safe_read(outdir / "market_regime.csv")
+    history = normalize_columns(safe_read(outdir / "stage_action_history.csv"))
+
+    num_cols = [
+        "current_rank", "prev_rank", "rank_change", "final_combined_score", "combined_score",
+        "daily_breakout_distance_pct", "weekly_breakout_distance_pct", "rs_3m_pct", "rs_6m_pct",
+        "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio", "avg_turnover_inr", "avg_combined_score",
+        "change_1d_pct", "day_change_pct", "move_1d_pct", "pct_change_1d", "return_1d_pct",
+        "daily_return_pct", "change_pct", "pct_change", "1d_change_pct", "daily_move_pct",
+    ]
+    combined = numeric(combined, num_cols)
+    daily = numeric(daily, num_cols)
+    weekly = numeric(weekly, num_cols)
+    industry = numeric(industry, num_cols)
+    changes = numeric(changes, num_cols)
+    industry_changes = numeric(industry_changes, num_cols)
+    moves = numeric(moves, num_cols)
+    history = numeric(history, num_cols)
+    # Dashboard safety filter: the engine should already apply Include == 1,
+    # but keep this here so old output files do not leak excluded stocks into the UI.
+    combined = filter_include_signal(combined)
+    daily = filter_include_signal(daily)
+    weekly = filter_include_signal(weekly)
+    changes = filter_include_signal(changes)
+    moves = filter_include_signal(moves)
+    history = filter_include_signal(history)
+    return combined, daily, weekly, industry, changes, industry_changes, moves, regime, history
+
+
+
+def engine_run_timestamp(outdir: Path) -> pd.Timestamp | None:
+    """Read actual engine run timestamp written by vcp_engine.py."""
+    metadata_path = outdir / "engine_run_metadata.json"
+    if not metadata_path.exists():
+        return None
+    try:
+        data = json.loads(metadata_path.read_text(encoding="utf-8"))
+        value = data.get("engine_ran_at_ist") or data.get("engine_ran_at_utc")
+        if not value:
+            return None
+        ts = pd.Timestamp(value)
+        if ts.tzinfo is None:
+            return ts.tz_localize("Asia/Kolkata")
+        return ts.tz_convert("Asia/Kolkata")
+    except Exception:
+        return None
+
+def latest_output_timestamp(outdir: Path, history: pd.DataFrame) -> pd.Timestamp | None:
+    run_ts = engine_run_timestamp(outdir)
+    if run_ts is not None:
+        return run_ts
+
+    # Fallback for old output folders without engine_run_metadata.json.
+    files = [
+        outdir / "vcp_combined_ranked.csv",
+        outdir / "industry_strength.csv",
+        outdir / "market_regime.csv",
+        outdir / "stock_changes.csv",
+        outdir / "interesting20_latest.csv",
+    ]
+    mtimes = [p.stat().st_mtime for p in files if p.exists()]
+    if mtimes:
+        return pd.Timestamp.fromtimestamp(max(mtimes), tz="Asia/Kolkata")
+    if not history.empty and "snapshot_date" in history.columns:
+        dates = pd.to_datetime(history["snapshot_date"], errors="coerce")
+        if dates.notna().any():
+            ts = pd.Timestamp(dates.max())
+            return ts.tz_localize("Asia/Kolkata") if ts.tzinfo is None else ts.tz_convert("Asia/Kolkata")
+    return None
+
+
+def latest_update_date(outdir: Path, history: pd.DataFrame) -> str:
+    ts = latest_output_timestamp(outdir, history)
+    if ts is None:
+        return "Not available"
+    return ts.date().isoformat()
+
+
+def generated_at_text(outdir: Path, history: pd.DataFrame) -> str:
+    ts = latest_output_timestamp(outdir, history)
+    if ts is None:
+        return "Updated time not available yet · Latest date: Not available"
+    time_text = ts.strftime("%I:%M %p").lstrip("0")
+    date_text = ts.strftime("%d-%b-%y")
+    return f"· Engine ran on {date_text} {time_text} IST · "
+
+
+def market_mode_text(regime: pd.DataFrame, combined: pd.DataFrame) -> str:
+    if not regime.empty and "regime_label" in regime.columns:
+        raw = str(regime.iloc[0].get("regime_label", "")).strip()
+        return {
+            "strong_risk_on": "Strong Risk On",
+            "risk_on": "Risk On",
+            "mixed": "Mixed",
+            "risk_off": "Risk Off",
+            "strong_risk_off": "Strong Risk Off",
+        }.get(raw, raw.replace("_", " ").title() if raw else "Mixed")
+    if combined.empty or "stage" not in combined.columns:
+        return "Mixed"
+    stage2_pct = (combined["stage"].astype(str).eq("Stage 2").mean() * 100) if len(combined) else 0
+    if stage2_pct >= 35:
+        return "Risk On"
+    if stage2_pct <= 12:
+        return "Risk Off"
+    return "Mixed"
+
+
+def industry_icon(industry: str) -> str:
+    ind = str(industry or "").lower()
+    mapping = [
+        (["bank", "nbfc", "credit services", "finance", "financial", "insurance", "capital markets","asset management"], "🏦"),
+        (["software", "information technology", "technology", "internet", "semiconductor", "electronic"], "💻"),
+        (["drug", "pharma", "biotech", "life sciences", "diagnostic", "healthcare plans"], "💊"),
+        (["medical care", "hospital", "health", "clinic", "facilities"], "🏥"),
+        (["auto", "automobile", "vehicle", "two wheel", "tyre", "tire", "auto parts"], "🚗"),
+        (["steel", "metal", "mining", "aluminium", "aluminum", "copper", "coal"], "⛓️"),
+        (["oil", "gas", "refining", "energy", "power", "utilities", "renewable", "solar"], "⚡"),
+        (["fmcg", "consumer defensive", "household", "personal products", "packaged foods", "beverages", "food"], "🛒"),
+        (["retail", "apparel", "luxury", "consumer cyclical", "footwear"], "🛍️"),
+        (["realty", "real estate", "construction", "cement", "infra", "building materials"], "🏗️"),
+        (["telecom", "communication", "media", "entertainment"], "📡"),
+        (["chemical", "fertilizer", "paint", "specialty chemicals", "agro chemicals"], "🧪"),
+        (["electrical", "equipment", "parts", "machinery", "capital goods", "engineering", "industrial", "tools"], "⚙️"),
+        (["aerospace", "defense", "defence", "aviation"], "✈️"),
+        (["textile", "fabric", "garment"], "🧵"),
+        (["hotel", "tourism", "travel", "restaurant", "leisure","Furnishings"], "🏨"),
+        (["marine", "shipping", "logistics", "transport", "rail"], "🚢"),
+        (["paper", "packaging", "containers"], "📦"),
+        (["agriculture", "farm", "crop", "seeds"], "🌾"),
+    ]
+    for keys, icon in mapping:
+        if any(k in ind for k in keys):
+            return icon
+    return "▫️"
+
+
+def stage_counts_by_industry(combined: pd.DataFrame) -> pd.DataFrame:
+    if combined.empty or "Industry" not in combined.columns or "stage" not in combined.columns:
+        return pd.DataFrame(columns=["Industry", "Stage 2 Stocks", "Stage 4 Stocks", "Total Stocks"])
+    temp = combined.copy()
+    temp["Industry"] = temp["Industry"].fillna("Unknown").astype(str).str.strip()
+    pivot = temp.groupby("Industry")["stage"].agg(
+        **{
+            "Stage 2 Stocks": lambda s: int(s.astype(str).eq("Stage 2").sum()),
+            "Stage 4 Stocks": lambda s: int(s.astype(str).eq("Stage 4").sum()),
+            "Total Stocks": "count",
+        }
+    ).reset_index()
+    return pivot
+
+
+def build_industry_table(industry: pd.DataFrame, industry_changes: pd.DataFrame, combined: pd.DataFrame) -> pd.DataFrame:
+    base = industry_changes if not industry_changes.empty else industry
+    counts = stage_counts_by_industry(combined)
+    if base.empty:
+        if counts.empty:
+            return pd.DataFrame(columns=["Industry Raw", "Industry", "Current Rank", "Stage 2 Stocks", "Stage 4 Stocks", "Total Stocks"])
+        out = counts.copy()
+        out["current_rank"] = out["Stage 2 Stocks"].rank(ascending=False, method="dense")
+        out["prev_rank"] = pd.NA
+    else:
+        base = ensure_current_rank(normalize_columns(base), "avg_combined_score").copy()
+        if "prev_rank" not in base.columns:
+            base["prev_rank"] = pd.NA
+        keep = [c for c in ["Industry", "current_rank", "prev_rank", "avg_combined_score", "rs_rank", "rank_change"] if c in base.columns]
+        out = base[keep].drop_duplicates("Industry")
+        out = out.merge(counts, on="Industry", how="left")
+    for col in ["Stage 2 Stocks", "Stage 4 Stocks", "Total Stocks"]:
+        out[col] = pd.to_numeric(out.get(col, 0), errors="coerce").fillna(0).astype(int)
+    out = out[out["Total Stocks"] >= 7].copy()
+    # Sort by the raw engine/database industry rank, but display a compact visible rank
+    # for the filtered Top-8 table. This avoids confusing rows like 12, 17, 23 after
+    # industries with fewer than 10 stocks have been removed.
+    out = out.sort_values(["current_rank", "Stage 2 Stocks"], ascending=[True, False], na_position="last").head(8).reset_index(drop=True)
+    out["Raw Dataset Rank"] = pd.to_numeric(out.get("current_rank"), errors="coerce").round(0).astype("Int64")
+    out["Current Rank"] = range(1, len(out) + 1)
+    out["Industry Raw"] = out["Industry"].astype(str)
+    out["Industry"] = out["Industry Raw"].apply(lambda x: f"{industry_icon(x)} {x}")
+    if "prev_rank" in out.columns:
+        out["_Previous Rank Internal"] = pd.to_numeric(out["prev_rank"], errors="coerce").round(0).astype("Int64")
+    return out[["Industry Raw", "Industry", "Current Rank", "Stage 2 Stocks", "Stage 4 Stocks", "Total Stocks"]].reset_index(drop=True)
+
+
+def leader_sector_names(industry_table: pd.DataFrame, n: int = 3) -> list[str]:
+    if industry_table.empty:
+        return []
+    top = industry_table.sort_values(["Current Rank", "Stage 2 Stocks"], ascending=[True, False], na_position="last").head(n)
+    return top["Industry"].dropna().astype(str).tolist()
+
+
+def clean_leader_sector_text(leaders: list[str]) -> str:
+    if not leaders:
+        return "Not available"
+    cleaned = []
+    for name in leaders[:3]:
+        text = str(name).strip()
+        text = re.sub(r"^[^A-Za-z0-9]+\s*", "", text).strip()
+        cleaned.append(text)
+    return ", ".join(cleaned) if cleaned else "Not available"
+
+
+def _pct_from_first_row(df: pd.DataFrame, *cols: str) -> float | None:
+    if df.empty:
+        return None
+    for col in cols:
+        if col in df.columns:
+            value = pd.to_numeric(pd.Series([df.iloc[0].get(col)]), errors="coerce").iloc[0]
+            if pd.notna(value):
+                return float(value)
+    return None
+
+
+def _tone_from_mode(mode_text: str) -> str:
+    mode = str(mode_text or "").lower()
+    if "strong risk on" in mode:
+        return "broad risk appetite is strong"
+    if "risk on" in mode:
+        return "risk appetite is constructive"
+    if "strong risk off" in mode:
+        return "risk appetite is weak"
+    if "risk off" in mode:
+        return "risk appetite is defensive"
+    return "market structure is mixed"
+
+
+def build_market_story(mode_text: str, stage2_count: int, leaders: list[str], reset_summary: dict, regime: pd.DataFrame, industry_table: pd.DataFrame) -> list[str]:
+    """Create a SEBI-safe, data-only daily narrative.
+
+    This intentionally avoids buy/sell language, targets, conviction calls, and stock-specific
+    recommendations. It only describes market breadth, sector/industry leadership, and
+    changes in the rule-based scan.
+    """
+    story: list[str] = []
+    leader_text = clean_leader_sector_text(leaders)
+    b20 = _pct_from_first_row(regime, "breadth_above_20_pct")
+    b50 = _pct_from_first_row(regime, "breadth_above_50_pct")
+
+    if leader_text != "Not available":
+        story.append(f"{leader_text} are currently leading the industry structure table.")
+    else:
+        story.append(f"{_tone_from_mode(mode_text).capitalize()} based on the latest rule-based scan.")
+
+    if b20 is not None and b50 is not None:
+        if b20 >= b50 + 8:
+            story.append(f"Short-term breadth is improving: {b20:.0f}% of tracked stocks are above the 20-day moving average versus {b50:.0f}% above the 50-day moving average.")
+        elif b20 <= b50 - 8:
+            story.append(f"Short-term breadth is cooling: {b20:.0f}% of tracked stocks are above the 20-day moving average versus {b50:.0f}% above the 50-day moving average.")
+        else:
+            story.append(f"Breadth is balanced: {b20:.0f}% are above the 20-day moving average and {b50:.0f}% are above the 50-day moving average.")
+    elif stage2_count > 0:
+        story.append(f"Stage 2 participation stands at {stage2_count} stocks in the current universe.")
+
+    new_stage2 = int(reset_summary.get("new_stage2", 0) or 0)
+    repeated = int(reset_summary.get("repeated", 0) or 0)
+    if new_stage2 > 0:
+        story.append(f"Fresh Stage 2 additions are visible today with {new_stage2} new names from the scan.")
+    elif repeated > 0:
+        story.append(f"Leadership is stable: {repeated} Interesting 20 names repeated from the previous snapshot.")
+    elif not industry_table.empty:
+        story.append("Leadership remains selective across the top-ranked industries.")
+
+    return story[:3]
+
+
+
+def simple_market_mood(mode_text: str) -> str:
+    mode = str(mode_text or "").lower()
+    if "strong risk on" in mode:
+        return "Very Positive"
+    if "risk on" in mode:
+        return "Positive / Cautiously Bullish"
+    if "strong risk off" in mode:
+        return "Very Weak"
+    if "risk off" in mode:
+        return "Weak / Defensive"
+    return "Mixed / Be Selective"
+
+
+def bold_first_sentence(text_value: str) -> str:
+    """Bold only the lead phrase before ':'."""
+    text_value = str(text_value or "").strip()
+    if not text_value:
+        return ""
+    if ":" in text_value:
+        first, rest = text_value.split(":", 1)
+        return f"<strong>{h(first)}:</strong>{h(rest)}"
+    parts = re.split(r"(?<=[.!?])\s+", text_value, maxsplit=1)
+    first = parts[0]
+    rest = parts[1] if len(parts) > 1 else ""
+    if rest:
+        return f"<strong>{h(first)}</strong> {h(rest)}"
+    return f"<strong>{h(first)}</strong>"
+
+
+def stage_help_html() -> str:
+    if not STAGE_ANALYSIS_IMAGE_B64:
+        return ""
+    return f"""
+<div class="stage-help-panel">
+  <img src="data:image/webp;base64,{STAGE_ANALYSIS_IMAGE_B64}" alt="Stage 1, Stage 2, Stage 3 and Stage 4 explanation">
+  <div class="stage-help-note">
+    <strong>Simple meaning:</strong> Stage 2 usually means the stock is in an uptrend. 
+    Stage 1 means base/repair, Stage 3 means distribution/possible topping, and Stage 4 means downtrend.
+  </div>
+</div>
+"""
+
+def build_today_summary_html(mode_text: str, stage2_count: int, leaders: list[str], reset_summary: dict, regime: pd.DataFrame | None = None, industry_table: pd.DataFrame | None = None, universe_count: int | None = None) -> str:
+    regime = regime if regime is not None else pd.DataFrame()
+    industry_table = industry_table if industry_table is not None else pd.DataFrame()
+
+    simple_mood = simple_market_mood(mode_text)
+    mood_display = f"{mode_text or 'Mixed'} <span class='simple-note'>({simple_mood})</span>"
+
+    # Keep this compact: remove repeated "Leader Industries" row because it already appears in the story.
+    rows = [
+        ("Market Mood", mood_display),
+        ("Stage 2 Stocks", f"<span class='stage-count-inline'><span class='stage-count-number'>{int(stage2_count):,}</span><span class='stage-count-note'>out of top {int(universe_count or 1000):,}</span></span>"),
+    ]
+
+    repeated = int(reset_summary.get("repeated", 0) or 0)
+    new_stage2 = int(reset_summary.get("new_stage2", 0) or 0)
+    if new_stage2 > 0:
+        rows.append(("Fresh Stage 2", f"{new_stage2} names"))
+    if repeated > 0:
+        rows.append(("Interesting 20", f"{repeated} repeated from yesterday"))
+
+    body = "".join(
+        f'<div class="today-summary-row"><div class="today-summary-label">{h(label)}</div><div class="today-summary-value">{value}</div></div>'
+        for label, value in rows
+    )
+    story_lines = "".join(
+        f'<div class="market-story-line">{bold_first_sentence(line)}</div>'
+        for line in build_market_story(mode_text, stage2_count, leaders, reset_summary, regime, industry_table)
+    )
+    return f"""
+<div class="today-summary-card">
+  <div class="today-summary-title">Today's Market Story</div>
+  <div class="market-story-box">{story_lines}</div>
+  <div class="today-summary-title today-summary-title-small">
+    Scan Snapshot
+    <span class="stage-help-button" title="What do stages mean?">?</span>
+  </div>
+  <details>
+    <summary style="cursor:pointer;color:#1d5fd1;font-weight:950;font-size:0.86rem;margin:0.15rem 0 0.45rem 0;">What do Stage 1 / 2 / 3 / 4 mean?</summary>
+    {stage_help_html()}
+  </details>
+  <div class="today-summary-grid">{body}</div>
+</div>
+"""
+
+
+
+def top_ranked_industries(industry_table: pd.DataFrame, n: int = 6) -> list[str]:
+    if industry_table.empty or "Industry Raw" not in industry_table.columns:
+        return []
+    top = industry_table.sort_values(["Current Rank", "Stage 2 Stocks"], ascending=[True, False], na_position="last").head(n)
+    return top["Industry Raw"].dropna().astype(str).tolist()
+
+
+def industry_key(value) -> str:
+    """Stable key for industry matching across output files and stock rows."""
+    if value is None:
+        return ""
+    try:
+        if pd.isna(value):
+            return ""
+    except Exception:
+        pass
+    s = str(value).strip()
+    # Remove common leading emoji/symbol prefix if an already-display-formatted industry leaks in.
+    s = re.sub(r"^[^A-Za-z0-9]+\s*", "", s)
+    s = re.sub(r"\s+", " ", s)
+    return s.lower()
+
+
+def build_industry_rank_context(industry: pd.DataFrame, industry_changes: pd.DataFrame, combined: pd.DataFrame) -> tuple[dict[str, int], dict[str, int], dict[str, int]]:
+    """Return (all_industry_position_map, top_support_position_map, weak_bottom_position_map).
+
+    The visible badge now says only "Industry Rank: X".
+    Styling still quietly highlights top-6 industries and bottom-8 industries.
+    Industries with fewer than 10 stocks are excluded from ranking context.
+    """
+    counts = stage_counts_by_industry(combined)
+    base = industry_changes if not industry_changes.empty else industry
+    if base.empty:
+        if counts.empty:
+            return {}, {}, {}
+        out = counts.copy()
+        out["current_rank"] = out["Stage 2 Stocks"].rank(ascending=False, method="first")
+    else:
+        base = ensure_current_rank(normalize_columns(base), "avg_combined_score").copy()
+        keep = [c for c in ["Industry", "current_rank", "avg_combined_score", "rs_rank", "rank_change"] if c in base.columns]
+        out = base[keep].drop_duplicates("Industry").merge(counts, on="Industry", how="left")
+
+    for col in ["Stage 2 Stocks", "Stage 4 Stocks", "Total Stocks"]:
+        out[col] = pd.to_numeric(out.get(col, 0), errors="coerce").fillna(0).astype(int)
+
+    out["Industry"] = out.get("Industry", pd.Series(dtype=str)).astype(str).str.strip()
+    out["current_rank"] = pd.to_numeric(out.get("current_rank"), errors="coerce")
+    out = out[(out["Total Stocks"] >= 7) & out["Industry"].ne("")].copy()
+    if out.empty:
+        return {}, {}, {}
+
+    out = out.sort_values(["current_rank", "Stage 2 Stocks", "Industry"], ascending=[True, False, True], na_position="last").reset_index(drop=True)
+    out["rank_position"] = range(1, len(out) + 1)
+
+    all_map = {industry_key(r["Industry"]): int(r["rank_position"]) for _, r in out.iterrows()}
+    top = out.head(6).copy()
+    support_map = {industry_key(r["Industry"]): int(r["rank_position"]) for _, r in top.iterrows()}
+
+    bottom = out.tail(8).copy().sort_values(["current_rank", "Stage 2 Stocks", "Industry"], ascending=[False, True, True], na_position="last").reset_index(drop=True)
+    weak_map = {industry_key(r["Industry"]): i for i, (_, r) in enumerate(bottom.iterrows(), start=1)}
+    return all_map, support_map, weak_map
+
+
+def interesting_priority(row: pd.Series) -> float:
+    priority = 0.0
+    stage = str(row.get("stage", ""))
+    combined_bucket = str(row.get("combined_bucket", ""))
+    daily_bucket = str(row.get("daily_setup_bucket", ""))
+    weekly_bucket = str(row.get("weekly_setup_bucket", ""))
+    priority += {"Stage 2": 30, "Stage 1": 12, "Stage 3": 6, "Stage 4": 0}.get(stage, 4)
+    priority += {"high_conviction_breakout": 70, "high_conviction_near_pivot": 62, "building_setup": 30, "watchlist": 8}.get(combined_bucket, 0)
+    priority += {"breakout_today": 54, "near_pivot": 46, "building_setup": 25, "watchlist": 4}.get(daily_bucket, 0)
+    priority += {"weekly_breakout": 42, "weekly_near_pivot": 36, "weekly_watchlist": 4}.get(weekly_bucket, 0)
+    if boolish(row.get("volume_is_drying_up", False)):
+        priority += 9
+    if boolish(row.get("weekly_volume_is_drying_up", False)):
+        priority += 7
+    for col, points in [("daily_breakout_distance_pct", 14), ("weekly_breakout_distance_pct", 10)]:
+        dist = pd.to_numeric(row.get(col), errors="coerce")
+        if pd.notna(dist):
+            if -5 <= float(dist) <= 1.5:
+                priority += points
+            elif 1.5 < float(dist) <= 4:
+                priority += points * 0.45
+    score = pd.to_numeric(row.get("final_combined_score", row.get("combined_score")), errors="coerce")
+    if pd.notna(score):
+        priority += min(float(score), 100) * 0.20
+    rank = pd.to_numeric(row.get("current_rank"), errors="coerce")
+    if pd.notna(rank):
+        priority += max(0.0, 30.0 - min(float(rank), 30.0)) * 0.25
+    return round(priority, 4)
+
+
+def build_interesting20(combined: pd.DataFrame) -> pd.DataFrame:
+    if combined.empty:
+        return pd.DataFrame()
+    df = ensure_current_rank(combined).copy()
+    df = numeric(df, ["current_rank", "final_combined_score", "combined_score", "daily_breakout_distance_pct", "weekly_breakout_distance_pct"])
+    pool = df[df["current_rank"].le(30)].copy()
+    if pool.empty:
+        pool = df.sort_values("current_rank", ascending=True, na_position="last").head(30).copy()
+    pool["interesting_priority"] = pool.apply(interesting_priority, axis=1)
+    sort_cols = ["interesting_priority", "current_rank"]
+    ascending = [False, True]
+    if "final_combined_score" in pool.columns:
+        sort_cols.append("final_combined_score")
+        ascending.append(False)
+    return pool.sort_values(sort_cols, ascending=ascending, na_position="last").head(20).reset_index(drop=True)
+
+
+def archive_date_from_path(path: Path):
+    match = re.match(r"(\d{4}-\d{2}-\d{2})_interesting20\.csv$", path.name)
+    if not match:
+        return None
+    try:
+        return pd.to_datetime(match.group(1)).date()
+    except Exception:
+        return None
+
+
+def archive_files(outdir: Path) -> list[tuple[object, Path]]:
+    archive_dir = outdir / ARCHIVE_DIRNAME
+    if not archive_dir.exists():
+        return []
+    files = []
+    for path in archive_dir.glob("*_interesting20.csv"):
+        dt = archive_date_from_path(path)
+        if dt:
+            files.append((dt, path))
+    return sorted(files, key=lambda x: x[0])
+
+
+def read_archive(path: Path) -> pd.DataFrame:
+    return normalize_columns(safe_read(path))
+
+
+def load_previous_interesting(outdir: Path, latest_date: str) -> pd.DataFrame:
+    files = archive_files(outdir)
+    if not files:
+        return pd.DataFrame()
+    try:
+        latest_dt = pd.to_datetime(latest_date).date()
+    except Exception:
+        latest_dt = files[-1][0]
+    eligible = [(dt, p) for dt, p in files if dt < latest_dt]
+    if not eligible:
+        return pd.DataFrame()
+    return read_archive(eligible[-1][1])
+
+
+def persist_interesting_snapshot(outdir: Path, interesting: pd.DataFrame, latest_date: str) -> None:
+    if interesting.empty or latest_date == "Not available":
+        return
+    archive_dir = outdir / ARCHIVE_DIRNAME
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    today_file = archive_dir / f"{latest_date}_interesting20.csv"
+    latest_file = outdir / "interesting20_latest.csv"
+    snapshot = interesting.copy()
+    if "snapshot_date" not in snapshot.columns:
+        snapshot.insert(0, "snapshot_date", latest_date)
+    keep = [c for c in [
+        "snapshot_date", "ticker", "Company Name", "Industry", "stage", "current_rank", "interesting_priority",
+        "daily_setup_bucket", "weekly_setup_bucket", "combined_bucket", "final_combined_score", "rs_3m_pct", "rs_6m_pct",
+        "volume_dryup_ratio", "breakout_volume_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up",
+    ] if c in snapshot.columns]
+    snapshot = snapshot[keep]
+    try:
+        snapshot.to_csv(latest_file, index=False)
+        snapshot.to_csv(today_file, index=False)
+    except Exception:
+        pass
+
+
+def load_last_week_interesting(outdir: Path, latest_date: str, combined: pd.DataFrame) -> pd.DataFrame:
+    files = archive_files(outdir)
+    if not files:
+        return pd.DataFrame()
+    try:
+        latest_dt = pd.to_datetime(latest_date).date()
+    except Exception:
+        latest_dt = files[-1][0]
+    target = latest_dt - timedelta(days=7)
+    eligible = [(dt, p) for dt, p in files if dt <= target]
+    if not eligible:
+        eligible = [(dt, p) for dt, p in files if dt < latest_dt]
+    if not eligible:
+        return pd.DataFrame()
+    archived = read_archive(eligible[-1][1])
+    if archived.empty:
+        return pd.DataFrame()
+    if "ticker" in archived.columns and not combined.empty and "ticker" in combined.columns:
+        current = combined.drop_duplicates("ticker")
+        merged = archived[["ticker"]].merge(current, on="ticker", how="left")
+        fallback = archived.drop_duplicates("ticker").set_index("ticker", drop=False)
+        for col in archived.columns:
+            if col not in merged.columns:
+                merged[col] = merged["ticker"].map(fallback[col])
+        return ensure_current_rank(merged)
+    return ensure_current_rank(archived)
+
+
+def interesting_streaks(outdir: Path, latest_date: str, current_tickers: set[str]) -> dict[str, int]:
+    files = archive_files(outdir)
+    if not files:
+        return {t: 1 for t in current_tickers}
+    try:
+        latest_dt = pd.to_datetime(latest_date).date()
+    except Exception:
+        latest_dt = files[-1][0]
+    relevant = [(dt, p) for dt, p in files if dt <= latest_dt]
+    relevant = sorted(relevant, key=lambda x: x[0], reverse=True)
+    streaks = {}
+    for ticker in current_tickers:
+        streak = 0
+        for _, path in relevant:
+            df = read_archive(path)
+            tickers = set(df.get("ticker", pd.Series(dtype=str)).dropna().astype(str))
+            if ticker in tickers:
+                streak += 1
+            else:
+                break
+        streaks[ticker] = max(streak, 1)
+    return streaks
+
+
+def build_misc20(combined: pd.DataFrame, exclude_tickers: set[str], top_industries: list[str]) -> pd.DataFrame:
+    if combined.empty:
+        return pd.DataFrame()
+    df = ensure_current_rank(combined).copy()
+    if "ticker" in df.columns:
+        df = df[~df["ticker"].astype(str).isin(exclude_tickers)].copy()
+    if "Industry" in df.columns and top_industries:
+        preferred = df[df["Industry"].astype(str).isin(top_industries)].copy()
+    else:
+        preferred = df.copy()
+    frames = []
+    stage_order = [("Stage 1", 5), ("Stage 2", 5), ("Stage 3", 5), ("Stage 4", 5)]
+    for stage, limit in stage_order:
+        part = preferred[preferred["stage"].astype(str).eq(stage)].sort_values("current_rank", ascending=True, na_position="last").head(limit).copy()
+        if len(part) < limit:
+            already = set(part.get("ticker", pd.Series(dtype=str)).astype(str)) if not part.empty and "ticker" in part.columns else set()
+            fallback = df[(df["stage"].astype(str).eq(stage)) & (~df["ticker"].astype(str).isin(already))].sort_values("current_rank", ascending=True, na_position="last").head(limit - len(part))
+            part = pd.concat([part, fallback], ignore_index=True)
+        part["misc_stage_group"] = stage
+        frames.append(part)
+    out = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+    return out.head(20).reset_index(drop=True)
+
+
+
+
+def normalize_ticker_for_match(value) -> str:
+    """Normalize ticker from trending_stocks.csv and output files for matching."""
+    if value is None:
+        return ""
+    try:
+        if pd.isna(value):
+            return ""
+    except Exception:
+        pass
+    text = str(value).strip().upper()
+    if not text or text in {"NAN", "NONE"}:
+        return ""
+    if text.startswith("^") or text.endswith(".NS"):
+        return text
+    return f"{text}.NS"
+
+
+def sort_stock_cards_alpha(df: pd.DataFrame) -> pd.DataFrame:
+    """Sort stock-card views alphabetically by company/display name."""
+    if df is None or df.empty:
+        return pd.DataFrame() if df is None else df
+    out = normalize_columns(df).copy()
+    if "Company Name" in out.columns:
+        key = out["Company Name"].fillna(out.get("ticker", "")).astype(str).str.lower()
+    elif "ticker" in out.columns:
+        key = out["ticker"].fillna("").astype(str).str.replace(".NS", "", regex=False).str.lower()
+    else:
+        return out.reset_index(drop=True)
+    out["_alpha_sort_key"] = key
+    out = out.sort_values(["_alpha_sort_key"], ascending=True, na_position="last").drop(columns=["_alpha_sort_key"], errors="ignore")
+    return out.reset_index(drop=True)
+
+
+def _read_trending_file(path: Path) -> pd.DataFrame:
+    if not path.exists():
+        return pd.DataFrame()
+    try:
+        if path.suffix.lower() in {".xlsx", ".xls"}:
+            return pd.read_excel(path)
+        return pd.read_csv(path)
+    except Exception:
+        return pd.DataFrame()
+
+
+def load_trending_stocks(combined: pd.DataFrame, outdir: Path, limit: int = 20) -> pd.DataFrame:
+    """Load manually curated Trending Stocks from CSV/XLSX and return matched stock rows.
+
+    Supported locations, in priority order:
+    - outputs/trending_stocks.csv
+    - trending_stocks.csv beside this Streamlit file
+    - outputs/trending_stocks.xlsx
+    - trending_stocks.xlsx beside this Streamlit file
+
+    The dashboard takes the first `limit` tickers from the manual file, matches them
+    against vcp_combined_ranked.csv, then displays the matched cards alphabetically.
+    """
+    if combined.empty or "ticker" not in combined.columns:
+        return pd.DataFrame()
+
+    candidates = [
+        outdir / "trending_stocks.csv",
+        Path("trending_stocks.csv"),
+        outdir / "trending_stocks.xlsx",
+        Path("trending_stocks.xlsx"),
+    ]
+    raw = pd.DataFrame()
+    for path in candidates:
+        raw = _read_trending_file(path)
+        if not raw.empty:
+            break
+    if raw.empty:
+        return pd.DataFrame()
+
+    ticker_col = None
+    normalized_cols = {str(c).strip().lower().replace(" ", "_"): c for c in raw.columns}
+    for cand in ["ticker", "symbol", "stock", "stock_symbol", "nse_symbol"]:
+        if cand in normalized_cols:
+            ticker_col = normalized_cols[cand]
+            break
+    if ticker_col is None:
+        ticker_col = raw.columns[0]
+
+    tickers = []
+    seen = set()
+    for value in raw[ticker_col].dropna().tolist():
+        t = normalize_ticker_for_match(value)
+        if t and t not in seen:
+            seen.add(t)
+            tickers.append(t)
+        if len(tickers) >= limit:
+            break
+    if not tickers:
+        return pd.DataFrame()
+
+    combined_work = normalize_columns(combined).copy()
+    combined_work["_ticker_key"] = combined_work["ticker"].apply(normalize_ticker_for_match)
+    combined_work["_ticker_key_raw"] = combined_work["ticker"].astype(str).str.strip().str.upper()
+
+    frames = []
+    for order, ticker in enumerate(tickers, start=1):
+        match = combined_work[combined_work["_ticker_key"].eq(ticker)]
+        if match.empty:
+            raw_key = ticker.replace(".NS", "")
+            match = combined_work[combined_work["_ticker_key_raw"].str.replace(".NS", "", regex=False).eq(raw_key)]
+        if not match.empty:
+            row = match.head(1).copy()
+            row["trending_order"] = order
+            frames.append(row)
+    if not frames:
+        return pd.DataFrame()
+    out = pd.concat(frames, ignore_index=True).drop(columns=["_ticker_key", "_ticker_key_raw"], errors="ignore")
+    return sort_stock_cards_alpha(out)
+
+def build_new_stage2(combined: pd.DataFrame, changes: pd.DataFrame, history: pd.DataFrame, latest_date: str) -> pd.DataFrame:
+    if combined.empty:
+        return pd.DataFrame()
+    base = ensure_current_rank(combined).copy()
+    entered = set()
+    if not history.empty and "snapshot_date" in history.columns and "ticker" in history.columns and "stage" in history.columns:
+        hist = history.copy()
+        hist["snapshot_date"] = pd.to_datetime(hist["snapshot_date"], errors="coerce")
+        hist = hist.dropna(subset=["snapshot_date"])
+        if not hist.empty:
+            try:
+                latest_dt = pd.to_datetime(latest_date).normalize()
+            except Exception:
+                latest_dt = hist["snapshot_date"].max().normalize()
+            window_start = latest_dt - pd.Timedelta(days=21)
+            current_stage2 = set(base[base["stage"].astype(str).eq("Stage 2")]["ticker"].astype(str))
+            for ticker in current_stage2:
+                rows = hist[(hist["ticker"].astype(str) == ticker) & (hist["snapshot_date"] >= window_start)].sort_values("snapshot_date")
+                if not rows.empty and rows["stage"].astype(str).ne("Stage 2").any():
+                    entered.add(ticker)
+    if not entered and not changes.empty and "entered_stage_2" in changes.columns and "ticker" in changes.columns:
+        entered.update(changes[changes["entered_stage_2"].apply(boolish)]["ticker"].dropna().astype(str).tolist())
+    if not entered:
+        return pd.DataFrame()
+    out = base[base["ticker"].astype(str).isin(entered)].sort_values("current_rank", ascending=True, na_position="last").head(9).reset_index(drop=True)
+    return out
+
+
+def sectors_improved_count(industry_changes: pd.DataFrame, industry_table: pd.DataFrame) -> int:
+    df = industry_changes.copy() if not industry_changes.empty else pd.DataFrame()
+    if not df.empty:
+        df = normalize_columns(df)
+        improved = pd.Series(False, index=df.index)
+        if "rank_change" in df.columns:
+            improved = improved | (pd.to_numeric(df["rank_change"], errors="coerce") > 0)
+        if "current_rank" in df.columns and "prev_rank" in df.columns:
+            improved = improved | (pd.to_numeric(df["current_rank"], errors="coerce") < pd.to_numeric(df["prev_rank"], errors="coerce"))
+        if "Industry" in df.columns:
+            return int(df.loc[improved, "Industry"].dropna().astype(str).nunique())
+        return int(improved.sum())
+    if not industry_table.empty and "_Previous Rank Internal" in industry_table.columns:
+        improved = pd.to_numeric(industry_table["Current Rank"], errors="coerce") < pd.to_numeric(industry_table["_Previous Rank Internal"], errors="coerce")
+        return int(improved.fillna(False).sum())
+    return 0
+
+
+def build_reset_summary(new_stage2: pd.DataFrame, industry_changes: pd.DataFrame, industry_table: pd.DataFrame, interesting20: pd.DataFrame, previous_interesting: pd.DataFrame) -> dict:
+    current = set(interesting20.get("ticker", pd.Series(dtype=str)).dropna().astype(str))
+    previous = set(previous_interesting.get("ticker", pd.Series(dtype=str)).dropna().astype(str))
+    repeated = len(current & previous) if previous else 0
+    dropped = len(previous - current) if previous else 0
+    improved = sectors_improved_count(industry_changes, industry_table)
+    return {
+        "new_stage2": int(len(new_stage2)),
+        "sectors_improved": int(improved),
+        "repeated": int(repeated),
+        "dropped": int(dropped),
+    }
+
+
+def resolve_chart_path(chart_dir: Path, ticker: str, suffix: str):
+    if not chart_dir.exists():
+        return None
+    ticker = str(ticker).strip()
+    raw = ticker.replace(".NS", "")
+    candidates = []
+    for candidate in {
+        ticker, raw,
+        ticker.replace(".", "_"), raw.replace(".", "_"),
+        ticker.replace("&", "_"), raw.replace("&", "_"),
+        ticker.replace("&", "AND"), raw.replace("&", "AND"),
+        re.sub(r"[^A-Za-z0-9]+", "_", ticker),
+        re.sub(r"[^A-Za-z0-9]+", "_", raw),
+        re.sub(r"[^A-Za-z0-9]+", "", ticker),
+        re.sub(r"[^A-Za-z0-9]+", "", raw),
+    }:
+        if candidate:
+            candidates.append(candidate + suffix)
+    for name in candidates:
+        path = chart_dir / name
+        if path.exists():
+            return path
+    raw_key = re.sub(r"[^A-Za-z0-9]+", "", raw).lower()
+    for path in chart_dir.glob(f"*{suffix}"):
+        stem_key = re.sub(r"[^A-Za-z0-9]+", "", path.stem).lower()
+        if raw_key and raw_key in stem_key:
+            return path
+    return None
+
+
+def _chart_lookup_key(value: str) -> str:
+    return re.sub(r"[^A-Za-z0-9]+", "", str(value or "")).lower()
+
+
+def build_chart_index(chart_dir: Path, suffix: str) -> dict[str, str]:
+    """Index chart filenames once so every stock card does not scan the chart folder."""
+    if not chart_dir.exists():
+        return {}
+    index: dict[str, str] = {}
+    for path in chart_dir.glob(f"*{suffix}"):
+        stem = path.name[:-len(suffix)] if path.name.endswith(suffix) else path.stem
+        keys = {
+            path.name.lower(),
+            stem.lower(),
+            _chart_lookup_key(stem),
+            _chart_lookup_key(stem.replace("_", ".")),
+        }
+        for key in keys:
+            if key:
+                index.setdefault(key, str(path))
+    return index
+
+
+def resolve_chart_path_fast(ticker: str, suffix: str) -> Path | None:
+    ticker = str(ticker or "").strip()
+    raw = ticker.replace(".NS", "")
+    index = DAILY_CHART_INDEX if suffix == "_daily.png" else WEEKLY_CHART_INDEX
+    candidates = {
+        ticker, raw,
+        ticker.replace(".", "_"), raw.replace(".", "_"),
+        ticker.replace("&", "_"), raw.replace("&", "_"),
+        ticker.replace("&", "AND"), raw.replace("&", "AND"),
+        re.sub(r"[^A-Za-z0-9]+", "_", ticker),
+        re.sub(r"[^A-Za-z0-9]+", "_", raw),
+        re.sub(r"[^A-Za-z0-9]+", "", ticker),
+        re.sub(r"[^A-Za-z0-9]+", "", raw),
+    }
+    for candidate in candidates:
+        if not candidate:
+            continue
+        for key in [candidate.lower(), _chart_lookup_key(candidate)]:
+            path_str = index.get(key)
+            if path_str:
+                return Path(path_str)
+    raw_key = _chart_lookup_key(raw)
+    if raw_key:
+        for key, path_str in index.items():
+            if raw_key in key:
+                return Path(path_str)
+    return None
+
+
+@st.cache_data(show_spinner=False)
+def image_bytes(path: str, mtime_ns: int) -> bytes:
+    return Path(path).read_bytes()
+
+
+def get_chart_bytes(chart_dir: Path, ticker: str, suffix: str):
+    path = resolve_chart_path_fast(ticker, suffix)
+    if not path:
+        return None
+    try:
+        return image_bytes(str(path), path.stat().st_mtime_ns)
+    except Exception:
+        return None
+
+
+
+def _first_existing_column(df: pd.DataFrame, candidates: list[str]) -> str | None:
+    if df is None or df.empty:
+        return None
+    lower_map = {str(c).lower(): c for c in df.columns}
+    for candidate in candidates:
+        if candidate in df.columns:
+            return candidate
+        if candidate.lower() in lower_map:
+            return lower_map[candidate.lower()]
+    return None
+
+
+def build_top_movers(moves: pd.DataFrame, combined: pd.DataFrame, limit: int = 10) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Build top/bottom daily movers from stock_price_moves.csv, with a combined-output fallback."""
+    base = normalize_columns(moves.copy()) if moves is not None and not moves.empty else normalize_columns(combined.copy())
+    if base.empty:
+        return pd.DataFrame(), pd.DataFrame()
+
+    move_col = _first_existing_column(base, [
+        "change_1d_pct", "daily_move_pct", "day_change_pct", "move_1d_pct", "pct_change_1d",
+        "return_1d_pct", "daily_return_pct", "change_pct", "pct_change", "1d_change_pct",
+        "change_1d", "daily_change", "move_pct",
+    ])
+    if move_col is None:
+        return pd.DataFrame(), pd.DataFrame()
+
+    base["move_pct"] = pd.to_numeric(base[move_col], errors="coerce")
+    base = base.dropna(subset=["move_pct"]).copy()
+    if base.empty:
+        return pd.DataFrame(), pd.DataFrame()
+
+    # Enrich movers with the full combined output so mover cards look like the other stock cards.
+    if not combined.empty and "ticker" in base.columns and "ticker" in combined.columns:
+        enrich = normalize_columns(combined.drop_duplicates("ticker").copy())
+        if not enrich.empty:
+            base = base.merge(enrich, on="ticker", how="left", suffixes=("", "_combined"))
+            for col in enrich.columns:
+                if col == "ticker":
+                    continue
+                alt = f"{col}_combined"
+                if alt in base.columns:
+                    if col not in base.columns:
+                        base[col] = base[alt]
+                    else:
+                        base[col] = base[col].where(base[col].notna() & (base[col].astype(str).str.strip() != ""), base[alt])
+
+    base = base.drop_duplicates("ticker") if "ticker" in base.columns else base
+    top = base.sort_values("move_pct", ascending=False).head(limit).copy()
+    bottom = base.sort_values("move_pct", ascending=True).head(limit).copy()
+    return top.reset_index(drop=True), bottom.reset_index(drop=True)
+
+
+def format_move_pct(value) -> str:
+    val = pd.to_numeric(value, errors="coerce")
+    if pd.isna(val):
+        return "-"
+    return f"{float(val):+.2f}%"
+
+
+def render_movers_table(df: pd.DataFrame, title: str):
+    st.markdown(f'<div class="kicker">{h(title)}</div>', unsafe_allow_html=True)
+    if df.empty:
+        st.info("Top mover data is not available from the current output yet.")
+        return
+    display = df.copy()
+    display["Stock"] = display.apply(stock_display_name, axis=1)
+    if "Industry" in display.columns:
+        display["Industry"] = display["Industry"].apply(lambda x: f"{industry_icon(str(x))} {x}" if str(x).strip() else "-")
+    else:
+        display["Industry"] = "-"
+    display["Move"] = display["move_pct"].apply(format_move_pct)
+    cols = ["Stock", "Industry", "Move"]
+    st.dataframe(display[cols], use_container_width=True, hide_index=True, height=385)
+
+def stock_display_name(row: pd.Series) -> str:
+    company = str(row.get("Company Name", "") or "").strip()
+    ticker = str(row.get("ticker", "") or "").replace(".NS", "").strip()
+    if company and ticker:
+        return f"{company} ({ticker})"
+    return company or ticker or "Stock"
+
+
+def _volume_ratio_label(ratio: float, basis: str) -> str:
+    ratio = float(ratio)
+    if ratio >= 1.2:
+        return f"Current Volume: {ratio:.1f}x Above {basis}"
+    if ratio <= 0.8:
+        return f"Current Volume: {ratio:.1f}x Below {basis}"
+    return f"Current Volume: Near {basis} ({ratio:.1f}x)"
+
+
+def volume_text(row: pd.Series, chart_mode: str = "Daily") -> str:
+    """Card volume text.
+
+    Daily card: current day volume / previous 30-day average.
+    Weekly card: latest 5 trading days volume / previous 10 completed-week average.
+    """
+    mode = str(chart_mode or "Daily").strip().lower()
+    if mode == "weekly":
+        ratio = pd.to_numeric(row.get("weekly_volume_ratio"), errors="coerce")
+        if pd.isna(ratio):
+            return "Current Volume: not available"
+        return _volume_ratio_label(float(ratio), "10-Week Average")
+
+    ratio = pd.to_numeric(row.get("breakout_volume_ratio"), errors="coerce")
+    if pd.isna(ratio):
+        return "Current Volume: not available"
+    return _volume_ratio_label(float(ratio), "30-Day Average")
+
+
+def rs_text(value, months: str) -> str:
+    val = pd.to_numeric(value, errors="coerce")
+    label_map = {"3m": "3 Months", "6m": "6 Months", "1m": "1 Month", "12m": "12 Months"}
+    label = label_map.get(str(months).strip().lower(), str(months))
+    if pd.isna(val):
+        return f"Nifty Relative: not available for {label}"
+    arrow = "↑" if float(val) >= 0 else "↓"
+    verb = "Outperformed" if float(val) >= 0 else "Underperformed"
+    return f"{verb} {arrow} Nifty : {abs(float(val)):.1f}% in {label}"
+
+
+def safe_key(text: str) -> str:
+    return re.sub(r"[^A-Za-z0-9_]+", "_", str(text))[:80]
+
+
+def rerun():
+    if hasattr(st, "rerun"):
+        st.rerun()
+    if hasattr(st, "experimental_rerun"):
+        st.experimental_rerun()
+
+
+def render_metric(title: str, value: str, subtitle: str = ""):
+    st.markdown(
+        f"""
+<div class="metric-card">
+  <div class="kicker">{h(title)}</div>
+  <div class="metric-value">{h(value)}</div>
+  <div class="metric-sub">{h(subtitle)}</div>
+
+""",
+        unsafe_allow_html=True,
+    )
+
+
+def badge_html(label: str, css_class: str) -> str:
+    return f'<span class="fresh-pill {css_class}">{h(label)}</span>'
+
+
+def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Path, freshness_badges: list[tuple[str, str]] | None = None, streak: int | None = None):
+    ticker = str(row.get("ticker", "") or "").strip()
+    key = safe_key(ticker or f"row_{idx}")
+    mode_key = f"chart_mode_{key}"
+    if mode_key not in st.session_state:
+        st.session_state[mode_key] = "Daily"
+
+    liked = st.session_state.setdefault("liked_tickers", [])
+    is_liked = ticker in liked
+
+    stage = str(row.get("stage", "-") or "-")
+    stage_variant = str(row.get("stage_variant", "") or "").strip()
+    stage_confidence = pd.to_numeric(row.get("stage_confidence"), errors="coerce")
+
+    variant_line = ""
+    if stage_variant and stage_variant not in {"nan", "None", stage}:
+        if pd.notna(stage_confidence):
+            variant_line = f"<div class=\"stage-variant\">Variant: {h(stage_variant)} · Confidence: {float(stage_confidence) * 100:.0f}%</div>"
+        else:
+            variant_line = f"<div class=\"stage-variant\">Variant: {h(stage_variant)}</div>"
+    elif stage_variant and stage_variant == stage and pd.notna(stage_confidence):
+        variant_line = f"<div class=\"stage-variant\">Confidence: {float(stage_confidence) * 100:.0f}%</div>"
+
+    industry_raw = str(row.get("Industry", row.get("industry", "-")) or "-")
+    sector_raw = str(row.get("sector", row.get("Sector", "")) or "").strip()
+    group_raw = str(row.get("industry_group", row.get("Industry Group", row.get("industry group", ""))) or "").strip()
+
+    industry = f"{industry_icon(industry_raw)} {industry_raw}" if industry_raw and industry_raw != "-" else "-"
+    name = stock_display_name(row)
+    chart_mode = st.session_state.get(mode_key, "Daily")
+    chart_dir = daily_dir if chart_mode == "Daily" else weekly_dir
+    suffix = "_daily.png" if chart_mode == "Daily" else "_weekly.png"
+    chart = get_chart_bytes(chart_dir, ticker, suffix) if ticker else None
+
+    badges = list(freshness_badges or [])
+    if is_fo_row(row):
+        badges.insert(0, ("F&O", "fo"))
+    industry_match_key = industry_key(industry_raw)
+    industry_rank = INDUSTRY_POSITION_MAP.get(industry_match_key)
+    top_position = INDUSTRY_RANK_MAP.get(industry_match_key)
+    weak_position = WEAK_INDUSTRY_POSITION_MAP.get(industry_match_key)
+    if industry_rank:
+        badge_style = "support" if top_position else "weak" if weak_position else "rank"
+        badges.append((f"Industry Rank: {industry_rank}", badge_style))
+    if streak and streak >= 2:
+        badges.append((f"Seen in Interesting 20 for {streak} days", "repeat"))
+    if is_liked:
+        badges.insert(0, ("Liked", "support"))
+    badge_line = "".join([badge_html(label, css_class) for label, css_class in badges])
+
+    extra_meta = []
+
+    extra_meta_line = ""
+    if extra_meta:
+        extra_meta_line = f"<div class=\"stock-meta\">{' · '.join(extra_meta)}</div>"
+
+    # Use a real Streamlit container so the text, chart, and buttons are inside one card.
+    with st.container(border=True):
+        st.markdown(
+            f"""
+<div class="stock-card">
+  <div class="stock-head">
+    <div>
+      <div class="stock-name">{h(name)} — {h(stage)}</div>
+      {variant_line}
+      <div class="stock-meta">Industry: {h(industry)}</div>
+      {extra_meta_line}
+
+
+  <div class="badge-strip">{badge_line}</div>
+  <div class="signal-line">{h(volume_text(row, chart_mode))}</div>
+  <div class="signal-line">{h(rs_text(row.get('rs_3m_pct'), '3m'))}</div>
+
+""",
+            unsafe_allow_html=True,
+        )
+
+        if chart:
+            st.markdown('<div class="chart-wrap">', unsafe_allow_html=True)
+            st.image(chart, use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+        else:
+            st.markdown('<div class="chart-missing">Chart not available for this stock yet.</div>', unsafe_allow_html=True)
+
+        st.markdown('<div class="stock-actions-marker"></div>', unsafe_allow_html=True)
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            like_label = "♥ Liked" if is_liked else "♡ Like"
+            if st.button(like_label, key=f"like_{key}_{idx}", use_container_width=True, type=("primary" if is_liked else "secondary")):
+                liked = st.session_state.setdefault("liked_tickers", [])
+                if ticker and ticker not in liked:
+                    liked.append(ticker)
+                rerun()
+        with c2:
+            daily_label = "Daily"
+            if st.button(daily_label, key=f"daily_{key}_{idx}", use_container_width=True, type=("primary" if chart_mode == "Daily" else "secondary")):
+                st.session_state[mode_key] = "Daily"
+                rerun()
+        with c3:
+            weekly_label = "Weekly"
+            if st.button(weekly_label, key=f"weekly_{key}_{idx}", use_container_width=True, type=("primary" if chart_mode == "Weekly" else "secondary")):
+                st.session_state[mode_key] = "Weekly"
+                rerun()
+
+        if is_liked:
+            st.markdown('<div class="liked-note">Saved to your liked list for this session.</div>', unsafe_allow_html=True)
+
+
+DAILY_CHART_INDEX: dict[str, str] = {}
+WEEKLY_CHART_INDEX: dict[str, str] = {}
+INDUSTRY_POSITION_MAP: dict[str, int] = {}
+INDUSTRY_RANK_MAP: dict[str, int] = {}
+WEAK_INDUSTRY_POSITION_MAP: dict[str, int] = {}
+
+
+
+def render_connect_feedback_section():
+    st.markdown(
+        """
+<div class="feedback-card">
+  <div class="feedback-title">Connect & Feedback</div>
+  <div class="feedback-sub">Share your view on this market-structure page, what felt useful, what was confusing, and your email ID if you want a reply.</div>
+
+""",
+        unsafe_allow_html=True,
+    )
+    with st.form("connect_feedback_form", clear_on_submit=False):
+        visitor_email = st.text_input("Your email ID", placeholder="name@example.com")
+        feedback_text = st.text_area(
+            "Your view / feedback",
+            placeholder="What should be improved? Which section was useful? What would make you come back daily?",
+            height=130,
+        )
+        submitted = st.form_submit_button("Prepare feedback email", use_container_width=True)
+
+    if submitted:
+        subject = "Feedback for Market Structure Daily"
+        body = (
+            "Hi,\n\n"
+            "Here is my feedback for the Market Structure Daily page.\n\n"
+            f"My email ID: {visitor_email or 'Not provided'}\n\n"
+            "Feedback / view:\n"
+            f"{feedback_text or 'Not provided'}\n\n"
+            "Regards"
+        )
+        mailto = f"mailto:{FEEDBACK_EMAIL}?subject={quote(subject)}&body={quote(body)}"
+        st.markdown(
+            f'<a class="feedback-mail-link" href="{mailto}">Open email to send feedback</a>',
+            unsafe_allow_html=True,
+        )
+        st.caption(f"This opens your email app addressed to {FEEDBACK_EMAIL}. Please press Send in your email app.")
+
+
+combined, daily_df, weekly_df, industry, changes, industry_changes, moves, regime, history = load_outputs(OUTPUT_DIR)
+
+if combined.empty:
+    st.error("No VCP output found. Put the generated CSV files inside an outputs folder beside this Streamlit file.")
+    st.stop()
+
+industry_table = build_industry_table(industry, industry_changes, combined)
+interesting20 = sort_stock_cards_alpha(build_interesting20(combined))
+trending20 = load_trending_stocks(combined, OUTPUT_DIR, limit=20)
+latest_date = latest_update_date(OUTPUT_DIR, history)
+previous_interesting = load_previous_interesting(OUTPUT_DIR, latest_date)
+new_stage2 = sort_stock_cards_alpha(build_new_stage2(combined, changes, history, latest_date))
+persist_interesting_snapshot(OUTPUT_DIR, interesting20, latest_date)
+last_week_interesting = load_last_week_interesting(OUTPUT_DIR, latest_date, combined)
+interesting_tickers = set(interesting20.get("ticker", pd.Series(dtype=str)).dropna().astype(str))
+previous_tickers = set(previous_interesting.get("ticker", pd.Series(dtype=str)).dropna().astype(str))
+top6_industries = top_ranked_industries(industry_table, 6)
+leaders = leader_sector_names(industry_table, 3)
+stage2_count = int(combined["stage"].astype(str).eq("Stage 2").sum()) if "stage" in combined.columns else 0
+mode_text = market_mode_text(regime, combined)
+daily_dir = OUTPUT_DIR / "charts" / "daily"
+weekly_dir = OUTPUT_DIR / "charts" / "weekly"
+DAILY_CHART_INDEX = build_chart_index(daily_dir, "_daily.png")
+WEEKLY_CHART_INDEX = build_chart_index(weekly_dir, "_weekly.png")
+INDUSTRY_POSITION_MAP, INDUSTRY_RANK_MAP, WEAK_INDUSTRY_POSITION_MAP = build_industry_rank_context(industry, industry_changes, combined)
+streak_map = interesting_streaks(OUTPUT_DIR, latest_date, interesting_tickers)
+reset_summary = build_reset_summary(new_stage2, industry_changes, industry_table, interesting20, previous_interesting)
+top_movers, bottom_movers = build_top_movers(moves, combined, 10)
+generated_line = generated_at_text(OUTPUT_DIR, history)
+dropped_tickers = previous_tickers - interesting_tickers
+
+st.markdown('<div class="reset-shell">', unsafe_allow_html=True)
+st.markdown(
+    f"""
+<div class="top-card stockgita-hero">
+  <div class="stockgita-brand-line">
+    <div class="stockgita-brand">Stock<span>Gita</span></div>
+  </div>
+  <div class="stockgita-tagline">Process over prediction · Clarity over noise</div>
+
+  <div class="gita-opening-card">
+    <div class="gita-symbol">ॐ</div>
+    <div class="gita-shlok">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।</div>
+    <div class="gita-translation">Karmanye Vadhikaraste, Ma Phaleshu Kadachana.</div>
+    <div class="gita-message">You control your process,<br>not the market’s outcome.</div>
+    <div class="gita-subtext">Post-close market structure and leadership insights for disciplined market participants. Not investment advice.</div>
+  </div>
+
+  <div class="stockgita-generated">{h(generated_line)}</div>
+</div>
+""",
+    unsafe_allow_html=True,
+)
+
+st.markdown(
+    build_today_summary_html(mode_text, stage2_count, leaders, reset_summary, regime, industry_table, universe_count=len(combined)),
+    unsafe_allow_html=True,
+)
+
+st.markdown('<div class="section-title">Industry Structure Table</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-note">Top Industries that Scores Well.</div>', unsafe_allow_html=True)
+if industry_table.empty:
+    st.info("Industry table is not available yet.")
+else:
+    display_table = industry_table.drop(columns=["Industry Raw"], errors="ignore")
+    st.dataframe(display_table, use_container_width=True, hide_index=True, height=340)
+
+st.markdown('<div class="section-title">Interesting Stock charts</div>', unsafe_allow_html=True)
+st.markdown('<div class="section-note">Switch each card between daily and weekly chart. No buy, sell, target, stop-loss, or position-sizing advice.</div>', unsafe_allow_html=True)
+
+list_choice = st.radio(
+    "Stock list",
+    ["Trending Stocks", "Interesting 20 Stocks", "Top Movers", "New Stage 2", "Last week Interesting 20 Stock"],
+    horizontal=True,
+    label_visibility="collapsed",
+)
+
+views = {
+    "Trending Stocks": trending20,
+    "Interesting 20 Stocks": interesting20,
+    "New Stage 2": new_stage2,
+    "Last week Interesting 20 Stock": last_week_interesting,
+}
+
+if list_choice == "Top Movers":
+    st.markdown('<div class="section-note">Top 10 movers and bottom 10 movers from the latest daily move output.</div>', unsafe_allow_html=True)
+    if top_movers.empty and bottom_movers.empty:
+        st.info("Top mover data is not available from the current output yet.")
+    else:
+        if not top_movers.empty:
+            st.markdown('<div class="stage-section-card"><div class="stage-section-title">Top 10 movers</div></div>', unsafe_allow_html=True)
+            for i, (_, row) in enumerate(top_movers.head(10).iterrows(), start=1):
+                render_stock_card(row, i, daily_dir, weekly_dir, [(f"Move: {format_move_pct(row.get('move_pct'))}", "new")])
+        if not bottom_movers.empty:
+            st.markdown('<div class="stage-section-card"><div class="stage-section-title">Bottom 10 movers</div></div>', unsafe_allow_html=True)
+            for i, (_, row) in enumerate(bottom_movers.head(10).iterrows(), start=1):
+                render_stock_card(row, i + 100, daily_dir, weekly_dir, [(f"Move: {format_move_pct(row.get('move_pct'))}", "drop")])
+else:
+    view_df = views.get(list_choice, pd.DataFrame())
+    if view_df.empty:
+        if list_choice == "Trending Stocks":
+            st.info("No trending stocks found. Add a trending_stocks.csv file beside this dashboard or inside the outputs folder with a ticker column.")
+        elif list_choice == "Last week Interesting 20 Stock":
+            st.info("Last week Interesting 20 snapshot is not available yet. It will appear after archived daily snapshots exist for at least one prior week.")
+        elif list_choice == "New Stage 2":
+            st.info("None — no stocks entered Stage 2 in the available last 1–3 week history.")
+        else:
+            st.info("No stocks available for this view.")
+    else:
+        for i, (_, row) in enumerate(view_df.head(20).iterrows(), start=1):
+            ticker = str(row.get("ticker", "") or "").strip()
+            badges = []
+            streak = None
+            if list_choice == "Interesting 20 Stocks":
+                # No repeated badge. Keep the useful streak memory only.
+                streak = streak_map.get(ticker, 1)
+            elif list_choice == "New Stage 2":
+                badges.append(("Entered Stage 2 recently", "stage2"))
+            elif list_choice == "Last week Interesting 20 Stock":
+                pass
+            render_stock_card(row, i, daily_dir, weekly_dir, badges, streak)
+
+liked_count = len(st.session_state.get("liked_tickers", []))
+st.markdown(
+    f"""
+<div class="disclaimer-card">
+<b>Public-data disclaimer:</b> This page shows rule-based structure, stage, sector and chart data only. It is not investment advice, research advice, portfolio advice, a recommendation, or a solicitation to buy/sell securities. Any mention of “interesting”, “leader”, “stage”, “outperformed”, or “underperformed” is a descriptive label from the dataset only. Liked stocks in this session: {liked_count}. Liked-watchlist memory is intentionally kept for the next update.
+
+""",
+    unsafe_allow_html=True,
+)
+render_connect_feedback_section()
+st.markdown('</div>', unsafe_allow_html=True)
