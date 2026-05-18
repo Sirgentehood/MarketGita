@@ -1,4 +1,4 @@
-# `.github/workflows/post_close_market_reset.yml`
+# `post_close_market_reset`
 
 ```yaml
 name: Post Close Market Reset
