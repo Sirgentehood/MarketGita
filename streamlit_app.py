@@ -2122,7 +2122,7 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
 
     industry = f"{industry_icon(industry_raw)} {industry_raw}" if industry_raw and industry_raw != "-" else "-"
     name = stock_display_name(row)
-    chart_mode = st.session_state.get(mode_key, "Daily")
+    chart_mode = st.session_state.get(mode_key, "Weekly")
     chart_dir = daily_dir if chart_mode == "Daily" else weekly_dir
     suffix = "_daily.png" if chart_mode == "Daily" else "_weekly.png"
     chart = get_chart_bytes(chart_dir, ticker, suffix) if ticker else None
@@ -2189,7 +2189,7 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
         with c2:
             daily_label = "Daily"
             if st.button(daily_label, key=f"daily_{key}_{idx}", use_container_width=True, type=("primary" if chart_mode == "Daily" else "secondary")):
-                st.session_state[mode_key] = "Weekly"
+                st.session_state[mode_key] = "Daily"
                 rerun()
         with c3:
             weekly_label = "Weekly"
