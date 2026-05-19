@@ -1124,6 +1124,133 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+
+/* v50: desktop dual charts, mobile original single-chart toggle */
+@media (min-width: 901px) {
+  .block-container {
+    max-width: 1580px !important;
+    padding-left: 1.15rem !important;
+    padding-right: 1.15rem !important;
+  }
+  .reset-shell {
+    max-width: 1540px !important;
+    margin: 0 auto !important;
+  }
+  .stock-card {
+    max-width: 1540px !important;
+    padding: 1.08rem 1.15rem 1.18rem 1.15rem !important;
+    margin: 1rem auto 1.45rem auto !important;
+  }
+  [data-testid="stVerticalBlockBorderWrapper"] {
+    max-width: 1540px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .desktop-chart-duo-v50 {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 1.05rem !important;
+    margin-top: 0.85rem !important;
+    width: 100% !important;
+  }
+  .desktop-chart-panel-v50 {
+    border: 1px solid rgba(35,72,108,0.15) !important;
+    border-radius: 20px !important;
+    overflow: hidden !important;
+    background: #ffffff !important;
+    box-shadow: 0 10px 28px rgba(31,56,88,0.08) !important;
+  }
+  .desktop-chart-title-v50 {
+    padding: 0.52rem 0.76rem !important;
+    font-size: 0.94rem !important;
+    font-weight: 950 !important;
+    color: #344256 !important;
+    text-align: center !important;
+    background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%) !important;
+    border-bottom: 1px solid rgba(35,72,108,0.10) !important;
+  }
+  .desktop-chart-panel-v50 img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+  /* Important: this removes the third chart on laptop/desktop. */
+  .mobile-chart-single-v50,
+  .mobile-chart-single-v47,
+  .mobile-chart-single,
+  .chart-wrap,
+  .chart-wrap-v50 {
+    display: none !important;
+  }
+
+  /* Desktop: keep only Like button. */
+  .stock-actions-marker + div [data-testid="stHorizontalBlock"] {
+    display: grid !important;
+    grid-template-columns: minmax(160px, 230px) !important;
+    justify-content: start !important;
+  }
+  .stock-actions-marker + div [data-testid="column"]:nth-child(2),
+  .stock-actions-marker + div [data-testid="column"]:nth-child(3) {
+    display: none !important;
+  }
+}
+
+@media (max-width: 900px) {
+  .desktop-chart-duo-v50,
+  .desktop-chart-duo-v47,
+  .desktop-chart-duo {
+    display: none !important;
+  }
+
+  .mobile-chart-single-v50 {
+    display: block !important;
+  }
+  .chart-wrap-v50 {
+    display: block !important;
+    border: 1px solid rgba(35,72,108,0.15);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-top: 0.58rem;
+    background: #ffffff;
+  }
+  .chart-wrap-v50 img {
+    width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+  /* Mobile breathing room. */
+  .block-container {
+    padding-left: 0.48rem !important;
+    padding-right: 0.48rem !important;
+  }
+  .stock-card {
+    margin-left: 0.08rem !important;
+    margin-right: 0.08rem !important;
+    padding-left: 0.62rem !important;
+    padding-right: 0.62rem !important;
+  }
+
+  /* Mobile: show Like + Daily + Weekly buttons as earlier. */
+  .stock-actions-marker + div [data-testid="stHorizontalBlock"] {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 0.28rem !important;
+  }
+  .stock-actions-marker + div [data-testid="column"] {
+    display: block !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 def h(value) -> str:
     try:
         if pd.isna(value):
@@ -2389,35 +2516,39 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
 
         daily_img = chart_data_uri(daily_chart)
         weekly_img = chart_data_uri(weekly_chart)
+        mobile_img = chart_data_uri(chart)
 
-        # Desktop/laptop: only the two-chart side-by-side view is shown.
+        # Desktop/laptop: show only side-by-side Daily + Weekly charts.
         if daily_img or weekly_img:
             daily_html = (
-                f'<div class="desktop-chart-panel-v47"><div class="desktop-chart-title-v47" style="text-align:center;">Daily Chart</div>'
+                f'<div class="desktop-chart-panel-v50"><div class="desktop-chart-title-v50">Daily Chart</div>'
                 f'<img src="{daily_img}" alt="Daily chart for {h(name)}"></div>'
                 if daily_img
-                else '<div class="desktop-chart-panel-v47"><div class="desktop-chart-title-v47" style="text-align:center;">Daily Chart</div><div class="chart-missing">Daily chart not available.</div></div>'
+                else '<div class="desktop-chart-panel-v50"><div class="desktop-chart-title-v50">Daily Chart</div><div class="chart-missing">Daily chart not available.</div></div>'
             )
             weekly_html = (
-                f'<div class="desktop-chart-panel-v47"><div class="desktop-chart-title-v47" style="text-align:center;">Weekly Chart</div>'
+                f'<div class="desktop-chart-panel-v50"><div class="desktop-chart-title-v50">Weekly Chart</div>'
                 f'<img src="{weekly_img}" alt="Weekly chart for {h(name)}"></div>'
                 if weekly_img
-                else '<div class="desktop-chart-panel-v47"><div class="desktop-chart-title-v47" style="text-align:center;">Weekly Chart</div><div class="chart-missing">Weekly chart not available.</div></div>'
+                else '<div class="desktop-chart-panel-v50"><div class="desktop-chart-title-v50">Weekly Chart</div><div class="chart-missing">Weekly chart not available.</div></div>'
             )
             st.markdown(
-                f'<div class="desktop-chart-duo-v47">{daily_html}{weekly_html}</div>',
+                f'<div class="desktop-chart-duo-v50">{daily_html}{weekly_html}</div>',
                 unsafe_allow_html=True,
             )
 
-        # Mobile: keep the existing single-chart Daily/Weekly toggle behavior.
-        st.markdown('<div class="mobile-chart-single-v47">', unsafe_allow_html=True)
-        if chart:
-            st.markdown('<div class="chart-wrap">', unsafe_allow_html=True)
-            st.image(chart, use_container_width=True)
-            st.markdown('</div>', unsafe_allow_html=True)
+        # Mobile: earlier layout retained — one chart at a time, controlled by Daily/Weekly buttons.
+        # This is pure HTML, not st.image(), so CSS can hide it on desktop reliably.
+        if mobile_img:
+            st.markdown(
+                f'<div class="mobile-chart-single-v50"><div class="chart-wrap-v50"><img src="{mobile_img}" alt="{h(chart_mode)} chart for {h(name)}"></div></div>',
+                unsafe_allow_html=True,
+            )
         else:
-            st.markdown('<div class="chart-missing">Chart not available for this stock yet.</div>', unsafe_allow_html=True)
-        st.markdown('</div>', unsafe_allow_html=True)
+            st.markdown(
+                '<div class="mobile-chart-single-v50"><div class="chart-missing">Chart not available for this stock yet.</div></div>',
+                unsafe_allow_html=True,
+            )
 
         st.markdown('<div class="stock-actions-marker"></div>', unsafe_allow_html=True)
         c1, c2, c3 = st.columns(3)
