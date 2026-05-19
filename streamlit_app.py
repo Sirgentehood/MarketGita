@@ -340,50 +340,36 @@ div[role="radiogroup"] label {background: rgba(255,255,255,0.72); border:1px sol
 }
 
 
-/* v42 selected stock-selection tab/button gold highlight */
-:root {
-  --sg-gold-bg: linear-gradient(180deg, #f8e7a3 0%, #e7c45a 100%);
-  --sg-gold-border: #c59a2f;
-  --sg-gold-text: #4b3400;
-  --sg-gold-shadow: rgba(214, 170, 38, 0.42);
-}
 
-/* Streamlit segmented controls / pills */
-button[kind="secondary"][aria-pressed="true"],
-button[aria-selected="true"],
-button[data-baseweb="tab"][aria-selected="true"] {
-  background: var(--sg-gold-bg) !important;
-  border: 1px solid var(--sg-gold-border) !important;
-  color: var(--sg-gold-text) !important;
-  font-weight: 900 !important;
-  box-shadow: 0 0 0 1px rgba(197,154,47,0.12), 0 6px 18px var(--sg-gold-shadow) !important;
+/* v43 selected tab highlight: use Streamlit primary button as gold selected state */
+.stButton > button[kind="primary"] {
+  color: #4b3400 !important;
+  border: 1px solid #c59a2f !important;
+  background: linear-gradient(180deg, #fff2b8 0%, #e7c45a 100%) !important;
+  box-shadow: 0 6px 18px rgba(214,170,38,0.34) !important;
+  font-weight: 950 !important;
 }
-
-/* Text inside selected tabs/buttons */
-button[kind="secondary"][aria-pressed="true"] p,
-button[aria-selected="true"] p,
-button[data-baseweb="tab"][aria-selected="true"] p,
-button[kind="secondary"][aria-pressed="true"] span,
-button[aria-selected="true"] span,
-button[data-baseweb="tab"][aria-selected="true"] span {
-  color: var(--sg-gold-text) !important;
-  font-weight: 900 !important;
+.stButton > button[kind="primary"] p,
+.stButton > button[kind="primary"] span {
+  color: #4b3400 !important;
+  font-weight: 950 !important;
 }
-
-/* Hover/focus polish */
-button[kind="secondary"][aria-pressed="true"]:hover,
-button[aria-selected="true"]:hover,
-button[data-baseweb="tab"][aria-selected="true"]:hover {
+.stButton > button[kind="primary"]:hover {
   filter: brightness(1.02);
+  border-color: #b8860b !important;
 }
 
-/* Mobile readability */
-@media (max-width: 768px) {
-  button[kind="secondary"][aria-pressed="true"],
-  button[aria-selected="true"],
-  button[data-baseweb="tab"][aria-selected="true"] {
-    box-shadow: 0 4px 12px rgba(214,170,38,0.34) !important;
-  }
+
+/* v43 selected stock-selection radio pill gold */
+div[role="radiogroup"] label:has(input:checked) {
+  background: linear-gradient(180deg, #fff2b8 0%, #e7c45a 100%) !important;
+  border-color: #c59a2f !important;
+  box-shadow: 0 6px 18px rgba(214,170,38,0.28) !important;
+}
+div[role="radiogroup"] label:has(input:checked) p,
+div[role="radiogroup"] label:has(input:checked) span {
+  color: #4b3400 !important;
+  font-weight: 950 !important;
 }
 
 </style>
@@ -2078,6 +2064,10 @@ def rs_text(value, months: str) -> str:
 def safe_key(text: str) -> str:
     return re.sub(r"[^A-Za-z0-9_]+", "_", str(text))[:80]
 
+
+
+def selected_button_type(label: str, current: str) -> str:
+    return "primary" if str(label).strip().lower() == str(current).strip().lower() else "secondary"
 
 def rerun():
     if hasattr(st, "rerun"):
