@@ -1054,6 +1054,76 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown("""
+<style>
+
+/* v48 final polish: transparent hero, centered chart titles, mobile breathing room */
+.top-card {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  padding-left: 0.15rem !important;
+  padding-right: 0.15rem !important;
+}
+
+.desktop-chart-title-v47,
+.desktop-chart-title,
+.desktop-chart-title-v48 {
+  text-align: center !important;
+  justify-content: center !important;
+}
+
+/* Mobile: restore slight breathing room so cards do not touch screen edges. */
+@media (max-width: 900px) {
+  .block-container {
+    padding-left: 0.48rem !important;
+    padding-right: 0.48rem !important;
+  }
+  .reset-shell {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  .stock-card {
+    margin-left: 0.08rem !important;
+    margin-right: 0.08rem !important;
+    padding-left: 0.62rem !important;
+    padding-right: 0.62rem !important;
+  }
+  [data-testid="stVerticalBlockBorderWrapper"] {
+    margin-left: 0.05rem !important;
+    margin-right: 0.05rem !important;
+  }
+  .chart-wrap {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* Desktop/laptop: never show the mobile/single chart below the dual chart grid. */
+@media (min-width: 901px) {
+  .mobile-chart-single-v47,
+  .mobile-chart-single,
+  .chart-wrap {
+    display: none !important;
+    visibility: hidden !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    min-height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  .desktop-chart-duo-v47 {
+    display: grid !important;
+  }
+}
+
+</style>
+""", unsafe_allow_html=True)
+
 def h(value) -> str:
     try:
         if pd.isna(value):
@@ -2323,16 +2393,16 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
         # Desktop/laptop: only the two-chart side-by-side view is shown.
         if daily_img or weekly_img:
             daily_html = (
-                f'<div class="desktop-chart-panel-v47"><div class="desktop-chart-title-v47">Daily Chart</div>'
+                f'<div class="desktop-chart-panel-v47"><div class="desktop-chart-title-v47" style="text-align:center;">Daily Chart</div>'
                 f'<img src="{daily_img}" alt="Daily chart for {h(name)}"></div>'
                 if daily_img
-                else '<div class="desktop-chart-panel-v47"><div class="desktop-chart-title-v47">Daily Chart</div><div class="chart-missing">Daily chart not available.</div></div>'
+                else '<div class="desktop-chart-panel-v47"><div class="desktop-chart-title-v47" style="text-align:center;">Daily Chart</div><div class="chart-missing">Daily chart not available.</div></div>'
             )
             weekly_html = (
-                f'<div class="desktop-chart-panel-v47"><div class="desktop-chart-title-v47">Weekly Chart</div>'
+                f'<div class="desktop-chart-panel-v47"><div class="desktop-chart-title-v47" style="text-align:center;">Weekly Chart</div>'
                 f'<img src="{weekly_img}" alt="Weekly chart for {h(name)}"></div>'
                 if weekly_img
-                else '<div class="desktop-chart-panel-v47"><div class="desktop-chart-title-v47">Weekly Chart</div><div class="chart-missing">Weekly chart not available.</div></div>'
+                else '<div class="desktop-chart-panel-v47"><div class="desktop-chart-title-v47" style="text-align:center;">Weekly Chart</div><div class="chart-missing">Weekly chart not available.</div></div>'
             )
             st.markdown(
                 f'<div class="desktop-chart-duo-v47">{daily_html}{weekly_html}</div>',
