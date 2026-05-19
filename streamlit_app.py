@@ -298,6 +298,47 @@ div[role="radiogroup"] label {background: rgba(255,255,255,0.72); border:1px sol
   font-weight: 850;
 }
 
+
+/* v41 mobile chart enlargement: reduce surrounding padding and let charts fill width */
+@media (max-width: 768px) {
+  .block-container {
+    padding-left: 0.16rem !important;
+    padding-right: 0.16rem !important;
+    padding-top: 0.18rem !important;
+  }
+  .reset-shell {
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+  .stock-card {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0.34rem !important;
+    padding-right: 0.34rem !important;
+  }
+  [data-testid="stVerticalBlockBorderWrapper"] {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0.30rem !important;
+    padding-right: 0.30rem !important;
+  }
+  .chart-wrap {
+    margin-left: -0.28rem !important;
+    margin-right: -0.28rem !important;
+    border-radius: 12px !important;
+  }
+  .chart-wrap img,
+  .stImage img,
+  div[data-testid="stImage"] img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+  }
+  div[data-testid="stImage"] {
+    width: 100% !important;
+  }
+}
+
 </style>
 """,
     unsafe_allow_html=True,
@@ -1837,6 +1878,13 @@ def image_bytes(path: str, mtime_ns: int) -> bytes:
 
 
 def get_chart_bytes(chart_dir: Path, ticker: str, suffix: str):
+    if suffix == "_weekly.png":
+        try:
+            chart_dir_mtime_ns = chart_dir.stat().st_mtime_ns if chart_dir.exists() else 0
+        except Exception:
+            chart_dir_mtime_ns = 0
+        return cached_weekly_chart_bytes(str(ticker), chart_dir_mtime_ns)
+
     path = resolve_chart_path_fast(ticker, suffix)
     if not path:
         return None
@@ -1846,6 +1894,18 @@ def get_chart_bytes(chart_dir: Path, ticker: str, suffix: str):
         return None
 
 
+
+
+@st.cache_data(show_spinner=False)
+def cached_weekly_chart_bytes(ticker: str, chart_dir_mtime_ns: int = 0):
+    """Cache weekly chart bytes separately so Weekly opens fast by default."""
+    path = resolve_chart_path_fast(ticker, "_weekly.png")
+    if not path:
+        return None
+    try:
+        return image_bytes(str(path), path.stat().st_mtime_ns)
+    except Exception:
+        return None
 
 def _first_existing_column(df: pd.DataFrame, candidates: list[str]) -> str | None:
     if df is None or df.empty:
@@ -2001,7 +2061,7 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
     key = safe_key(ticker or f"row_{idx}")
     mode_key = f"chart_mode_{key}"
     if mode_key not in st.session_state:
-        st.session_state[mode_key] = "Daily"
+        st.session_state[mode_key] = "Weekly"
 
     liked = st.session_state.setdefault("liked_tickers", [])
     is_liked = ticker in liked
@@ -2092,7 +2152,7 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
         with c2:
             daily_label = "Daily"
             if st.button(daily_label, key=f"daily_{key}_{idx}", use_container_width=True, type=("primary" if chart_mode == "Daily" else "secondary")):
-                st.session_state[mode_key] = "Daily"
+                st.session_state[mode_key] = "Weekly"
                 rerun()
         with c3:
             weekly_label = "Weekly"
