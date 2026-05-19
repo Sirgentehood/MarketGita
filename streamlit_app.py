@@ -372,6 +372,53 @@ div[role="radiogroup"] label:has(input:checked) span {
   font-weight: 950 !important;
 }
 
+
+/* v45 desktop dual chart view: daily + weekly side by side on larger screens */
+.desktop-chart-duo {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.72rem;
+  margin-top: 0.62rem;
+}
+.desktop-chart-panel {
+  border: 1px solid rgba(35,72,108,0.15);
+  border-radius: 18px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+}
+.desktop-chart-title {
+  padding: 0.42rem 0.62rem;
+  font-size: 0.82rem;
+  font-weight: 950;
+  color: #344256;
+  background: linear-gradient(180deg, #f8fbff 0%, #eef6ff 100%);
+  border-bottom: 1px solid rgba(35,72,108,0.10);
+}
+.desktop-chart-panel img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.mobile-chart-single {
+  display: none;
+}
+
+@media (max-width: 900px) {
+  .desktop-chart-duo {
+    display: none !important;
+  }
+  .mobile-chart-single {
+    display: block !important;
+  }
+}
+
+@media (min-width: 901px) {
+  .mobile-chart-single {
+    display: none !important;
+  }
+}
+
 </style>
 """,
     unsafe_allow_html=True,
@@ -1910,6 +1957,14 @@ def image_bytes(path: str, mtime_ns: int) -> bytes:
     return Path(path).read_bytes()
 
 
+
+@st.cache_data(show_spinner=False)
+def chart_data_uri(chart_bytes: bytes | None) -> str:
+    """Convert cached chart bytes to an embeddable data URI for desktop side-by-side charts."""
+    if not chart_bytes:
+        return ""
+    return "data:image/png;base64," + base64.b64encode(chart_bytes).decode("ascii")
+
 def get_chart_bytes(chart_dir: Path, ticker: str, suffix: str):
     if suffix == "_weekly.png":
         try:
@@ -2137,6 +2192,10 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
     suffix = "_daily.png" if chart_mode == "Daily" else "_weekly.png"
     chart = get_chart_bytes(chart_dir, ticker, suffix) if ticker else None
 
+    # Desktop/laptop view shows both charts side by side.
+    daily_chart = get_chart_bytes(daily_dir, ticker, "_daily.png") if ticker else None
+    weekly_chart = get_chart_bytes(weekly_dir, ticker, "_weekly.png") if ticker else None
+
     badges = list(freshness_badges or [])
     badges.append((strength_label, strength_style))
     industry_match_key = industry_key(industry_raw)
@@ -2177,12 +2236,36 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
             unsafe_allow_html=True,
         )
 
+        # Desktop/laptop: show both Daily and Weekly charts side by side.
+        if daily_chart or weekly_chart:
+            daily_img = chart_data_uri(daily_chart)
+            weekly_img = chart_data_uri(weekly_chart)
+            daily_html = (
+                f'<div class="desktop-chart-panel"><div class="desktop-chart-title">Daily Chart</div>'
+                f'<img src="{daily_img}" alt="Daily chart for {h(name)}"></div>'
+                if daily_img
+                else '<div class="desktop-chart-panel"><div class="desktop-chart-title">Daily Chart</div><div class="chart-missing">Daily chart not available.</div></div>'
+            )
+            weekly_html = (
+                f'<div class="desktop-chart-panel"><div class="desktop-chart-title">Weekly Chart</div>'
+                f'<img src="{weekly_img}" alt="Weekly chart for {h(name)}"></div>'
+                if weekly_img
+                else '<div class="desktop-chart-panel"><div class="desktop-chart-title">Weekly Chart</div><div class="chart-missing">Weekly chart not available.</div></div>'
+            )
+            st.markdown(
+                f'<div class="desktop-chart-duo">{daily_html}{weekly_html}</div>',
+                unsafe_allow_html=True,
+            )
+
+        # Mobile: keep the current single-chart Daily/Weekly toggle behavior.
+        st.markdown('<div class="mobile-chart-single">', unsafe_allow_html=True)
         if chart:
             st.markdown('<div class="chart-wrap">', unsafe_allow_html=True)
             st.image(chart, use_container_width=True)
             st.markdown('</div>', unsafe_allow_html=True)
         else:
             st.markdown('<div class="chart-missing">Chart not available for this stock yet.</div>', unsafe_allow_html=True)
+        st.markdown('</div>', unsafe_allow_html=True)
 
         st.markdown('<div class="stock-actions-marker"></div>', unsafe_allow_html=True)
         c1, c2, c3 = st.columns(3)
