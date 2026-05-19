@@ -2165,7 +2165,7 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
   <div class="stock-head">
     <div>
       <div class="stock-name"><span class="stock-title-gold">{h(name)}</span> <span class="black-text">— {h(stage)}</span></div>
-      <div class="stock-meta">Industry: {h(industry)}</div>\n      <div class="stock-meta">{h(strength_label)}</div>
+      <div class="stock-meta">Industry: {h(industry)}</div>
       {extra_meta_line}
 
 
