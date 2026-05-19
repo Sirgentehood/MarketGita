@@ -2093,12 +2093,13 @@ def badge_html(label: str, css_class: str) -> str:
     return f'<span class="fresh-pill {css_class}">{h(label)}</span>'
 
 
-def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Path, freshness_badges: list[tuple[str, str]] | None = None, streak: int | None = None):
+def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Path, freshness_badges: list[tuple[str, str]] | None = None, streak: int | None = None, default_chart_mode: str = "Weekly"):
     ticker = str(row.get("ticker", "") or "").strip()
     key = safe_key(ticker or f"row_{idx}")
-    mode_key = f"chart_mode_{key}"
+    mode_scope = "top_movers" if str(default_chart_mode).lower() == "daily" else "default"
+    mode_key = f"chart_mode_{mode_scope}_{key}"
     if mode_key not in st.session_state:
-        st.session_state[mode_key] = "Weekly"
+        st.session_state[mode_key] = default_chart_mode
 
     liked = st.session_state.setdefault("liked_tickers", [])
     is_liked = ticker in liked
@@ -2122,7 +2123,7 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
 
     industry = f"{industry_icon(industry_raw)} {industry_raw}" if industry_raw and industry_raw != "-" else "-"
     name = stock_display_name(row)
-    chart_mode = st.session_state.get(mode_key, "Weekly")
+    chart_mode = st.session_state.get(mode_key, default_chart_mode)
     chart_dir = daily_dir if chart_mode == "Daily" else weekly_dir
     suffix = "_daily.png" if chart_mode == "Daily" else "_weekly.png"
     chart = get_chart_bytes(chart_dir, ticker, suffix) if ticker else None
@@ -2362,14 +2363,14 @@ st.markdown('<div class="section-note">Switch each card between daily and weekly
 st.markdown('<div class="section-title stock-selection-title">Stock selection</div>', unsafe_allow_html=True)
 list_choice = st.radio(
     "Stock list",
-    ["In News", "Interesting 20 Stocks", "Top Movers", "New Stage 2", "Last week Interesting 20 Stock"],
+    ["Interesting 20 Stocks", "In News", "Top Movers", "New Stage 2", "Last week Interesting 20 Stock"],
     horizontal=True,
     label_visibility="collapsed",
 )
 
 views = {
-    "In News": trending20,
     "Interesting 20 Stocks": interesting20,
+    "In News": trending20,
     "New Stage 2": new_stage2,
     "Last week Interesting 20 Stock": last_week_interesting,
 }
@@ -2382,11 +2383,11 @@ if list_choice == "Top Movers":
         if not top_movers.empty:
             st.markdown('<div class="stage-section-card"><div class="stage-section-title">Top 10 movers</div></div>', unsafe_allow_html=True)
             for i, (_, row) in enumerate(top_movers.head(10).iterrows(), start=1):
-                render_stock_card(row, i, daily_dir, weekly_dir, [(f"Move: {format_move_pct(row.get('move_pct'))}", "new")])
+                render_stock_card(row, i, daily_dir, weekly_dir, [(f"Move: {format_move_pct(row.get('move_pct'))}", "new")], default_chart_mode="Daily")
         if not bottom_movers.empty:
             st.markdown('<div class="stage-section-card"><div class="stage-section-title">Bottom 10 movers</div></div>', unsafe_allow_html=True)
             for i, (_, row) in enumerate(bottom_movers.head(10).iterrows(), start=1):
-                render_stock_card(row, i + 100, daily_dir, weekly_dir, [(f"Move: {format_move_pct(row.get('move_pct'))}", "drop")])
+                render_stock_card(row, i + 100, daily_dir, weekly_dir, [(f"Move: {format_move_pct(row.get('move_pct'))}", "drop")], default_chart_mode="Daily")
 else:
     view_df = views.get(list_choice, pd.DataFrame())
     if view_df.empty:
