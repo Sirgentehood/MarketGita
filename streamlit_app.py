@@ -2237,7 +2237,7 @@ st.markdown(
     <div class="gita-shlok">कर्मण्येवाधिकारस्ते मा फलेषु कदाचन।</div>
     <div class="gita-translation">Karmanye Vadhikaraste, Ma Phaleshu Kadachana.</div>
     <div class="gita-message">You control your process,<br>not the market’s outcome.</div>
-    <div class="gita-subtext">Market Structure and Leadership Insights for Everyone. Really Learnings, No Investment Advice.</div>
+    <div class="gita-subtext">Market Structure and Leadership Insights for Everyone. Real Learnings, No Investment Advice.</div>
   </div>
 
   <div class="stockgita-generated">{h(generated_line)}</div>
