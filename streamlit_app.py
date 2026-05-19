@@ -2093,6 +2093,21 @@ def badge_html(label: str, css_class: str) -> str:
     return f'<span class="fresh-pill {css_class}">{h(label)}</span>'
 
 
+
+def industry_strength_label(industry_raw: str) -> tuple[str, str]:
+    """Human-friendly industry strength bucket for stock cards.
+
+    Strong = industry is in the top 6 ranked industries.
+    Weak = industry is in the bottom 8 ranked industries.
+    Neutral = all other industries.
+    """
+    key = industry_key(industry_raw)
+    if INDUSTRY_RANK_MAP.get(key):
+        return "Industry Strength: Strong", "support"
+    if WEAK_INDUSTRY_POSITION_MAP.get(key):
+        return "Industry Strength: Weak", "weak"
+    return "Industry Strength: Neutral", "rank"
+
 def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Path, freshness_badges: list[tuple[str, str]] | None = None, streak: int | None = None, default_chart_mode: str = "Weekly"):
     ticker = str(row.get("ticker", "") or "").strip()
     key = safe_key(ticker or f"row_{idx}")
@@ -2109,13 +2124,6 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
     stage_confidence = pd.to_numeric(row.get("stage_confidence"), errors="coerce")
 
     variant_line = ""
-    if stage_variant and stage_variant not in {"nan", "None", stage}:
-        if pd.notna(stage_confidence):
-            variant_line = f"<div class=\"stage-variant\">Variant: {h(stage_variant)} · Confidence: {float(stage_confidence) * 100:.0f}%</div>"
-        else:
-            variant_line = f"<div class=\"stage-variant\">Variant: {h(stage_variant)}</div>"
-    elif stage_variant and stage_variant == stage and pd.notna(stage_confidence):
-        variant_line = f"<div class=\"stage-variant\">Confidence: {float(stage_confidence) * 100:.0f}%</div>"
 
     industry_raw = str(row.get("Industry", row.get("industry", "-")) or "-")
     sector_raw = str(row.get("sector", row.get("Sector", "")) or "").strip()
@@ -2129,15 +2137,12 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
     chart = get_chart_bytes(chart_dir, ticker, suffix) if ticker else None
 
     badges = list(freshness_badges or [])
-    if is_fo_row(row):
-        badges.insert(0, ("F&O", "fo"))
     industry_match_key = industry_key(industry_raw)
     industry_rank = INDUSTRY_POSITION_MAP.get(industry_match_key)
     top_position = INDUSTRY_RANK_MAP.get(industry_match_key)
     weak_position = WEAK_INDUSTRY_POSITION_MAP.get(industry_match_key)
     if industry_rank:
         badge_style = "support" if top_position else "weak" if weak_position else "rank"
-        badges.append((f"Industry Rank: {industry_rank}", badge_style))
     if streak and streak >= 2:
         badges.append((f"Seen in Interesting 20 for {streak} days", "repeat"))
     if is_liked:
@@ -2158,7 +2163,6 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
   <div class="stock-head">
     <div>
       <div class="stock-name"><span class="stock-title-gold">{h(name)}</span> <span class="black-text">— {h(stage)}</span></div>
-      {variant_line}
       <div class="stock-meta">Industry: {h(industry)}</div>
       {extra_meta_line}
 
