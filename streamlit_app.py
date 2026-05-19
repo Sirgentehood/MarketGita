@@ -2725,5 +2725,93 @@ footer {
   }
 }
 
+
+/* v46 desktop large-card dual-chart layout */
+@media (min-width: 901px) {
+  .block-container {
+    max-width: 1480px !important;
+    padding-left: 1.05rem !important;
+    padding-right: 1.05rem !important;
+  }
+
+  .reset-shell {
+    max-width: 1440px !important;
+    margin: 0 auto !important;
+  }
+
+  .stock-card {
+    padding: 1.05rem 1.12rem 1.14rem 1.12rem !important;
+    margin: 0.95rem 0 1.35rem 0 !important;
+  }
+
+  [data-testid="stVerticalBlockBorderWrapper"] {
+    max-width: 1440px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
+
+  .desktop-chart-duo {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    gap: 0.95rem !important;
+    margin-top: 0.78rem !important;
+  }
+
+  .desktop-chart-panel {
+    border-radius: 20px !important;
+  }
+
+  .desktop-chart-title {
+    font-size: 0.92rem !important;
+    padding: 0.50rem 0.72rem !important;
+  }
+
+  .desktop-chart-panel img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+  }
+
+  /* Desktop/laptop should show only the side-by-side charts. */
+  .mobile-chart-single,
+  .chart-wrap {
+    display: none !important;
+    height: 0 !important;
+    max-height: 0 !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+
+  /* Hide Daily/Weekly buttons on desktop, keep only Like. */
+  .stock-actions-marker + div [data-testid="stHorizontalBlock"] {
+    display: grid !important;
+    grid-template-columns: minmax(160px, 220px) !important;
+    justify-content: start !important;
+  }
+
+  .stock-actions-marker + div [data-testid="column"]:nth-child(2),
+  .stock-actions-marker + div [data-testid="column"]:nth-child(3) {
+    display: none !important;
+  }
+
+  .stock-actions-marker + div [data-testid="column"]:nth-child(1) {
+    width: 220px !important;
+    min-width: 160px !important;
+  }
+}
+
+@media (max-width: 900px) {
+  /* Mobile keeps single-chart toggle behavior. */
+  .desktop-chart-duo {
+    display: none !important;
+  }
+
+  .mobile-chart-single {
+    display: block !important;
+  }
+}
+
 </style>
 """, unsafe_allow_html=True)
