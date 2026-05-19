@@ -2130,6 +2130,7 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
     group_raw = str(row.get("industry_group", row.get("Industry Group", row.get("industry group", ""))) or "").strip()
 
     industry = f"{industry_icon(industry_raw)} {industry_raw}" if industry_raw and industry_raw != "-" else "-"
+    strength_label, strength_style = industry_strength_label(industry_raw)
     name = stock_display_name(row)
     chart_mode = st.session_state.get(mode_key, default_chart_mode)
     chart_dir = daily_dir if chart_mode == "Daily" else weekly_dir
@@ -2137,6 +2138,7 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
     chart = get_chart_bytes(chart_dir, ticker, suffix) if ticker else None
 
     badges = list(freshness_badges or [])
+    badges.append((strength_label, strength_style))
     industry_match_key = industry_key(industry_raw)
     industry_rank = INDUSTRY_POSITION_MAP.get(industry_match_key)
     top_position = INDUSTRY_RANK_MAP.get(industry_match_key)
@@ -2163,7 +2165,7 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
   <div class="stock-head">
     <div>
       <div class="stock-name"><span class="stock-title-gold">{h(name)}</span> <span class="black-text">— {h(stage)}</span></div>
-      <div class="stock-meta">Industry: {h(industry)}</div>
+      <div class="stock-meta">Industry: {h(industry)}</div>\n      <div class="stock-meta">{h(strength_label)}</div>
       {extra_meta_line}
 
 
