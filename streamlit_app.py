@@ -339,6 +339,53 @@ div[role="radiogroup"] label {background: rgba(255,255,255,0.72); border:1px sol
   }
 }
 
+
+/* v42 selected stock-selection tab/button gold highlight */
+:root {
+  --sg-gold-bg: linear-gradient(180deg, #f8e7a3 0%, #e7c45a 100%);
+  --sg-gold-border: #c59a2f;
+  --sg-gold-text: #4b3400;
+  --sg-gold-shadow: rgba(214, 170, 38, 0.42);
+}
+
+/* Streamlit segmented controls / pills */
+button[kind="secondary"][aria-pressed="true"],
+button[aria-selected="true"],
+button[data-baseweb="tab"][aria-selected="true"] {
+  background: var(--sg-gold-bg) !important;
+  border: 1px solid var(--sg-gold-border) !important;
+  color: var(--sg-gold-text) !important;
+  font-weight: 900 !important;
+  box-shadow: 0 0 0 1px rgba(197,154,47,0.12), 0 6px 18px var(--sg-gold-shadow) !important;
+}
+
+/* Text inside selected tabs/buttons */
+button[kind="secondary"][aria-pressed="true"] p,
+button[aria-selected="true"] p,
+button[data-baseweb="tab"][aria-selected="true"] p,
+button[kind="secondary"][aria-pressed="true"] span,
+button[aria-selected="true"] span,
+button[data-baseweb="tab"][aria-selected="true"] span {
+  color: var(--sg-gold-text) !important;
+  font-weight: 900 !important;
+}
+
+/* Hover/focus polish */
+button[kind="secondary"][aria-pressed="true"]:hover,
+button[aria-selected="true"]:hover,
+button[data-baseweb="tab"][aria-selected="true"]:hover {
+  filter: brightness(1.02);
+}
+
+/* Mobile readability */
+@media (max-width: 768px) {
+  button[kind="secondary"][aria-pressed="true"],
+  button[aria-selected="true"],
+  button[data-baseweb="tab"][aria-selected="true"] {
+    box-shadow: 0 4px 12px rgba(214,170,38,0.34) !important;
+  }
+}
+
 </style>
 """,
     unsafe_allow_html=True,
@@ -1662,7 +1709,7 @@ def _read_trending_file(path: Path) -> pd.DataFrame:
 
 
 def load_trending_stocks(combined: pd.DataFrame, outdir: Path, limit: int = 20) -> pd.DataFrame:
-    """Load manually curated Trending Stocks from CSV/XLSX and return matched stock rows.
+    """Load manually curated In News from CSV/XLSX and return matched stock rows.
 
     Supported locations, in priority order:
     - outputs/trending_stocks.csv
@@ -2325,13 +2372,13 @@ st.markdown('<div class="section-note">Switch each card between daily and weekly
 st.markdown('<div class="section-title stock-selection-title">Stock selection</div>', unsafe_allow_html=True)
 list_choice = st.radio(
     "Stock list",
-    ["Trending Stocks", "Interesting 20 Stocks", "Top Movers", "New Stage 2", "Last week Interesting 20 Stock"],
+    ["In News", "Interesting 20 Stocks", "Top Movers", "New Stage 2", "Last week Interesting 20 Stock"],
     horizontal=True,
     label_visibility="collapsed",
 )
 
 views = {
-    "Trending Stocks": trending20,
+    "In News": trending20,
     "Interesting 20 Stocks": interesting20,
     "New Stage 2": new_stage2,
     "Last week Interesting 20 Stock": last_week_interesting,
@@ -2353,7 +2400,7 @@ if list_choice == "Top Movers":
 else:
     view_df = views.get(list_choice, pd.DataFrame())
     if view_df.empty:
-        if list_choice == "Trending Stocks":
+        if list_choice == "In News":
             st.info("No trending stocks found. Add a trending_stocks.csv file beside this dashboard or inside the outputs folder with a ticker column.")
         elif list_choice == "Last week Interesting 20 Stock":
             st.info("Last week Interesting 20 snapshot is not available yet. It will appear after archived daily snapshots exist for at least one prior week.")
