@@ -2626,7 +2626,7 @@ if combined.empty:
     st.stop()
 
 industry_table = build_industry_table(industry, industry_changes, combined)
-interesting20 = sort_stock_cards_alpha(build_interesting20(combined))
+interesting20 = build_interesting20(combined)
 trending20 = load_trending_stocks(combined, OUTPUT_DIR, limit=20)
 latest_date = latest_update_date(OUTPUT_DIR, history)
 previous_interesting = load_previous_interesting(OUTPUT_DIR, latest_date)
