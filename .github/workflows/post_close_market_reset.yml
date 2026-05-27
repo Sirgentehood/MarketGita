@@ -2,7 +2,7 @@ name: Post Close Market Reset
 
 on:
   schedule:
-    - cron: "30 9 * * 1-5" # 4:00 PM IST
+    - cron: "30 10 * * 1-5" # 4:00 PM IST
   workflow_dispatch:
 
 permissions:
