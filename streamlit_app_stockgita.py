@@ -1345,7 +1345,7 @@ def persist_interesting_snapshot(outdir: Path, interesting: pd.DataFrame, latest
     if "snapshot_date" not in snapshot.columns:
         snapshot.insert(0, "snapshot_date", latest_date)
     keep = [c for c in [
-        "snapshot_date", "ticker", "Company Name", "Industry", "stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "current_rank", "interesting_priority",
+        "snapshot_date", "ticker", "Company Name", "Industry", "stage", "current_rank", "interesting_priority",
         "daily_setup_bucket", "weekly_setup_bucket", "combined_bucket", "final_combined_score", "rs_3m_pct", "rs_6m_pct",
         "volume_dryup_ratio", "breakout_volume_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up",
     ] if c in snapshot.columns]
@@ -1371,20 +1371,471 @@ def load_last_week_interesting(outdir: Path, latest_date: str, combined: pd.Data
         eligible = [(dt, p) for dt, p in files if dt < latest_dt]
     if not eligible:
         return pd.DataFrame()
-
-    archive_dt, archive_path = eligible[-1]
-    archived = read_archive(archive_path)
+    archived = read_archive(eligible[-1][1])
     if archived.empty:
         return pd.DataFrame()
-
-    # Important trust rule: Last Week Interesting 20 must show the archived stage and archived data,
-    # not today's latest classification. Otherwise a stock that was Stage 2 last week can appear as
-    # Stage 1 today, which makes the archive misleading.
-    archived = archived.copy()
-    archived["_archive_date"] = pd.to_datetime(archive_dt).date().isoformat()
-    if "snapshot_date" not in archived.columns:
-        archived.insert(0, "snapshot_date", archived["_archive_date"])
+    if "ticker" in archived.columns and not combined.empty and "ticker" in combined.columns:
+        current = combined.drop_duplicates("ticker")
+        merged = archived[["ticker"]].merge(current, on="ticker", how="left")
+        fallback = archived.drop_duplicates("ticker").set_index("ticker", drop=False)
+        for col in archived.columns:
+            if col not in merged.columns:
+                merged[col] = merged["ticker"].map(fallback[col])
+        return ensure_current_rank(merged)
     return ensure_current_rank(archived)
+
+
+def interesting_streaks(outdir: Path, latest_date: str, current_tickers: set[str]) -> dict[str, int]:
+    files = archive_files(outdir)
+    if not files:
+        return {t: 1 for t in current_tickers}
+    try:
+        latest_dt = pd.to_datetime(latest_date).date()
+    except Exception:
+        latest_dt = files[-1][0]
+    relevant = [(dt, p) for dt, p in files if dt <= latest_dt]
+    relevant = sorted(relevant, key=lambda x: x[0], reverse=True)
+    streaks = {}
+    for ticker in current_tickers:
+        streak = 0
+        for _, path in relevant:
+            df = read_archive(path)
+            tickers = set(df.get("ticker", pd.Series(dtype=str)).dropna().astype(str))
+            if ticker in tickers:
+                streak += 1
+            else:
+                break
+        streaks[ticker] = max(streak, 1)
+    return streaks
+
+
+def build_misc20(combined: pd.DataFrame, exclude_tickers: set[str], top_industries: list[str]) -> pd.DataFrame:
+    if combined.empty:
+        return pd.DataFrame()
+    df = ensure_current_rank(combined).copy()
+    if "ticker" in df.columns:
+        df = df[~df["ticker"].astype(str).isin(exclude_tickers)].copy()
+    if "Industry" in df.columns and top_industries:
+        preferred = df[df["Industry"].astype(str).isin(top_industries)].copy()
+    else:
+        preferred = df.copy()
+    frames = []
+    stage_order = [("Stage 1", 5), ("Stage 2", 5), ("Stage 3", 5), ("Stage 4", 5)]
+    for stage, limit in stage_order:
+        part = preferred[preferred["stage"].astype(str).eq(stage)].sort_values("current_rank", ascending=True, na_position="last").head(limit).copy()
+        if len(part) < limit:
+            already = set(part.get("ticker", pd.Series(dtype=str)).astype(str)) if not part.empty and "ticker" in part.columns else set()
+            fallback = df[(df["stage"].astype(str).eq(stage)) & (~df["ticker"].astype(str).isin(already))].sort_values("current_rank", ascending=True, na_position="last").head(limit - len(part))
+            part = pd.concat([part, fallback], ignore_index=True)
+        part["misc_stage_group"] = stage
+        frames.append(part)
+    out = pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+    return out.head(20).reset_index(drop=True)
+
+
+
+
+def normalize_ticker_for_match(value) -> str:
+    """Normalize ticker from trending_stocks.csv and output files for matching."""
+    if value is None:
+        return ""
+    try:
+        if pd.isna(value):
+            return ""
+    except Exception:
+        pass
+    text = str(value).strip().upper()
+    if not text or text in {"NAN", "NONE"}:
+        return ""
+    if text.startswith("^") or text.endswith(".NS"):
+        return text
+    return f"{text}.NS"
+
+
+def sort_stock_cards_alpha(df: pd.DataFrame) -> pd.DataFrame:
+    """Sort stock-card views alphabetically by company/display name."""
+    if df is None or df.empty:
+        return pd.DataFrame() if df is None else df
+    out = normalize_columns(df).copy()
+    if "Company Name" in out.columns:
+        key = out["Company Name"].fillna(out.get("ticker", "")).astype(str).str.lower()
+    elif "ticker" in out.columns:
+        key = out["ticker"].fillna("").astype(str).str.replace(".NS", "", regex=False).str.lower()
+    else:
+        return out.reset_index(drop=True)
+    out["_alpha_sort_key"] = key
+    out = out.sort_values(["_alpha_sort_key"], ascending=True, na_position="last").drop(columns=["_alpha_sort_key"], errors="ignore")
+    return out.reset_index(drop=True)
+
+
+def _read_trending_file(path: Path) -> pd.DataFrame:
+    if not path.exists():
+        return pd.DataFrame()
+    try:
+        if path.suffix.lower() in {".xlsx", ".xls"}:
+            return pd.read_excel(path)
+        return pd.read_csv(path)
+    except Exception:
+        return pd.DataFrame()
+
+
+def load_trending_stocks(combined: pd.DataFrame, outdir: Path, limit: int = 20) -> pd.DataFrame:
+    """Load manually curated Trending Stocks from CSV/XLSX and return matched stock rows.
+
+    Supported locations, in priority order:
+    - outputs/trending_stocks.csv
+    - trending_stocks.csv beside this Streamlit file
+    - outputs/trending_stocks.xlsx
+    - trending_stocks.xlsx beside this Streamlit file
+
+    The dashboard takes the first `limit` tickers from the manual file, matches them
+    against vcp_combined_ranked.csv, then displays the matched cards alphabetically.
+    """
+    if combined.empty or "ticker" not in combined.columns:
+        return pd.DataFrame()
+
+    candidates = [
+        outdir / "trending_stocks.csv",
+        Path("trending_stocks.csv"),
+        outdir / "trending_stocks.xlsx",
+        Path("trending_stocks.xlsx"),
+    ]
+    raw = pd.DataFrame()
+    for path in candidates:
+        raw = _read_trending_file(path)
+        if not raw.empty:
+            break
+    if raw.empty:
+        return pd.DataFrame()
+
+    ticker_col = None
+    normalized_cols = {str(c).strip().lower().replace(" ", "_"): c for c in raw.columns}
+    for cand in ["ticker", "symbol", "stock", "stock_symbol", "nse_symbol"]:
+        if cand in normalized_cols:
+            ticker_col = normalized_cols[cand]
+            break
+    if ticker_col is None:
+        ticker_col = raw.columns[0]
+
+    tickers = []
+    seen = set()
+    for value in raw[ticker_col].dropna().tolist():
+        t = normalize_ticker_for_match(value)
+        if t and t not in seen:
+            seen.add(t)
+            tickers.append(t)
+        if len(tickers) >= limit:
+            break
+    if not tickers:
+        return pd.DataFrame()
+
+    combined_work = normalize_columns(combined).copy()
+    combined_work["_ticker_key"] = combined_work["ticker"].apply(normalize_ticker_for_match)
+    combined_work["_ticker_key_raw"] = combined_work["ticker"].astype(str).str.strip().str.upper()
+
+    frames = []
+    for order, ticker in enumerate(tickers, start=1):
+        match = combined_work[combined_work["_ticker_key"].eq(ticker)]
+        if match.empty:
+            raw_key = ticker.replace(".NS", "")
+            match = combined_work[combined_work["_ticker_key_raw"].str.replace(".NS", "", regex=False).eq(raw_key)]
+        if not match.empty:
+            row = match.head(1).copy()
+            row["trending_order"] = order
+            frames.append(row)
+    if not frames:
+        return pd.DataFrame()
+    out = pd.concat(frames, ignore_index=True).drop(columns=["_ticker_key", "_ticker_key_raw"], errors="ignore")
+    return sort_stock_cards_alpha(out)
+
+def build_new_stage2(combined: pd.DataFrame, changes: pd.DataFrame, history: pd.DataFrame, latest_date: str) -> pd.DataFrame:
+    if combined.empty:
+        return pd.DataFrame()
+    base = ensure_current_rank(combined).copy()
+    entered = set()
+    if not history.empty and "snapshot_date" in history.columns and "ticker" in history.columns and "stage" in history.columns:
+        hist = history.copy()
+        hist["snapshot_date"] = pd.to_datetime(hist["snapshot_date"], errors="coerce")
+        hist = hist.dropna(subset=["snapshot_date"])
+        if not hist.empty:
+            try:
+                latest_dt = pd.to_datetime(latest_date).normalize()
+            except Exception:
+                latest_dt = hist["snapshot_date"].max().normalize()
+            window_start = latest_dt - pd.Timedelta(days=21)
+            current_stage2 = set(base[base["stage"].astype(str).eq("Stage 2")]["ticker"].astype(str))
+            for ticker in current_stage2:
+                rows = hist[(hist["ticker"].astype(str) == ticker) & (hist["snapshot_date"] >= window_start)].sort_values("snapshot_date")
+                if not rows.empty and rows["stage"].astype(str).ne("Stage 2").any():
+                    entered.add(ticker)
+    if not entered and not changes.empty and "entered_stage_2" in changes.columns and "ticker" in changes.columns:
+        entered.update(changes[changes["entered_stage_2"].apply(boolish)]["ticker"].dropna().astype(str).tolist())
+    if not entered:
+        return pd.DataFrame()
+    out = base[base["ticker"].astype(str).isin(entered)].sort_values("current_rank", ascending=True, na_position="last").head(9).reset_index(drop=True)
+    return out
+
+
+def sectors_improved_count(industry_changes: pd.DataFrame, industry_table: pd.DataFrame) -> int:
+    df = industry_changes.copy() if not industry_changes.empty else pd.DataFrame()
+    if not df.empty:
+        df = normalize_columns(df)
+        improved = pd.Series(False, index=df.index)
+        if "rank_change" in df.columns:
+            improved = improved | (pd.to_numeric(df["rank_change"], errors="coerce") > 0)
+        if "current_rank" in df.columns and "prev_rank" in df.columns:
+            improved = improved | (pd.to_numeric(df["current_rank"], errors="coerce") < pd.to_numeric(df["prev_rank"], errors="coerce"))
+        if "Industry" in df.columns:
+            return int(df.loc[improved, "Industry"].dropna().astype(str).nunique())
+        return int(improved.sum())
+    if not industry_table.empty and "_Previous Rank Internal" in industry_table.columns:
+        improved = pd.to_numeric(industry_table["Current Rank"], errors="coerce") < pd.to_numeric(industry_table["_Previous Rank Internal"], errors="coerce")
+        return int(improved.fillna(False).sum())
+    return 0
+
+
+def build_reset_summary(new_stage2: pd.DataFrame, industry_changes: pd.DataFrame, industry_table: pd.DataFrame, interesting20: pd.DataFrame, previous_interesting: pd.DataFrame) -> dict:
+    current = set(interesting20.get("ticker", pd.Series(dtype=str)).dropna().astype(str))
+    previous = set(previous_interesting.get("ticker", pd.Series(dtype=str)).dropna().astype(str))
+    repeated = len(current & previous) if previous else 0
+    dropped = len(previous - current) if previous else 0
+    improved = sectors_improved_count(industry_changes, industry_table)
+    return {
+        "new_stage2": int(len(new_stage2)),
+        "sectors_improved": int(improved),
+        "repeated": int(repeated),
+        "dropped": int(dropped),
+    }
+
+
+def resolve_chart_path(chart_dir: Path, ticker: str, suffix: str):
+    if not chart_dir.exists():
+        return None
+    ticker = str(ticker).strip()
+    raw = ticker.replace(".NS", "")
+    candidates = []
+    for candidate in {
+        ticker, raw,
+        ticker.replace(".", "_"), raw.replace(".", "_"),
+        ticker.replace("&", "_"), raw.replace("&", "_"),
+        ticker.replace("&", "AND"), raw.replace("&", "AND"),
+        re.sub(r"[^A-Za-z0-9]+", "_", ticker),
+        re.sub(r"[^A-Za-z0-9]+", "_", raw),
+        re.sub(r"[^A-Za-z0-9]+", "", ticker),
+        re.sub(r"[^A-Za-z0-9]+", "", raw),
+    }:
+        if candidate:
+            candidates.append(candidate + suffix)
+    for name in candidates:
+        path = chart_dir / name
+        if path.exists():
+            return path
+    raw_key = re.sub(r"[^A-Za-z0-9]+", "", raw).lower()
+    for path in chart_dir.glob(f"*{suffix}"):
+        stem_key = re.sub(r"[^A-Za-z0-9]+", "", path.stem).lower()
+        if raw_key and raw_key in stem_key:
+            return path
+    return None
+
+
+def _chart_lookup_key(value: str) -> str:
+    return re.sub(r"[^A-Za-z0-9]+", "", str(value or "")).lower()
+
+
+def build_chart_index(chart_dir: Path, suffix: str) -> dict[str, str]:
+    """Index chart filenames once so every stock card does not scan the chart folder."""
+    if not chart_dir.exists():
+        return {}
+    index: dict[str, str] = {}
+    for path in chart_dir.glob(f"*{suffix}"):
+        stem = path.name[:-len(suffix)] if path.name.endswith(suffix) else path.stem
+        keys = {
+            path.name.lower(),
+            stem.lower(),
+            _chart_lookup_key(stem),
+            _chart_lookup_key(stem.replace("_", ".")),
+        }
+        for key in keys:
+            if key:
+                index.setdefault(key, str(path))
+    return index
+
+
+def resolve_chart_path_fast(ticker: str, suffix: str) -> Path | None:
+    ticker = str(ticker or "").strip()
+    raw = ticker.replace(".NS", "")
+    index = DAILY_CHART_INDEX if suffix == "_daily.png" else WEEKLY_CHART_INDEX
+    candidates = {
+        ticker, raw,
+        ticker.replace(".", "_"), raw.replace(".", "_"),
+        ticker.replace("&", "_"), raw.replace("&", "_"),
+        ticker.replace("&", "AND"), raw.replace("&", "AND"),
+        re.sub(r"[^A-Za-z0-9]+", "_", ticker),
+        re.sub(r"[^A-Za-z0-9]+", "_", raw),
+        re.sub(r"[^A-Za-z0-9]+", "", ticker),
+        re.sub(r"[^A-Za-z0-9]+", "", raw),
+    }
+    for candidate in candidates:
+        if not candidate:
+            continue
+        for key in [candidate.lower(), _chart_lookup_key(candidate)]:
+            path_str = index.get(key)
+            if path_str:
+                return Path(path_str)
+    raw_key = _chart_lookup_key(raw)
+    if raw_key:
+        for key, path_str in index.items():
+            if raw_key in key:
+                return Path(path_str)
+    return None
+
+
+@st.cache_data(show_spinner=False)
+def image_bytes(path: str, mtime_ns: int) -> bytes:
+    return Path(path).read_bytes()
+
+
+def get_chart_bytes(chart_dir: Path, ticker: str, suffix: str):
+    path = resolve_chart_path_fast(ticker, suffix)
+    if not path:
+        return None
+    try:
+        return image_bytes(str(path), path.stat().st_mtime_ns)
+    except Exception:
+        return None
+
+
+
+def _first_existing_column(df: pd.DataFrame, candidates: list[str]) -> str | None:
+    if df is None or df.empty:
+        return None
+    lower_map = {str(c).lower(): c for c in df.columns}
+    for candidate in candidates:
+        if candidate in df.columns:
+            return candidate
+        if candidate.lower() in lower_map:
+            return lower_map[candidate.lower()]
+    return None
+
+
+def build_top_movers(moves: pd.DataFrame, combined: pd.DataFrame, limit: int = 10) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Build top/bottom daily movers from stock_price_moves.csv, with a combined-output fallback."""
+    base = normalize_columns(moves.copy()) if moves is not None and not moves.empty else normalize_columns(combined.copy())
+    if base.empty:
+        return pd.DataFrame(), pd.DataFrame()
+
+    move_col = _first_existing_column(base, [
+        "change_1d_pct", "daily_move_pct", "day_change_pct", "move_1d_pct", "pct_change_1d",
+        "return_1d_pct", "daily_return_pct", "change_pct", "pct_change", "1d_change_pct",
+        "change_1d", "daily_change", "move_pct",
+    ])
+    if move_col is None:
+        return pd.DataFrame(), pd.DataFrame()
+
+    base["move_pct"] = pd.to_numeric(base[move_col], errors="coerce")
+    base = base.dropna(subset=["move_pct"]).copy()
+    if base.empty:
+        return pd.DataFrame(), pd.DataFrame()
+
+    # Enrich movers with the full combined output so mover cards look like the other stock cards.
+    if not combined.empty and "ticker" in base.columns and "ticker" in combined.columns:
+        enrich = normalize_columns(combined.drop_duplicates("ticker").copy())
+        if not enrich.empty:
+            base = base.merge(enrich, on="ticker", how="left", suffixes=("", "_combined"))
+            for col in enrich.columns:
+                if col == "ticker":
+                    continue
+                alt = f"{col}_combined"
+                if alt in base.columns:
+                    if col not in base.columns:
+                        base[col] = base[alt]
+                    else:
+                        base[col] = base[col].where(base[col].notna() & (base[col].astype(str).str.strip() != ""), base[alt])
+
+    base = base.drop_duplicates("ticker") if "ticker" in base.columns else base
+    top = base.sort_values("move_pct", ascending=False).head(limit).copy()
+    bottom = base.sort_values("move_pct", ascending=True).head(limit).copy()
+    return top.reset_index(drop=True), bottom.reset_index(drop=True)
+
+
+def format_move_pct(value) -> str:
+    val = pd.to_numeric(value, errors="coerce")
+    if pd.isna(val):
+        return "-"
+    return f"{float(val):+.2f}%"
+
+
+def render_movers_table(df: pd.DataFrame, title: str):
+    st.markdown(f'<div class="kicker">{h(title)}</div>', unsafe_allow_html=True)
+    if df.empty:
+        st.info("Top mover data is not available from the current output yet.")
+        return
+    display = df.copy()
+    display["Stock"] = display.apply(stock_display_name, axis=1)
+    if "Industry" in display.columns:
+        display["Industry"] = display["Industry"].apply(lambda x: f"{industry_icon(str(x))} {x}" if str(x).strip() else "-")
+    else:
+        display["Industry"] = "-"
+    display["Move"] = display["move_pct"].apply(format_move_pct)
+    cols = ["Stock", "Industry", "Move"]
+    st.dataframe(display[cols], use_container_width=True, hide_index=True, height=385)
+
+def stock_display_name(row: pd.Series) -> str:
+    company = str(row.get("Company Name", "") or "").strip()
+    ticker = str(row.get("ticker", "") or "").replace(".NS", "").strip()
+    if company and ticker:
+        return f"{company} ({ticker})"
+    return company or ticker or "Stock"
+
+
+def _volume_ratio_label(ratio: float, basis: str) -> str:
+    ratio = float(ratio)
+    if ratio >= 1.2:
+        return f"Current Volume: {ratio:.1f}x Above {basis}"
+    if ratio <= 0.8:
+        return f"Current Volume: {ratio:.1f}x Below {basis}"
+    return f"Current Volume: Near {basis} ({ratio:.1f}x)"
+
+
+def volume_text(row: pd.Series, chart_mode: str = "Daily") -> str:
+    """Card volume text.
+
+    Daily card: current day volume / previous 30-day average.
+    Weekly card: latest 5 trading days volume / previous 10 completed-week average.
+    """
+    mode = str(chart_mode or "Daily").strip().lower()
+    if mode == "weekly":
+        ratio = pd.to_numeric(row.get("weekly_volume_ratio"), errors="coerce")
+        if pd.isna(ratio):
+            return "Current Volume: not available"
+        return _volume_ratio_label(float(ratio), "10-Week Average")
+
+    ratio = pd.to_numeric(row.get("breakout_volume_ratio"), errors="coerce")
+    if pd.isna(ratio):
+        return "Current Volume: not available"
+    return _volume_ratio_label(float(ratio), "30-Day Average")
+
+
+def rs_text(value, months: str) -> str:
+    val = pd.to_numeric(value, errors="coerce")
+    label_map = {"3m": "3 Months", "6m": "6 Months", "1m": "1 Month", "12m": "12 Months"}
+    label = label_map.get(str(months).strip().lower(), str(months))
+    if pd.isna(val):
+        return f"Nifty Relative: not available for {label}"
+    arrow = "↑" if float(val) >= 0 else "↓"
+    verb = "Outperformed" if float(val) >= 0 else "Underperformed"
+    return f"{verb} {arrow} Nifty : {abs(float(val)):.1f}% in {label}"
+
+
+def safe_key(text: str) -> str:
+    return re.sub(r"[^A-Za-z0-9_]+", "_", str(text))[:80]
+
+
+def rerun():
+    if hasattr(st, "rerun"):
+        st.rerun()
+    if hasattr(st, "experimental_rerun"):
+        st.experimental_rerun()
 
 
 def render_metric(title: str, value: str, subtitle: str = ""):
@@ -1436,29 +1887,9 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
     chart_mode = st.session_state.get(mode_key, "Daily")
     chart_dir = daily_dir if chart_mode == "Daily" else weekly_dir
     suffix = "_daily.png" if chart_mode == "Daily" else "_weekly.png"
-
-    archive_date = str(row.get("_archive_date", "") or "").strip()
-    using_archive_chart = False
-    if archive_date:
-        archived_chart_dir = OUTPUT_DIR / ARCHIVE_DIRNAME / archive_date / "charts" / ("daily" if chart_mode == "Daily" else "weekly")
-        archived_chart = get_chart_bytes(archived_chart_dir, ticker, suffix) if ticker else None
-        if archived_chart is not None:
-            chart = archived_chart
-            using_archive_chart = True
-        else:
-            chart = get_chart_bytes(chart_dir, ticker, suffix) if ticker else None
-    else:
-        chart = get_chart_bytes(chart_dir, ticker, suffix) if ticker else None
+    chart = get_chart_bytes(chart_dir, ticker, suffix) if ticker else None
 
     badges = list(freshness_badges or [])
-    if archive_date:
-        try:
-            asof = pd.to_datetime(archive_date).strftime("%d-%b-%y")
-        except Exception:
-            asof = archive_date
-        badges.insert(0, (f"As of {asof}", "rank"))
-        if not using_archive_chart:
-            badges.append(("Latest chart shown", "weak"))
     if is_fo_row(row):
         badges.insert(0, ("F&O", "fo"))
     industry_match_key = industry_key(industry_raw)
@@ -1576,6 +2007,25 @@ def render_connect_feedback_section():
         )
         st.caption(f"This opens your email app addressed to {FEEDBACK_EMAIL}. Please press Send in your email app.")
 
+
+
+# Safety helper: some deployed builds call sort_stock_cards_alpha before the helper is present.
+# Keeping this guard here prevents NameError while preserving the same alphabetical behavior.
+if "sort_stock_cards_alpha" not in globals():
+    def sort_stock_cards_alpha(df: pd.DataFrame) -> pd.DataFrame:
+        """Sort stock-card views alphabetically by company/display name."""
+        if df is None or df.empty:
+            return pd.DataFrame() if df is None else df
+        out = normalize_columns(df).copy()
+        if "Company Name" in out.columns:
+            key = out["Company Name"].fillna(out.get("ticker", "")).astype(str).str.lower()
+        elif "ticker" in out.columns:
+            key = out["ticker"].fillna("").astype(str).str.replace(".NS", "", regex=False).str.lower()
+        else:
+            return out.reset_index(drop=True)
+        out["_alpha_sort_key"] = key
+        out = out.sort_values(["_alpha_sort_key"], ascending=True, na_position="last").drop(columns=["_alpha_sort_key"], errors="ignore")
+        return out.reset_index(drop=True)
 
 combined, daily_df, weekly_df, industry, changes, industry_changes, moves, regime, history = load_outputs(OUTPUT_DIR)
 
