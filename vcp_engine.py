@@ -57,6 +57,8 @@ DEFAULT_CONFIG = {
     "history_init_enabled": False,
     "history_init_lookback_trading_days": 63,
     "max_price_rows": 620,
+    # Public stage-state memory. Prevents 1-day Stage 1/2/1 flicker and keeps failed Stage 2 visible briefly.
+    "stage2_failed_hold_days": 21,
 }
 
 @dataclass
@@ -913,7 +915,7 @@ def determine_stage(close: pd.Series, ma50: float, ma150: float, ma200: float) -
     """
     c = close.dropna().astype(float)
     if len(c) < 260:
-        return "Unknown"
+        return "Not Sure"
 
     def finite(x) -> bool:
         return pd.notna(x) and np.isfinite(float(x))
@@ -1125,7 +1127,7 @@ def determine_stage(close: pd.Series, ma50: float, ma150: float, ma200: float) -
      # Conservative fallback.
     if below_200 and (ma200_falling or weekly_bear):
         return "Stage 4"
-    return "Stage 1"
+    return "Not Sure"
 
 
 def determine_stage_details(close: pd.Series, ma50: float, ma150: float, ma200: float) -> Tuple[str, str, float, str]:
@@ -1137,8 +1139,8 @@ def determine_stage_details(close: pd.Series, ma50: float, ma150: float, ma200: 
     """
     stage = determine_stage(close, ma50, ma150, ma200)
     c = close.dropna().astype(float)
-    if len(c) < 260 or stage == "Unknown":
-        return stage, "Unknown", 0.0, "Not enough price history for reliable stage variant."
+    if len(c) < 260 or stage in {"Unknown", "Not Sure"}:
+        return "Not Sure", "Not Sure", 0.0, "Not enough price history for reliable stage classification."
 
     def finite(x) -> bool:
         return pd.notna(x) and np.isfinite(float(x))
@@ -2167,7 +2169,7 @@ def _clean_stock_snapshot(df: Optional[pd.DataFrame]) -> pd.DataFrame:
         if col not in out.columns:
             out[col] = pd.NA
     keep_cols = [
-        "ticker", "Company Name", "Industry", "sector", "is_fo_stock", "fo_category", "Include", "stage", "stage_variant", "stage_confidence", "stage_reason", "daily_setup_bucket", "weekly_setup_bucket", "combined_bucket",
+        "ticker", "Company Name", "Industry", "sector", "is_fo_stock", "fo_category", "Include", "stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "daily_setup_bucket", "weekly_setup_bucket", "combined_bucket",
         "daily_score", "weekly_score", "combined_score", "industry_boost", "final_daily_score", "final_weekly_score",
         "final_combined_score", "rs_3m_pct", "rs_6m_pct", "avg_turnover_inr", "notes",
     ]
@@ -2244,6 +2246,144 @@ def build_industry_changes(current_df: pd.DataFrame, previous_df: Optional[pd.Da
 
 
 
+
+def _read_existing_stage_history(out_path: Path) -> pd.DataFrame:
+    history_file = out_path / "stage_action_history.csv"
+    if not history_file.exists():
+        return pd.DataFrame()
+    try:
+        hist = pd.read_csv(history_file, parse_dates=["snapshot_date"])
+        if "snapshot_date" in hist.columns:
+            hist["snapshot_date"] = pd.to_datetime(hist["snapshot_date"], errors="coerce").dt.tz_localize(None).dt.normalize()
+        return hist.dropna(subset=["snapshot_date", "ticker"])
+    except Exception:
+        return pd.DataFrame()
+
+
+def _latest_stage_map_from_history(history_df: pd.DataFrame) -> Dict[str, str]:
+    if history_df is None or history_df.empty or "ticker" not in history_df.columns or "stage" not in history_df.columns:
+        return {}
+    hist = history_df.copy().dropna(subset=["ticker"])
+    hist["ticker"] = hist["ticker"].astype(str).str.upper().str.strip()
+    hist = hist.sort_values(["snapshot_date", "ticker"])
+    latest = hist.drop_duplicates("ticker", keep="last")
+    return dict(zip(latest["ticker"], latest["stage"].astype(str)))
+
+
+def _last_stage2_date_map(history_df: pd.DataFrame) -> Dict[str, pd.Timestamp]:
+    if history_df is None or history_df.empty or "ticker" not in history_df.columns or "stage" not in history_df.columns:
+        return {}
+    hist = history_df.copy().dropna(subset=["ticker"])
+    hist["ticker"] = hist["ticker"].astype(str).str.upper().str.strip()
+    stage_text = hist["stage"].astype(str)
+    raw_text = hist["stage_raw"].astype(str) if "stage_raw" in hist.columns else stage_text
+    stage2_rows = hist[(stage_text == "Stage 2") | (raw_text == "Stage 2")].copy()
+    if stage2_rows.empty:
+        return {}
+    stage2_rows = stage2_rows.sort_values(["snapshot_date", "ticker"])
+    latest = stage2_rows.drop_duplicates("ticker", keep="last")
+    return dict(zip(latest["ticker"], pd.to_datetime(latest["snapshot_date"], errors="coerce")))
+
+
+def _previous_stage_map_from_combined(prev_combined: Optional[pd.DataFrame]) -> Dict[str, str]:
+    if prev_combined is None or prev_combined.empty or "ticker" not in prev_combined.columns or "stage" not in prev_combined.columns:
+        return {}
+    prev = prev_combined.copy().dropna(subset=["ticker"])
+    prev["ticker"] = prev["ticker"].astype(str).str.upper().str.strip()
+    prev = prev.drop_duplicates("ticker", keep="last")
+    return dict(zip(prev["ticker"], prev["stage"].astype(str)))
+
+
+def _append_note(existing: object, note: str) -> str:
+    text = "" if pd.isna(existing) else str(existing).strip()
+    if not text:
+        return note
+    if note in text:
+        return text
+    return f"{text} | {note}"
+
+
+def apply_stage_state_memory(
+    current_df: pd.DataFrame,
+    out_path: Path,
+    prev_combined: Optional[pd.DataFrame],
+    config: dict,
+) -> pd.DataFrame:
+    """Apply public stage-state memory after raw chart classification.
+
+    Raw chart classification remains in `stage_raw`. Public `stage` gets a small state layer:
+    - no unidentified fallback: raw uncertainty remains Not Sure;
+    - if a recent Stage 2 breaks, publish Stage 2 Failed for a cooling window;
+    - this prevents misleading one-day Stage 1 -> Stage 2 -> Stage 1 flicker.
+    """
+    if current_df is None or current_df.empty or "ticker" not in current_df.columns or "stage" not in current_df.columns:
+        return current_df
+
+    out = current_df.copy()
+    out["stage_raw"] = out["stage"].astype(str)
+    if "stage_state_reason" not in out.columns:
+        out["stage_state_reason"] = ""
+    if "stage_failed_since" not in out.columns:
+        out["stage_failed_since"] = ""
+    if "last_stage2_date" not in out.columns:
+        out["last_stage2_date"] = ""
+
+    history_df = _read_existing_stage_history(out_path)
+    prior_stage = _latest_stage_map_from_history(history_df)
+    prior_stage.update({k: v for k, v in _previous_stage_map_from_combined(prev_combined).items() if k not in prior_stage})
+    last_stage2 = _last_stage2_date_map(history_df)
+
+    # If only yesterday's combined file exists and history was not initialized yet, still catch Stage 2 breaks.
+    if prev_combined is not None and not prev_combined.empty and "ticker" in prev_combined.columns and "stage" in prev_combined.columns:
+        yesterday = pd.Timestamp.now(tz="Asia/Kolkata").normalize().tz_localize(None) - pd.Timedelta(days=1)
+        for _, row in prev_combined.iterrows():
+            ticker = str(row.get("ticker", "")).upper().strip()
+            if ticker and str(row.get("stage", "")) == "Stage 2" and ticker not in last_stage2:
+                last_stage2[ticker] = yesterday
+
+    today = pd.Timestamp.now(tz="Asia/Kolkata").normalize().tz_localize(None)
+    hold_days = int(config.get("stage2_failed_hold_days", 21) or 21)
+
+    for idx, row in out.iterrows():
+        ticker = str(row.get("ticker", "")).upper().strip()
+        raw_stage = str(row.get("stage_raw", "Not Sure") or "Not Sure").strip()
+        prev_stage = str(prior_stage.get(ticker, "") or "").strip()
+        last_s2 = last_stage2.get(ticker)
+        days_since_s2 = None
+        if pd.notna(last_s2):
+            try:
+                days_since_s2 = int((today - pd.Timestamp(last_s2).normalize()).days)
+                out.at[idx, "last_stage2_date"] = pd.Timestamp(last_s2).date().isoformat()
+            except Exception:
+                days_since_s2 = None
+
+        recently_stage2 = days_since_s2 is not None and days_since_s2 <= hold_days
+        broke_from_stage2 = (
+            raw_stage != "Stage 2"
+            and (prev_stage == "Stage 2" or (prev_stage == "Stage 2 Failed" and recently_stage2) or recently_stage2)
+        )
+
+        if broke_from_stage2:
+            out.at[idx, "stage"] = "Stage 2 Failed"
+            out.at[idx, "stage_variant"] = "Failed Stage 2"
+            out.at[idx, "stage_confidence"] = 0.72
+            if not str(row.get("stage_failed_since", "") or "").strip():
+                out.at[idx, "stage_failed_since"] = today.date().isoformat()
+            out.at[idx, "stage_reason"] = (
+                "This stock was recently Stage 2, but the latest structure no longer satisfies Stage 2 rules. "
+                "It is kept as Stage 2 Failed until a fresh base/repair structure forms."
+            )
+            out.at[idx, "stage_state_reason"] = "Recent Stage 2 break; public stage held as Stage 2 Failed."
+            out.at[idx, "notes"] = _append_note(row.get("notes", ""), "Stage 2 failed state applied from stage memory.")
+        elif raw_stage in {"Unknown", "", "nan", "None"}:
+            out.at[idx, "stage"] = "Not Sure"
+            out.at[idx, "stage_variant"] = "Not Sure"
+            out.at[idx, "stage_confidence"] = 0.0
+            out.at[idx, "stage_reason"] = "Stage rules did not identify a reliable structure."
+            out.at[idx, "stage_state_reason"] = "No confident stage classification."
+
+    return out
+
 def _ensure_rank_column_for_snapshot(df: pd.DataFrame, score_col: str = "final_combined_score") -> pd.DataFrame:
     """Ensure stable dataset rank: 1 = strongest row by score."""
     if df is None or df.empty:
@@ -2266,7 +2406,7 @@ def _interesting_priority(row: pd.Series) -> float:
     daily_bucket = str(row.get("daily_setup_bucket", ""))
     weekly_bucket = str(row.get("weekly_setup_bucket", ""))
 
-    priority += {"Stage 2": 30, "Stage 1": 12, "Stage 3": 6, "Stage 4": 0}.get(stage, 4)
+    priority += {"Stage 2": 30, "Stage 1": 12, "Stage 2 Failed": 5, "Stage 3": 6, "Stage 4": 0, "Not Sure": 1}.get(stage, 1)
     priority += {
         "high_conviction_breakout": 70,
         "high_conviction_near_pivot": 62,
@@ -2326,7 +2466,7 @@ def build_interesting20_snapshot(combined_df: pd.DataFrame, limit: int = 20, top
     pool = pool.sort_values(sort_cols, ascending=ascending, na_position="last").head(limit).copy()
     pool["snapshot_date"] = pd.Timestamp.now(tz="Asia/Kolkata").date().isoformat()
     keep = [c for c in [
-        "snapshot_date", "ticker", "Company Name", "Industry", "stage", "current_rank",
+        "snapshot_date", "ticker", "Company Name", "Industry", "stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "current_rank",
         "interesting_priority", "daily_setup_bucket", "weekly_setup_bucket", "combined_bucket",
         "final_combined_score", "daily_breakout_distance_pct", "weekly_breakout_distance_pct",
         "rs_3m_pct", "rs_6m_pct", "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio",
@@ -2427,8 +2567,11 @@ def build_outputs(
     industry_df = build_industry_strength_table(final_report)
     final_report = apply_industry_boost(final_report, industry_df, cfg)
 
+    prev_combined_for_stage_memory = pd.read_csv(out_path / "vcp_combined_ranked.csv") if (out_path / "vcp_combined_ranked.csv").exists() else None
+    final_report = apply_stage_state_memory(final_report, out_path, prev_combined_for_stage_memory, cfg)
+
     metadata_cols = ["sector", "industry_group", "is_fo_stock", "fo_category", "Include"]
-    common_cols = ["ticker", "Company Name", "Industry"] + metadata_cols + ["stage", "stage_variant", "stage_confidence", "stage_reason", "rs_3m_pct", "rs_6m_pct", "avg_turnover_inr", "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up", "notes"]
+    common_cols = ["ticker", "Company Name", "Industry"] + metadata_cols + ["stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "rs_3m_pct", "rs_6m_pct", "avg_turnover_inr", "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up", "notes"]
     daily_cols = common_cols + ["daily_setup_bucket", "daily_score", "final_daily_score", "daily_pivot", "daily_breakout_distance_pct", "daily_contraction_depths_pct", "daily_contraction_durations", "daily_contraction_score", "daily_base_duration_days"]
     weekly_cols = common_cols + ["weekly_setup_bucket", "weekly_score", "final_weekly_score", "weekly_pivot", "weekly_breakout_distance_pct", "weekly_contraction_depths_pct", "weekly_contraction_durations", "weekly_contraction_score", "weekly_base_duration_weeks", "weekly_vcp_quality"]
     combined_cols = common_cols + ["daily_setup_bucket", "weekly_setup_bucket", "combined_bucket", "daily_score", "weekly_score", "combined_score", "industry_boost", "final_combined_score"]
@@ -2550,6 +2693,10 @@ def build_price_moves(current_df: pd.DataFrame, price_data: Dict[str, pd.DataFra
 
 
 def derive_public_action(stage: str, combined_bucket: str, score: float) -> str:
+    if stage == "Stage 2 Failed":
+        return "Failed Stage 2"
+    if stage == "Not Sure":
+        return "Not Sure"
     if stage == "Stage 2":
         if combined_bucket in {"high_conviction_breakout", "high_conviction_near_pivot"} and score >= 70:
             return "Strong Structure"
@@ -2563,6 +2710,10 @@ def derive_public_action(stage: str, combined_bucket: str, score: float) -> str:
     return "Mixed"
 
 def derive_super_action(stage: str, combined_bucket: str, score: float) -> str:
+    if stage == "Stage 2 Failed":
+        return "Avoid / Wait for new base"
+    if stage == "Not Sure":
+        return "No Action"
     if stage == "Stage 2":
         if combined_bucket == "high_conviction_breakout" and score >= 72:
             return "Buy"
@@ -2587,7 +2738,7 @@ def build_stage_action_history_snapshot(snapshot_df: pd.DataFrame, snapshot_date
     out["public_action"] = out.apply(lambda r: derive_public_action(str(r.get("stage", "")), str(r.get("combined_bucket", "")), float(pd.to_numeric(r.get(score_col), errors="coerce") if pd.notna(pd.to_numeric(r.get(score_col), errors="coerce")) else 0.0)), axis=1)
     out["super_action"] = out.apply(lambda r: derive_super_action(str(r.get("stage", "")), str(r.get("combined_bucket", "")), float(pd.to_numeric(r.get(score_col), errors="coerce") if pd.notna(pd.to_numeric(r.get(score_col), errors="coerce")) else 0.0)), axis=1)
     keep_cols = [c for c in [
-        "snapshot_date", "ticker", "Company Name", "Industry", "sector", "is_fo_stock", "fo_category", "stage", "stage_variant", "stage_confidence", "stage_reason", "combined_bucket", score_col,
+        "snapshot_date", "ticker", "Company Name", "Industry", "sector", "is_fo_stock", "fo_category", "stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "combined_bucket", score_col,
         "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up",
         "public_action", "super_action"
     ] if c in out.columns]
