@@ -430,6 +430,33 @@ div[role="radiogroup"] label:has(input:checked) span {
   }
 }
 
+
+.stock-number-badge {
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:1.72rem;
+  height:1.72rem;
+  margin-right:0.42rem;
+  border-radius:999px;
+  font-size:0.84rem;
+  font-weight:950;
+  line-height:1;
+  color:#122033;
+  background:rgba(255,214,102,0.82);
+  border:1px solid rgba(196,122,0,0.28);
+  box-shadow:0 4px 12px rgba(31,56,88,0.08);
+  vertical-align:middle;
+}
+@media (max-width: 520px) {
+  .stock-number-badge {
+    min-width:1.55rem;
+    height:1.55rem;
+    margin-right:0.34rem;
+    font-size:0.78rem;
+  }
+}
+
 </style>
 """,
     unsafe_allow_html=True,
@@ -2452,9 +2479,10 @@ def industry_strength_label(industry_raw: str) -> tuple[str, str]:
         return "Industry Strength: Weak", "weak"
     return "Industry Strength: Neutral", "rank"
 
-def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Path, freshness_badges: list[tuple[str, str]] | None = None, streak: int | None = None, default_chart_mode: str = "Weekly"):
+def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Path, freshness_badges: list[tuple[str, str]] | None = None, streak: int | None = None, default_chart_mode: str = "Weekly", display_idx: int | None = None):
     ticker = str(row.get("ticker", "") or "").strip()
     key = safe_key(ticker or f"row_{idx}")
+    display_num = int(display_idx if display_idx is not None else idx)
     mode_scope = "top_movers" if str(default_chart_mode).lower() == "daily" else "default"
     mode_key = f"chart_mode_{mode_scope}_{key}"
     if mode_key not in st.session_state:
@@ -2520,7 +2548,7 @@ def render_stock_card(row: pd.Series, idx: int, daily_dir: Path, weekly_dir: Pat
 <div class="stock-card">
   <div class="stock-head">
     <div>
-      <div class="stock-name"><span class="stock-title-gold">{h(name)}</span> <span class="black-text">— {h(stage)}</span></div>
+      <div class="stock-name"><span class="stock-number-badge">{display_num}</span><span class="stock-title-gold">{h(name)}</span> <span class="black-text">— {h(stage)}</span></div>
       <div class="stock-meta">Industry: {h(industry)}</div>
       {extra_meta_line}
 
@@ -2791,11 +2819,11 @@ if list_choice == "Top Movers":
         if not top_movers.empty:
             st.markdown('<div class="stage-section-card"><div class="stage-section-title">Top 10 movers</div></div>', unsafe_allow_html=True)
             for i, (_, row) in enumerate(top_movers.head(10).iterrows(), start=1):
-                render_stock_card(row, i, daily_dir, weekly_dir, [(f"Move: {format_move_pct(row.get('move_pct'))}", "new")], default_chart_mode="Daily")
+                render_stock_card(row, i, daily_dir, weekly_dir, [(f"Move: {format_move_pct(row.get('move_pct'))}", "new")], default_chart_mode="Daily", display_idx=i)
         if not bottom_movers.empty:
             st.markdown('<div class="stage-section-card"><div class="stage-section-title">Bottom 10 movers</div></div>', unsafe_allow_html=True)
             for i, (_, row) in enumerate(bottom_movers.head(10).iterrows(), start=1):
-                render_stock_card(row, i + 100, daily_dir, weekly_dir, [(f"Move: {format_move_pct(row.get('move_pct'))}", "drop")], default_chart_mode="Daily")
+                render_stock_card(row, i + 100, daily_dir, weekly_dir, [(f"Move: {format_move_pct(row.get('move_pct'))}", "drop")], default_chart_mode="Daily", display_idx=i)
 else:
     view_df = views.get(list_choice, pd.DataFrame())
     if view_df.empty:
@@ -2819,7 +2847,7 @@ else:
                 badges.append(("Entered Stage 2 recently", "stage2"))
             elif list_choice == "Last week Interesting 20 Stock":
                 pass
-            render_stock_card(row, i, daily_dir, weekly_dir, badges, streak)
+            render_stock_card(row, i, daily_dir, weekly_dir, badges, streak, display_idx=i)
 
 liked_count = len(st.session_state.get("liked_tickers", []))
 st.markdown(
