@@ -59,6 +59,12 @@ DEFAULT_CONFIG = {
     "max_price_rows": 620,
     # Public stage-state memory. Prevents 1-day Stage 1/2/1 flicker and keeps failed Stage 2 visible briefly.
     "stage2_failed_hold_days": 21,
+    # Minimum daily runs before public promotion into a new advancing stage.
+    "stage_transition_confirm_days": 3,
+    "stage2_entry_confirm_days": 3,
+    # A stock cannot publicly move Stage 4 -> Stage 2 without first showing Stage 1/base repair.
+    "stage4_to_stage2_min_stage1_days": 3,
+    "enforce_no_stage_jumps": True,
 }
 
 @dataclass
@@ -2169,7 +2175,7 @@ def _clean_stock_snapshot(df: Optional[pd.DataFrame]) -> pd.DataFrame:
         if col not in out.columns:
             out[col] = pd.NA
     keep_cols = [
-        "ticker", "Company Name", "Industry", "sector", "is_fo_stock", "fo_category", "Include", "stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "daily_setup_bucket", "weekly_setup_bucket", "combined_bucket",
+        "ticker", "Company Name", "Industry", "sector", "is_fo_stock", "fo_category", "Include", "stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "stage_pending_raw", "daily_setup_bucket", "weekly_setup_bucket", "combined_bucket",
         "daily_score", "weekly_score", "combined_score", "industry_boost", "final_daily_score", "final_weekly_score",
         "final_combined_score", "rs_3m_pct", "rs_6m_pct", "avg_turnover_inr", "notes",
     ]
@@ -2303,6 +2309,139 @@ def _append_note(existing: object, note: str) -> str:
     return f"{text} | {note}"
 
 
+def _history_stage_col(history_df: pd.DataFrame) -> str:
+    if history_df is not None and not history_df.empty and "stage_raw" in history_df.columns:
+        return "stage_raw"
+    return "stage"
+
+
+def _ticker_history(history_df: pd.DataFrame, ticker: str) -> pd.DataFrame:
+    if history_df is None or history_df.empty or "ticker" not in history_df.columns:
+        return pd.DataFrame()
+    t = str(ticker or "").upper().strip()
+    hist = history_df.copy()
+    hist["ticker"] = hist["ticker"].astype(str).str.upper().str.strip()
+    hist = hist[hist["ticker"].eq(t)].copy()
+    if hist.empty:
+        return hist
+    if "snapshot_date" in hist.columns:
+        hist["snapshot_date"] = pd.to_datetime(hist["snapshot_date"], errors="coerce")
+        hist = hist.dropna(subset=["snapshot_date"]).sort_values("snapshot_date")
+    return hist
+
+
+def _consecutive_raw_stage_runs(history_df: pd.DataFrame, prev_combined: Optional[pd.DataFrame], ticker: str, target_stage: str) -> int:
+    """Count prior consecutive daily runs where raw stage matched target_stage.
+
+    Current day is intentionally NOT counted here. Caller should add 1 when today's raw stage matches.
+    """
+    target = str(target_stage or "").strip()
+    if not target:
+        return 0
+
+    records: List[Tuple[pd.Timestamp, str]] = []
+    hist = _ticker_history(history_df, ticker)
+    if not hist.empty:
+        col = _history_stage_col(hist)
+        for _, r in hist.iterrows():
+            dt = pd.to_datetime(r.get("snapshot_date"), errors="coerce")
+            stg = str(r.get(col, r.get("stage", "")) or "").strip()
+            if pd.notna(dt) and stg:
+                records.append((pd.Timestamp(dt).normalize(), stg))
+
+    if prev_combined is not None and not prev_combined.empty and "ticker" in prev_combined.columns:
+        prev = prev_combined.copy()
+        prev["ticker"] = prev["ticker"].astype(str).str.upper().str.strip()
+        row = prev[prev["ticker"].eq(str(ticker or "").upper().strip())]
+        if not row.empty:
+            r = row.iloc[-1]
+            stg = str(r.get("stage_raw", r.get("stage", "")) or "").strip()
+            if stg:
+                # Use a synthetic timestamp after history, so it contributes if history is missing/not initialized.
+                records.append((pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None).normalize() - pd.Timedelta(hours=1), stg))
+
+    if not records:
+        return 0
+
+    # Deduplicate by timestamp and walk backward from latest.
+    df = pd.DataFrame(records, columns=["dt", "stage"])
+    df = df.dropna(subset=["dt"]).sort_values("dt").drop_duplicates("dt", keep="last")
+    count = 0
+    for stg in reversed(df["stage"].tolist()):
+        if stg == target:
+            count += 1
+        else:
+            break
+    return count
+
+
+def _consecutive_public_stage_runs(history_df: pd.DataFrame, prev_combined: Optional[pd.DataFrame], ticker: str, target_stage: str) -> int:
+    target = str(target_stage or "").strip()
+    if not target:
+        return 0
+    records: List[Tuple[pd.Timestamp, str]] = []
+    hist = _ticker_history(history_df, ticker)
+    if not hist.empty:
+        for _, r in hist.iterrows():
+            dt = pd.to_datetime(r.get("snapshot_date"), errors="coerce")
+            stg = str(r.get("stage", "") or "").strip()
+            if pd.notna(dt) and stg:
+                records.append((pd.Timestamp(dt).normalize(), stg))
+    if prev_combined is not None and not prev_combined.empty and "ticker" in prev_combined.columns and "stage" in prev_combined.columns:
+        prev = prev_combined.copy()
+        prev["ticker"] = prev["ticker"].astype(str).str.upper().str.strip()
+        row = prev[prev["ticker"].eq(str(ticker or "").upper().strip())]
+        if not row.empty:
+            records.append((pd.Timestamp.now(tz="Asia/Kolkata").tz_localize(None).normalize() - pd.Timedelta(hours=1), str(row.iloc[-1].get("stage", "") or "").strip()))
+    if not records:
+        return 0
+    df = pd.DataFrame(records, columns=["dt", "stage"])
+    df = df.dropna(subset=["dt"]).sort_values("dt").drop_duplicates("dt", keep="last")
+    count = 0
+    for stg in reversed(df["stage"].tolist()):
+        if stg == target:
+            count += 1
+        else:
+            break
+    return count
+
+
+def _seen_public_stage_since_last(history_df: pd.DataFrame, ticker: str, last_stage: str, required_stage: str) -> bool:
+    hist = _ticker_history(history_df, ticker)
+    if hist.empty or "stage" not in hist.columns:
+        return False
+    stages = hist["stage"].astype(str).tolist()
+    last_idx = None
+    for i, stg in enumerate(stages):
+        if stg == last_stage:
+            last_idx = i
+    if last_idx is None:
+        return False
+    return any(stg == required_stage for stg in stages[last_idx + 1:])
+
+
+def _stage_number(stage: str) -> Optional[int]:
+    text = str(stage or "").strip()
+    if text == "Stage 1":
+        return 1
+    if text == "Stage 2":
+        return 2
+    if text == "Stage 3":
+        return 3
+    if text == "Stage 4":
+        return 4
+    return None
+
+
+def _set_pending_stage(out: pd.DataFrame, idx: int, row: pd.Series, raw_stage: str, reason: str) -> None:
+    out.at[idx, "stage"] = "Not Sure"
+    out.at[idx, "stage_variant"] = f"Pending {raw_stage}" if raw_stage else "Pending Confirmation"
+    out.at[idx, "stage_confidence"] = min(float(pd.to_numeric(row.get("stage_confidence"), errors="coerce") or 0.0), 0.55)
+    out.at[idx, "stage_reason"] = reason
+    out.at[idx, "stage_state_reason"] = reason
+    out.at[idx, "notes"] = _append_note(row.get("notes", ""), reason)
+
+
 def apply_stage_state_memory(
     current_df: pd.DataFrame,
     out_path: Path,
@@ -2311,42 +2450,48 @@ def apply_stage_state_memory(
 ) -> pd.DataFrame:
     """Apply public stage-state memory after raw chart classification.
 
-    Raw chart classification remains in `stage_raw`. Public `stage` gets a small state layer:
-    - no unidentified fallback: raw uncertainty remains Not Sure;
-    - if a recent Stage 2 breaks, publish Stage 2 Failed for a cooling window;
-    - this prevents misleading one-day Stage 1 -> Stage 2 -> Stage 1 flicker.
+    This is the trust layer. Raw chart classification remains in `stage_raw`; public `stage`
+    is smoothed using a simple state machine:
+    - no unidentified fallback: uncertainty is Not Sure;
+    - no direct Stage 4 -> Stage 2 public jump;
+    - Stage 2 entry needs repeated confirmation runs;
+    - failed Stage 2 remains visible before a new base/repair stage is accepted.
     """
     if current_df is None or current_df.empty or "ticker" not in current_df.columns or "stage" not in current_df.columns:
         return current_df
 
     out = current_df.copy()
     out["stage_raw"] = out["stage"].astype(str)
-    if "stage_state_reason" not in out.columns:
-        out["stage_state_reason"] = ""
-    if "stage_failed_since" not in out.columns:
-        out["stage_failed_since"] = ""
-    if "last_stage2_date" not in out.columns:
-        out["last_stage2_date"] = ""
+    for col in ["stage_state_reason", "stage_failed_since", "last_stage2_date", "stage_pending_raw"]:
+        if col not in out.columns:
+            out[col] = ""
 
     history_df = _read_existing_stage_history(out_path)
     prior_stage = _latest_stage_map_from_history(history_df)
+    # If stage_action_history is absent/stale, yesterday's combined file is still useful.
     prior_stage.update({k: v for k, v in _previous_stage_map_from_combined(prev_combined).items() if k not in prior_stage})
     last_stage2 = _last_stage2_date_map(history_df)
 
-    # If only yesterday's combined file exists and history was not initialized yet, still catch Stage 2 breaks.
     if prev_combined is not None and not prev_combined.empty and "ticker" in prev_combined.columns and "stage" in prev_combined.columns:
         yesterday = pd.Timestamp.now(tz="Asia/Kolkata").normalize().tz_localize(None) - pd.Timedelta(days=1)
-        for _, row in prev_combined.iterrows():
-            ticker = str(row.get("ticker", "")).upper().strip()
-            if ticker and str(row.get("stage", "")) == "Stage 2" and ticker not in last_stage2:
+        for _, prev_row in prev_combined.iterrows():
+            ticker = str(prev_row.get("ticker", "")).upper().strip()
+            if ticker and str(prev_row.get("stage", "")) == "Stage 2" and ticker not in last_stage2:
                 last_stage2[ticker] = yesterday
 
     today = pd.Timestamp.now(tz="Asia/Kolkata").normalize().tz_localize(None)
-    hold_days = int(config.get("stage2_failed_hold_days", 21) or 21)
+    failed_hold_days = int(config.get("stage2_failed_hold_days", 21) or 21)
+    transition_confirm_days = int(config.get("stage_transition_confirm_days", 3) or 3)
+    stage2_confirm_days = int(config.get("stage2_entry_confirm_days", transition_confirm_days) or transition_confirm_days)
+    stage4_to_stage2_min_stage1_days = int(config.get("stage4_to_stage2_min_stage1_days", 3) or 3)
+    enforce_no_jumps = bool(config.get("enforce_no_stage_jumps", True))
 
     for idx, row in out.iterrows():
         ticker = str(row.get("ticker", "")).upper().strip()
         raw_stage = str(row.get("stage_raw", "Not Sure") or "Not Sure").strip()
+        if raw_stage in {"Unknown", "", "nan", "None"}:
+            raw_stage = "Not Sure"
+            out.at[idx, "stage_raw"] = "Not Sure"
         prev_stage = str(prior_stage.get(ticker, "") or "").strip()
         last_s2 = last_stage2.get(ticker)
         days_since_s2 = None
@@ -2357,12 +2502,15 @@ def apply_stage_state_memory(
             except Exception:
                 days_since_s2 = None
 
-        recently_stage2 = days_since_s2 is not None and days_since_s2 <= hold_days
+        raw_confirm_runs = _consecutive_raw_stage_runs(history_df, prev_combined, ticker, raw_stage) + (1 if raw_stage not in {"Not Sure"} else 0)
+        public_stage1_runs = _consecutive_public_stage_runs(history_df, prev_combined, ticker, "Stage 1")
+        recently_stage2 = days_since_s2 is not None and days_since_s2 <= failed_hold_days
+
+        # 1) Explicit failed Stage 2 mechanism. This takes priority over normal transitions.
         broke_from_stage2 = (
             raw_stage != "Stage 2"
             and (prev_stage == "Stage 2" or (prev_stage == "Stage 2 Failed" and recently_stage2) or recently_stage2)
         )
-
         if broke_from_stage2:
             out.at[idx, "stage"] = "Stage 2 Failed"
             out.at[idx, "stage_variant"] = "Failed Stage 2"
@@ -2375,7 +2523,66 @@ def apply_stage_state_memory(
             )
             out.at[idx, "stage_state_reason"] = "Recent Stage 2 break; public stage held as Stage 2 Failed."
             out.at[idx, "notes"] = _append_note(row.get("notes", ""), "Stage 2 failed state applied from stage memory.")
-        elif raw_stage in {"Unknown", "", "nan", "None"}:
+            continue
+
+        # 2) While in failed Stage 2, do not instantly relabel unless the repair/advance is confirmed.
+        if prev_stage == "Stage 2 Failed":
+            if raw_stage == "Stage 2" and raw_confirm_runs >= stage2_confirm_days:
+                out.at[idx, "stage_state_reason"] = f"Stage 2 reclaimed after {raw_confirm_runs} confirmation runs."
+                continue
+            if recently_stage2:
+                out.at[idx, "stage"] = "Stage 2 Failed"
+                out.at[idx, "stage_variant"] = "Failed Stage 2"
+                out.at[idx, "stage_confidence"] = 0.70
+                out.at[idx, "stage_reason"] = "Failed Stage 2 cooling period is still active; waiting for a fresh base or confirmed reclaim."
+                out.at[idx, "stage_state_reason"] = "Failed Stage 2 hold period active."
+                out.at[idx, "notes"] = _append_note(row.get("notes", ""), "Failed Stage 2 hold period active.")
+                continue
+            if raw_stage in {"Stage 1", "Stage 3", "Stage 4"} and raw_confirm_runs < transition_confirm_days:
+                _set_pending_stage(out, idx, row, raw_stage, f"Stage 2 Failed -> {raw_stage} needs {transition_confirm_days} confirmation runs; current count {raw_confirm_runs}.")
+                out.at[idx, "stage_pending_raw"] = raw_stage
+                continue
+
+        # 3) No direct Stage 4 -> Stage 2. Must show Stage 1/base repair first.
+        if prev_stage == "Stage 4" and raw_stage == "Stage 2":
+            seen_stage1_since_last_stage4 = _seen_public_stage_since_last(history_df, ticker, "Stage 4", "Stage 1")
+            if (not seen_stage1_since_last_stage4) or public_stage1_runs < stage4_to_stage2_min_stage1_days:
+                reason = (
+                    "Blocked Stage 4 -> Stage 2 jump. Public Stage 2 needs Stage 1/base repair first "
+                    f"and at least {stage4_to_stage2_min_stage1_days} Stage 1 confirmation runs."
+                )
+                _set_pending_stage(out, idx, row, raw_stage, reason)
+                out.at[idx, "stage_pending_raw"] = raw_stage
+                continue
+
+        # 4) Stage 2 entry/promotion requires repeated raw confirmation.
+        if raw_stage == "Stage 2" and prev_stage != "Stage 2":
+            if raw_confirm_runs < stage2_confirm_days:
+                reason = f"Stage 2 pending confirmation: needs {stage2_confirm_days} raw Stage 2 runs; current count {raw_confirm_runs}."
+                _set_pending_stage(out, idx, row, raw_stage, reason)
+                out.at[idx, "stage_pending_raw"] = raw_stage
+                continue
+            out.at[idx, "stage_state_reason"] = f"Stage 2 confirmed with {raw_confirm_runs} raw confirmation runs."
+
+        # 5) General no-stage-jump rule for public stage changes.
+        prev_num = _stage_number(prev_stage)
+        raw_num = _stage_number(raw_stage)
+        if enforce_no_jumps and prev_num is not None and raw_num is not None and prev_stage != raw_stage:
+            allowed = False
+            # Normal adjacent transitions plus the cycle reset Stage 4 -> Stage 1.
+            if abs(raw_num - prev_num) == 1:
+                allowed = True
+            if prev_stage == "Stage 4" and raw_stage == "Stage 1":
+                allowed = raw_confirm_runs >= transition_confirm_days
+            if prev_stage == "Stage 1" and raw_stage == "Stage 2":
+                allowed = raw_confirm_runs >= stage2_confirm_days
+            if not allowed:
+                reason = f"Blocked public stage jump {prev_stage} -> {raw_stage}; waiting for intermediate/confirmed structure."
+                _set_pending_stage(out, idx, row, raw_stage, reason)
+                out.at[idx, "stage_pending_raw"] = raw_stage
+                continue
+
+        if raw_stage == "Not Sure":
             out.at[idx, "stage"] = "Not Sure"
             out.at[idx, "stage_variant"] = "Not Sure"
             out.at[idx, "stage_confidence"] = 0.0
@@ -2383,6 +2590,7 @@ def apply_stage_state_memory(
             out.at[idx, "stage_state_reason"] = "No confident stage classification."
 
     return out
+
 
 def _ensure_rank_column_for_snapshot(df: pd.DataFrame, score_col: str = "final_combined_score") -> pd.DataFrame:
     """Ensure stable dataset rank: 1 = strongest row by score."""
@@ -2466,7 +2674,7 @@ def build_interesting20_snapshot(combined_df: pd.DataFrame, limit: int = 20, top
     pool = pool.sort_values(sort_cols, ascending=ascending, na_position="last").head(limit).copy()
     pool["snapshot_date"] = pd.Timestamp.now(tz="Asia/Kolkata").date().isoformat()
     keep = [c for c in [
-        "snapshot_date", "ticker", "Company Name", "Industry", "stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "current_rank",
+        "snapshot_date", "ticker", "Company Name", "Industry", "stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "stage_pending_raw", "current_rank",
         "interesting_priority", "daily_setup_bucket", "weekly_setup_bucket", "combined_bucket",
         "final_combined_score", "daily_breakout_distance_pct", "weekly_breakout_distance_pct",
         "rs_3m_pct", "rs_6m_pct", "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio",
@@ -2571,7 +2779,7 @@ def build_outputs(
     final_report = apply_stage_state_memory(final_report, out_path, prev_combined_for_stage_memory, cfg)
 
     metadata_cols = ["sector", "industry_group", "is_fo_stock", "fo_category", "Include"]
-    common_cols = ["ticker", "Company Name", "Industry"] + metadata_cols + ["stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "rs_3m_pct", "rs_6m_pct", "avg_turnover_inr", "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up", "notes"]
+    common_cols = ["ticker", "Company Name", "Industry"] + metadata_cols + ["stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "stage_pending_raw", "rs_3m_pct", "rs_6m_pct", "avg_turnover_inr", "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up", "notes"]
     daily_cols = common_cols + ["daily_setup_bucket", "daily_score", "final_daily_score", "daily_pivot", "daily_breakout_distance_pct", "daily_contraction_depths_pct", "daily_contraction_durations", "daily_contraction_score", "daily_base_duration_days"]
     weekly_cols = common_cols + ["weekly_setup_bucket", "weekly_score", "final_weekly_score", "weekly_pivot", "weekly_breakout_distance_pct", "weekly_contraction_depths_pct", "weekly_contraction_durations", "weekly_contraction_score", "weekly_base_duration_weeks", "weekly_vcp_quality"]
     combined_cols = common_cols + ["daily_setup_bucket", "weekly_setup_bucket", "combined_bucket", "daily_score", "weekly_score", "combined_score", "industry_boost", "final_combined_score"]
@@ -2738,7 +2946,7 @@ def build_stage_action_history_snapshot(snapshot_df: pd.DataFrame, snapshot_date
     out["public_action"] = out.apply(lambda r: derive_public_action(str(r.get("stage", "")), str(r.get("combined_bucket", "")), float(pd.to_numeric(r.get(score_col), errors="coerce") if pd.notna(pd.to_numeric(r.get(score_col), errors="coerce")) else 0.0)), axis=1)
     out["super_action"] = out.apply(lambda r: derive_super_action(str(r.get("stage", "")), str(r.get("combined_bucket", "")), float(pd.to_numeric(r.get(score_col), errors="coerce") if pd.notna(pd.to_numeric(r.get(score_col), errors="coerce")) else 0.0)), axis=1)
     keep_cols = [c for c in [
-        "snapshot_date", "ticker", "Company Name", "Industry", "sector", "is_fo_stock", "fo_category", "stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "combined_bucket", score_col,
+        "snapshot_date", "ticker", "Company Name", "Industry", "sector", "is_fo_stock", "fo_category", "stage", "stage_raw", "stage_variant", "stage_confidence", "stage_reason", "stage_state_reason", "stage_failed_since", "last_stage2_date", "stage_pending_raw", "combined_bucket", score_col,
         "volume_dryup_ratio", "breakout_volume_ratio", "weekly_volume_ratio", "volume_is_drying_up", "weekly_volume_is_drying_up",
         "public_action", "super_action"
     ] if c in out.columns]
