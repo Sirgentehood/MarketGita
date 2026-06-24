@@ -63,7 +63,7 @@ DEFAULT_CONFIG = {
     "stage_transition_confirm_days": 3,
     "stage2_entry_confirm_days": 3,
     # A stock cannot publicly move Stage 4 -> Stage 2 without first showing Stage 1/base repair.
-    "stage4_to_stage2_min_stage1_days": 3,
+    "stage4_to_stage2_min_stage1_days": 20,
     "enforce_no_stage_jumps": True,
 }
 
